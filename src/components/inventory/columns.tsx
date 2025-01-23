@@ -15,6 +15,7 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { db } from "@/lib/db"
 import { TableMeta } from "./data-table"
+import { ConfirmationDialog } from "../ui/confirmation-dialog"
 
 // Update the status type to match your data
 export type InventoryItem = {
@@ -96,22 +97,24 @@ export const columns: ColumnDef<InventoryItem>[] = [
     cell: ({ table, row }) => {
       const item = row.original
       const [editOpen, setEditOpen] = useState(false)
-  
+      const [deleteOpen, setDeleteOpen] = useState(false)
+    
       const handleUpdate = (updatedItem: InventoryItem) => {
         (table.options.meta as TableMeta).updateData(updatedItem)
       }
-  
+    
       const handleDelete = async () => {
         try {
           await db.inventory.delete(item.id)
           ;(table.options.meta as TableMeta).deleteData(item)
           toast.success("Item deleted successfully")
+          setDeleteOpen(false)
         } catch (error) {
           toast.error("Failed to delete item")
           console.error(error)
         }
       }
-  
+    
       return (
         <>
           <DropdownMenu>
@@ -128,7 +131,7 @@ export const columns: ColumnDef<InventoryItem>[] = [
               <DropdownMenuItem onClick={() => setEditOpen(true)}>
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete} className="text-destructive">
+              <DropdownMenuItem onClick={() => setDeleteOpen(true)} className="text-destructive">
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -138,6 +141,14 @@ export const columns: ColumnDef<InventoryItem>[] = [
             open={editOpen}
             onOpenChange={setEditOpen}
             onItemUpdated={handleUpdate}
+          />
+          <ConfirmationDialog
+            open={deleteOpen}
+            onOpenChange={setDeleteOpen}
+            onConfirm={handleDelete}
+            title="Delete Item"
+            description="Are you sure you want to delete this item? This action cannot be undone."
+            confirmLabel="Delete"
           />
         </>
       )

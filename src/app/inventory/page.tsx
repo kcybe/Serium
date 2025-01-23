@@ -11,25 +11,31 @@ import { db } from "@/lib/db"
 import { Skeleton } from "@/components/ui/skeleton"
 import { exportToJson } from "@/lib/utils"
 import { DataActions } from "@/components/inventory/data-actions"
+import { InventoryHeader } from "@/components/inventory/inventory-header"
+import { toast } from "sonner"
 
 export default function InventoryPage() {
-  const [data, setData] = useState<InventoryItem[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
+    const [data, setData] = useState<InventoryItem[]>([])
+    const [loading, setLoading] = useState(true)
+  
     const loadItems = async () => {
-      try {
-        const items = await db.inventory.toArray()
-        setData(items)
-      } catch (error) {
-        console.error("Failed to load items:", error)
-      } finally {
-        setLoading(false)
+        setLoading(true)  // Add this line
+        try {
+          const items = await db.inventory.toArray()
+          setData(items)
+          toast.success("Data refreshed successfully")  // Add this line
+        } catch (error) {
+          console.error("Failed to load items:", error)
+          toast.error("Failed to refresh data")  // Add this line
+        } finally {
+          setLoading(false)
+        }
       }
-    }
+  
+    useEffect(() => {
+      loadItems()
+    }, [])
 
-    loadItems()
-  }, [])
 
   const handleAddItem = (newItem: InventoryItem) => {
     setData(prev => [...prev, newItem])
@@ -76,12 +82,15 @@ export default function InventoryPage() {
     <div className="flex justify-center space-y-4 p-8 pt-8">
       <Card className="w-full max-w-7xl">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle>Inventory</CardTitle>
+            <CardTitle>
+                <InventoryHeader />
+            </CardTitle>
           <div className="flex items-center gap-2">
             <AddItemDialog onAddItem={handleAddItem} />
             <DataActions 
               data={data} 
               onDataImported={(items: InventoryItem[]) => setData(prev => [...prev, ...items])} 
+              onRefresh={loadItems}
             />
           </div>
         </CardHeader>

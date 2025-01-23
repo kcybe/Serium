@@ -1,5 +1,5 @@
 export interface SiteSettings {
-    companyName: string
+    inventoryName: string
     currency: string
     dateFormat: string
     theme: 'light' | 'dark' | 'system'
@@ -11,7 +11,7 @@ export interface SiteSettings {
   
   export interface SiteSettings {
     id?: string
-    companyName: string
+    inventoryName: string
     currency: string
     dateFormat: string
     theme: 'light' | 'dark' | 'system'

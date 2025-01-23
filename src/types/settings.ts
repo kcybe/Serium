@@ -1,6 +1,6 @@
 export interface SiteSettings {
     id?: string
-    companyName: string
+    inventoryName: string
     currency: string
     dateFormat: string
     theme: 'light' | 'dark' | 'system'
@@ -13,7 +13,7 @@ export interface SiteSettings {
   }
   
   export const defaultSettings: SiteSettings = {
-    companyName: 'Inventory Manager',
+    inventoryName: 'Inventory Manager',
     currency: 'USD',
     dateFormat: 'MM/DD/YYYY',
     theme: 'system',

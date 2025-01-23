@@ -12,6 +12,8 @@ import { AddItemForm } from "./add-item-form"
 import { InventoryItem } from "./columns"
 import { db } from "@/lib/db"
 import { toast } from "sonner"
+import { LoadingSpinner } from "../ui/loading-spinner"
+import { AddItemFormValues } from "./add-item-form"
 
 interface EditItemDialogProps {
   item: InventoryItem
@@ -23,11 +25,12 @@ interface EditItemDialogProps {
 export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: EditItemDialogProps) {
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (values: Omit<InventoryItem, 'id'>) => {
+  const handleSubmit = async (values: AddItemFormValues) => {
     try {
       setLoading(true)
-      await db.inventory.update(item.id, values)
-      const updatedItem = { ...values, id: item.id }
+      const valuesWithNumberSku = { ...values, sku: Number(values.sku) }
+      await db.inventory.update(item.id, valuesWithNumberSku)
+      const updatedItem = { ...valuesWithNumberSku, id: item.id }
       onItemUpdated(updatedItem)
       toast.success("Item updated successfully")
       onOpenChange(false)
@@ -43,14 +46,23 @@ export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: Edit
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Item</DialogTitle>
+          <DialogTitle>
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <LoadingSpinner className="h-4 w-4" />
+                Updating Item...
+              </div>
+            ) : (
+              "Edit Item"
+            )}
+          </DialogTitle>
         </DialogHeader>
         <AddItemForm 
           onSubmit={handleSubmit}
           onCancel={() => onOpenChange(false)}
           loading={loading}
-          defaultValues={item}
-          submitLabel="Save Changes"
+          defaultValues={{ ...item, sku: "" + item.sku }}
+          submitLabel={loading ? "Saving..." : "Save Changes"}
         />
       </DialogContent>
     </Dialog>

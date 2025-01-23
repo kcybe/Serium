@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Download, Upload } from "lucide-react"
+import { MoreHorizontal, Download, Upload, RotateCw } from "lucide-react"
 import { useRef } from "react"
 import { toast } from "sonner"
 import { db } from "@/lib/db"
@@ -17,9 +17,10 @@ import { InventoryItem } from "@/types/inventory"
 interface DataActionsProps {
   data: InventoryItem[]
   onDataImported: (items: InventoryItem[]) => void
+  onRefresh: () => void
 }
 
-export function DataActions({ data, onDataImported }: DataActionsProps) {
+export function DataActions({ data, onDataImported, onRefresh }: DataActionsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleExport = () => {
@@ -67,6 +68,10 @@ export function DataActions({ data, onDataImported }: DataActionsProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={onRefresh}>
+            <RotateCw className="mr-2 h-4 w-4" />
+            Refresh
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" />
             Export Data

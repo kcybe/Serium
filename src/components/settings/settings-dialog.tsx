@@ -8,13 +8,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Settings2 } from "lucide-react"
-import { SettingsForm } from "./settings-form"
+import { Settings2, Table2, Save } from "lucide-react"
 import { useState, useEffect } from "react"
 import { SiteSettings, defaultSettings } from "@/types/settings"
 import { db } from "@/lib/db"
 import { toast } from "sonner"
 import { useTheme } from "next-themes"
+import { SettingsTabs } from "./settings-tabs"
+
+const tabs = [
+  { value: "general", label: "General", icon: Settings2 },
+  { value: "table", label: "Table", icon: Table2 },
+  { value: "backup", label: "Backup", icon: Save }
+]
 
 export function SettingsDialog() {
   const [open, setOpen] = useState(false)
@@ -23,39 +29,22 @@ export function SettingsDialog() {
 
   useEffect(() => {
     const loadSettings = async () => {
-      try {
-        const savedSettings = await db.settings.get('site-settings')
-        if (savedSettings) {
-          setSettings({
-            ...defaultSettings,
-            ...savedSettings,
-            categories: savedSettings.categories || defaultSettings.categories,
-            statuses: savedSettings.statuses || defaultSettings.statuses
-          })
-          setTheme(savedSettings.theme)
-        } else {
-          const defaultWithId = { ...defaultSettings, id: 'site-settings' }
-          await db.settings.put(defaultWithId)
-          setSettings(defaultWithId)
-        }
-      } catch (error) {
-        console.error("Failed to load settings:", error)
+      const savedSettings = await db.settings.get('site-settings')
+      if (savedSettings) {
+        setSettings(savedSettings)
+        setTheme(savedSettings.theme)
       }
     }
-
-    if (open) {
-      loadSettings()
-    }
-  }, [open, setTheme])
+    loadSettings()
+  }, [])
 
   const handleSubmit = async (values: SiteSettings) => {
     try {
-      const settingsWithId = { ...values, id: 'site-settings' }
-      await db.settings.put(settingsWithId)
-      setSettings(settingsWithId)
+      await db.settings.put({ ...values, id: 'site-settings' })
+      setSettings(values)
       setTheme(values.theme)
-      setOpen(false)
       toast.success("Settings saved successfully")
+      setOpen(false)
     } catch (error) {
       toast.error("Failed to save settings")
       console.error(error)
@@ -69,11 +58,18 @@ export function SettingsDialog() {
           <Settings2 className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
-        <SettingsForm settings={settings} onSubmit={handleSubmit} />
+        <SettingsTabs 
+          settings={settings} 
+          onSubmit={handleSubmit} 
+          onSettingsImported={(newSettings) => {
+            setSettings(newSettings)
+            window.location.reload()
+          }}
+        />
       </DialogContent>
     </Dialog>
   )

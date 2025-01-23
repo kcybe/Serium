@@ -1,29 +1,25 @@
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 export default function Loading() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6">
-        <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">Inventory</h2>
-        </div>
-        <div className="space-y-4">
-          <div className="rounded-md border">
-            <div className="space-y-4">
-              <div className="border-b p-4">
-                <Skeleton className="h-8 w-[250px]" />
-              </div>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="p-4">
-                  <div className="space-y-3">
-                    <Skeleton className="h-5 w-full" />
-                  </div>
-                </div>
-              ))}
-            </div>
+    <div className="flex justify-center space-y-4 p-8 pt-8">
+      <Card className="w-full max-w-7xl">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+          <div className="flex items-center gap-2">
+            <LoadingSpinner />
+            <h2 className="text-2xl font-semibold">Loading Inventory</h2>
           </div>
-        </div>
-      </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-16 w-full" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
