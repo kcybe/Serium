@@ -10,7 +10,8 @@ import { BackupSettings } from "./tabs/backup-settings"
 interface SettingsTabsProps {
   settings: SiteSettings
   onSubmit: (values: SiteSettings) => void
-  onSettingsImported: (settings: SiteSettings) => void  // Add this line
+  onSettingsImported: (newSettings: SiteSettings) => void
+  children?: React.ReactNode  // Add this line
 }
 
 export function SettingsTabs({ settings, onSubmit, onSettingsImported }: SettingsTabsProps) {

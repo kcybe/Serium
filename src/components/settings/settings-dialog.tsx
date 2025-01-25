@@ -15,6 +15,8 @@ import { db } from "@/lib/db"
 import { toast } from "sonner"
 import { useTheme } from "next-themes"
 import { SettingsTabs } from "./settings-tabs"
+import { TableSettings } from "./tabs/table-settings"
+import { Tabs, TabsContent } from "@/components/ui/tabs"  // Updated import
 
 const tabs = [
   { value: "general", label: "General", icon: Settings2 },
@@ -51,6 +53,14 @@ export function SettingsDialog() {
     }
   }
 
+  const loadSettings = async () => {
+    const savedSettings = await db.settings.get('site-settings')
+    if (savedSettings) {
+      setSettings(savedSettings)
+      setTheme(savedSettings.theme)
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -69,7 +79,15 @@ export function SettingsDialog() {
             setSettings(newSettings)
             window.location.reload()
           }}
-        />
+        >
+          <TabsContent value="table">
+            <TableSettings 
+              settings={settings} 
+              onSubmit={handleSubmit} 
+              onSettingsUpdated={loadSettings}
+            />
+          </TabsContent>
+        </SettingsTabs>
       </DialogContent>
     </Dialog>
   )

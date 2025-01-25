@@ -25,7 +25,13 @@ const tableSettingsSchema = z.object({
 
 type TableSettingsValues = z.infer<typeof tableSettingsSchema>
 
-export function TableSettings({ settings, onSubmit }: { settings: SiteSettings; onSubmit: (values: SiteSettings) => void }) {
+interface TableSettingsProps {
+  settings: SiteSettings
+  onSubmit: (values: SiteSettings) => void
+  onSettingsUpdated?: () => void
+}
+
+export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSettingsProps) {
   const [newCategory, setNewCategory] = useState("")
   const [newStatus, setNewStatus] = useState("")
   const [localCategories, setLocalCategories] = useState(settings.categories)
@@ -42,13 +48,16 @@ export function TableSettings({ settings, onSubmit }: { settings: SiteSettings; 
     },
   })
 
-  const handleSubmit = (values: TableSettingsValues) => {
-    onSubmit({ 
+  const handleSubmit = async (values: TableSettingsValues) => {
+    await onSubmit({ 
       ...settings, 
       ...values,
       categories: localCategories,
       statuses: localStatuses
     })
+    if (onSettingsUpdated) {
+      onSettingsUpdated()
+    }
   }
 
   const handleAddCategory = () => {

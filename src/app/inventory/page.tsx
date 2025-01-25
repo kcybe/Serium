@@ -78,15 +78,22 @@ export default function InventoryPage() {
       loadItems()
     }, [])
 
-    useEffect(() => {
-      const loadSettings = async () => {
-        const savedSettings = await db.settings.get('site')
+    const loadSettings = async () => {
+        const savedSettings = await db.settings.get('site-settings')  // Changed from 'site' to 'site-settings'
         if (savedSettings) {
           setSettings(savedSettings)
         }
       }
-      loadSettings()
-    }, [])
+
+      useEffect(() => {
+        loadItems()
+        loadSettings()
+      }, [])
+      
+      // Add a new effect to watch settings changes
+      useEffect(() => {
+        loadSettings()
+      }, [settings])
 
   const handleAddItem = (newItem: InventoryItem) => {
     setData(prev => [...prev, newItem])
