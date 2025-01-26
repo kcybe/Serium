@@ -1,18 +1,27 @@
 import Dexie, { Table } from 'dexie'
 import { InventoryItem } from '@/types/inventory'
 import { SiteSettings } from '@/types/settings'
+import { HistoryEntry } from '@/types/history'
 
-export class InventoryDB extends Dexie {
+class InventoryDB extends Dexie {
   inventory!: Table<InventoryItem>
   settings!: Table<SiteSettings>
+  history!: Table<HistoryEntry>
   
   constructor() {
     super('inventoryDB')
-    this.version(4).stores({ // Increment version to force schema update
-      inventory: '++id, name, sku, description, quantity, price, category, location, status',
-      settings: 'id, companyName, currency, dateFormat, theme, categories, statuses, lowStockThreshold, defaultCategory, defaultLocation, defaultStatus'
+    this.version(1).stores({
+      inventory: 'id, name, sku, description, quantity, price, category, location, status',
+      settings: 'id, companyName, currency, dateFormat, theme, categories, statuses, lowStockThreshold, defaultCategory, defaultLocation, defaultStatus',
+      history: '++id, itemId, action, timestamp'
     })
   }
 }
 
 export const db = new InventoryDB()
+
+// Delete existing database if needed
+export const resetDatabase = async () => {
+  await Dexie.delete('inventoryDB')
+  window.location.reload()
+}

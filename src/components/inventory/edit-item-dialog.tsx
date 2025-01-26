@@ -14,6 +14,7 @@ import { db } from "@/lib/db"
 import { toast } from "sonner"
 import { LoadingSpinner } from "../ui/loading-spinner"
 import { AddItemFormValues } from "./add-item-form"
+import { historyService } from "@/lib/history-service"
 
 interface EditItemDialogProps {
   item: InventoryItem
@@ -28,10 +29,23 @@ export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: Edit
   const handleSubmit = async (values: AddItemFormValues) => {
     try {
       setLoading(true)
-      const valuesWithNumberSku = { ...values, sku: Number(values.sku) }
-      await db.inventory.update(item.id, valuesWithNumberSku)
-      const updatedItem = { ...valuesWithNumberSku, id: item.id }
-      onItemUpdated(updatedItem)
+      const oldItem = await db.inventory.get(item.id)
+      if (!oldItem) {
+        throw new Error('Item not found')
+      }
+
+      const processedValues: InventoryItem = {
+        ...item,
+        ...values,
+        id: item.id,
+        sku: values.sku,
+        quantity: Number(values.quantity),
+        price: Number(values.price)
+      }
+      
+      await db.inventory.update(item.id, processedValues)
+      await historyService.trackChange(item.id, 'update', oldItem, processedValues)
+      onItemUpdated(processedValues)
       toast.success("Item updated successfully")
       onOpenChange(false)
     } catch (error) {
@@ -61,7 +75,7 @@ export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: Edit
           onSubmit={handleSubmit}
           onCancel={() => onOpenChange(false)}
           loading={loading}
-          defaultValues={{ ...item, sku: "" + item.sku }}
+          defaultValues={{ ...item, sku: String(item.sku) }}
           submitLabel={loading ? "Saving..." : "Save Changes"}
         />
       </DialogContent>

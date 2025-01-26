@@ -32,28 +32,30 @@ import {
   ChevronsRight,
 } from "lucide-react"
 import { useState } from "react"
+import { InventoryItem } from "./columns"
 
 export interface TableMeta {
-  updateData: (updatedItem: any) => void
-  deleteData: (deletedItem: any) => void
+  updateData: (id: string, item: InventoryItem) => void
+  deleteData: (item: InventoryItem) => void
 }
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData, any>[]
   data: TData[]
-  onUpdate: (item: TData) => void
-  onDelete: (item: TData) => void
+  onUpdate: (id: string, item: TData) => void
+  onDelete: (id: string) => void
 }
 
-export function DataTable<TData, TValue>({
-  columns,
+export function DataTable({ 
+  columns, 
   data,
   onUpdate,
-  onDelete,
-}: DataTableProps<TData, TValue>) {
+  onDelete 
+}: DataTableProps<InventoryItem>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pageSize, setPageSize] = useState(8)
   const [pageIndex, setPageIndex] = useState(0)
+  const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
     data,
@@ -62,8 +64,10 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      rowSelection,
       pagination: {
         pageSize,
         pageIndex,
@@ -77,8 +81,8 @@ export function DataTable<TData, TValue>({
       }
     },
     meta: {
-      updateData: onUpdate,
-      deleteData: onDelete,
+      updateData: (id: string, updatedItem: InventoryItem) => onUpdate(id, updatedItem),
+      deleteData: (item: InventoryItem) => onDelete(item.id)
     } as TableMeta,
   })
 

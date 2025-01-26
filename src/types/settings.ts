@@ -1,29 +1,41 @@
 export interface SiteSettings {
-    id?: string
-    inventoryName: string
-    currency: string
-    dateFormat: string
-    theme: 'light' | 'dark' | 'system'
-    lowStockThreshold: number
-    defaultCategory: string
-    defaultLocation: string
-    defaultStatus: string
-    categories: string[]
-    statuses: string[]
+  inventoryName: string
+  theme: "light" | "dark" | "system"
+  currency: string
+  dateFormat: string
+  lowStockThreshold: number
+  defaultCategory: string
+  defaultLocation: string
+  defaultStatus: string
+  categories: string[]
+  statuses: string[]
+  features: {
+    barcodeScanning?: boolean
+    qrCodeSupport?: boolean
+    historyTracking?: boolean
+    notifications?: boolean
+    [key: string]: boolean | undefined
   }
-  
-  export const defaultSettings: SiteSettings = {
-    inventoryName: 'Inventory Manager',
-    currency: 'USD',
-    dateFormat: 'MM/DD/YYYY',
-    theme: 'system',
-    lowStockThreshold: 10,
-    defaultCategory: 'General',
-    defaultLocation: 'Main Warehouse',
-    defaultStatus: 'In Stock',
-    categories: ['General', 'Electronics', 'Office Supplies'],
-    statuses: ['In Stock', 'Low Stock', 'Out of Stock']
+}
+
+export const defaultSettings: SiteSettings = {
+  inventoryName: "My Inventory",
+  theme: "system",
+  currency: "USD",
+  dateFormat: "MM/DD/YYYY",
+  lowStockThreshold: 10,
+  defaultCategory: "General",
+  defaultLocation: "Main Storage",
+  defaultStatus: "In Stock",
+  categories: ["General", "Electronics", "Office Supplies"],
+  statuses: ["In Stock", "Low Stock", "Out of Stock"],
+  features: {
+    barcodeScanning: false,
+    qrCodeSupport: false,
+    historyTracking: false,
+    notifications: false,
   }
+}
 
   export const currencyOptions = [
     { label: 'USD ($)', value: 'USD' },

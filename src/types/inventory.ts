@@ -1,7 +1,7 @@
 export interface InventoryItem {
   id: string
   name: string
-  sku: number
+  sku: string | number
   quantity: number
   price: number
   category: string
@@ -12,7 +12,7 @@ export interface InventoryItem {
 
 export interface AddItemFormValues {
   name: string
-  sku: number
+  sku: string
   quantity: number
   price: number
   category: string

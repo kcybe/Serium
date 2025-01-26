@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { pixelifySans } from "@/lib/fonts"
 
 export function Hero() {
   return (
@@ -6,7 +7,7 @@ export function Hero() {
       <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
         Manage Your Inventory
         <br className="hidden sm:inline" />
-        With Ease
+        With <span className={`${pixelifySans.className} text-8xl font-bold`}>Ease</span>
       </h1>
       <p className="max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
         Streamline your inventory management process with our powerful and intuitive platform.

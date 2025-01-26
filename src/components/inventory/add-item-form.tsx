@@ -20,7 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { db } from "@/lib/db"
 
 const formSchema = z.object({
-  sku: z.string().min(2, "SKU must be at least 2 characters"),
+  sku: z.string(),
   name: z.string().min(2, "Name must be at least 2 characters"),
   description: z.string(),
   quantity: z.number().min(0, "Quantity must be positive"),

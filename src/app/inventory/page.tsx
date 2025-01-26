@@ -15,6 +15,10 @@ import { InventoryHeader } from "@/components/inventory/inventory-header"
 import { toast } from "sonner"
 import { SearchFilter } from "@/components/inventory/search-filter"
 import { defaultSettings, SiteSettings } from "@/types/settings"
+import { historyService } from '@/lib/history-service'
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
+import { PageTransition } from '@/components/ui/page-transition'
 
 
 export default function InventoryPage() {
@@ -27,6 +31,7 @@ export default function InventoryPage() {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
     const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
     const [settings, setSettings] = useState<SiteSettings>(defaultSettings)
+    const [historyEnabled, setHistoryEnabled] = useState<boolean>(true)
 
     const filteredData = useMemo(() => {
         let filtered = data
@@ -95,8 +100,24 @@ export default function InventoryPage() {
         loadSettings()
       }, [settings])
 
-  const handleAddItem = (newItem: InventoryItem) => {
-    setData(prev => [...prev, newItem])
+    // Add this effect after your other effects
+    useEffect(() => {
+      const checkHistoryTracking = async () => {
+        const isEnabled = await historyService.isHistoryTrackingEnabled()
+        setHistoryEnabled(isEnabled)
+      }
+      checkHistoryTracking()
+    }, [settings])
+
+  const handleAddItem = async (newItem: InventoryItem) => {
+    try {
+      await historyService.trackChange(newItem.id, 'create', undefined, newItem)
+      setData(prev => [...prev, newItem])
+      toast.success("Item added successfully")
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to add item")
+    }
   }
 
   const handleExport = () => {
@@ -126,14 +147,36 @@ export default function InventoryPage() {
     )
   }
 
-  const handleUpdateItem = (updatedItem: InventoryItem) => {
-    setData(prev => prev.map(item => 
-      item.id === updatedItem.id ? updatedItem : item
-    ))
+  const handleUpdateItem = async (id: string, updatedItem: InventoryItem) => {
+    try {
+      const oldItem = await db.inventory.get(id)
+      if (!oldItem) {
+        throw new Error('Item not found')
+      }
+      
+      const processedItem: InventoryItem = {
+        ...oldItem,
+        ...updatedItem,
+        sku: updatedItem.sku,
+        quantity: Number(updatedItem.quantity),
+        price: Number(updatedItem.price)
+      }
+      
+      await db.inventory.update(id, processedItem)
+      setData(prev => prev.map(item => item.id === id ? processedItem : item))
+      toast.success("Item updated successfully")
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to update item")
+    }
   }
 
-  const handleDeleteItem = (deletedItem: InventoryItem) => {
-    setData(prev => prev.filter(item => item.id !== deletedItem.id))
+  const handleDeleteItem = async (id: string) => {
+    const oldItem = await db.inventory.get(id)
+    await db.inventory.delete(id)
+    await historyService.trackChange(id, 'delete', oldItem)
+    setData(prev => prev.filter(item => item.id !== id))
+    toast.success("Item deleted successfully")
   }
 
   const handleClearFilters = () => {
@@ -144,45 +187,60 @@ export default function InventoryPage() {
   }
 
   return (
-    <div className="flex justify-center space-y-4 p-8 pt-8">
-      <Card className="w-full max-w-7xl">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle>
-            <InventoryHeader />
-          </CardTitle>
-          <div className="flex items-center gap-2">
-            <AddItemDialog onAddItem={handleAddItem} />
-            <DataActions 
-              data={data} 
-              onDataImported={(items) => setData(prev => [...prev, ...items])} 
-              onRefresh={loadItems}
-            />
+    <PageTransition>
+      <div className="flex flex-col gap-4 p-8 pt-8">
+        {!historyEnabled && (
+          <div className="w-full max-w-7xl mx-auto">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>History Tracking Disabled</AlertTitle>
+              <AlertDescription>
+                History tracking is currently disabled. Enable it in settings to track inventory changes.
+              </AlertDescription>
+            </Alert>
           </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4">
-            <SearchFilter 
-              onSearchChange={(value, param) => {
-                setSearchValue(value)
-                setSearchParam(param)
-              }}
-              categories={settings.categories}
-              statuses={settings.statuses}
-              selectedCategories={selectedCategories}
-              selectedStatuses={selectedStatuses}
-              onCategoriesChange={setSelectedCategories}
-              onStatusesChange={setSelectedStatuses}
-              onClearFilters={handleClearFilters}
-            />
-            <DataTable 
-              columns={columns} 
-              data={filteredData}  // Changed from data to filteredData
-              onUpdate={handleUpdateItem}
-              onDelete={handleDeleteItem}
-            />
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+        )}
+        <div className="flex justify-center">
+          <Card className="w-full max-w-7xl">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+              <CardTitle>
+                <InventoryHeader />
+              </CardTitle>
+              <div className="flex items-center gap-2">
+                <AddItemDialog onAddItem={handleAddItem} />
+                <DataActions 
+                  data={data} 
+                  onDataImported={(items) => setData(prev => [...prev, ...items])} 
+                  onRefresh={loadItems}
+                />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-4">
+                <SearchFilter 
+                  onSearchChange={(value, param) => {
+                    setSearchValue(value)
+                    setSearchParam(param)
+                  }}
+                  categories={settings.categories}
+                  statuses={settings.statuses}
+                  selectedCategories={selectedCategories}
+                  selectedStatuses={selectedStatuses}
+                  onCategoriesChange={setSelectedCategories}
+                  onStatusesChange={setSelectedStatuses}
+                  onClearFilters={handleClearFilters}
+                />
+                <DataTable 
+                  columns={columns} 
+                  data={filteredData}  // Changed from data to filteredData
+                  onUpdate={(id, updatedItem) => handleUpdateItem(id, updatedItem)}
+                  onDelete={handleDeleteItem}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </PageTransition>
   )
 }

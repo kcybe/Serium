@@ -17,17 +17,16 @@ import { db } from "@/lib/db"
 import { TableMeta } from "./data-table"
 import { ConfirmationDialog } from "../ui/confirmation-dialog"
 
-// Update the status type to match your data
-export type InventoryItem = {
+export interface InventoryItem {
   id: string
-  sku: number
   name: string
-  description: string
+  sku: string | number
   quantity: number
   price: number
   category: string
-  location: string
   status: string
+  description: string
+  location: string
 }
 
 function SortableHeader({ column, title }: { column: any, title: string }) {
@@ -100,13 +99,17 @@ export const columns: ColumnDef<InventoryItem>[] = [
       const [deleteOpen, setDeleteOpen] = useState(false)
     
       const handleUpdate = (updatedItem: InventoryItem) => {
-        (table.options.meta as TableMeta).updateData(updatedItem)
+        (table.options.meta as TableMeta).updateData(item.id, updatedItem)
       }
     
       const handleDelete = async () => {
         try {
-          await db.inventory.delete(item.id)
-          ;(table.options.meta as TableMeta).deleteData(item)
+          const itemToDelete = row.original
+          if (!itemToDelete.id) {
+            throw new Error('Item ID is missing')
+          }
+          await db.inventory.delete(itemToDelete.id)
+          ;(table.options.meta as TableMeta).deleteData(itemToDelete)
           toast.success("Item deleted successfully")
           setDeleteOpen(false)
         } catch (error) {

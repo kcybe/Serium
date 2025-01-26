@@ -14,6 +14,7 @@ import { AddItemForm, type AddItemFormValues } from "./add-item-form"
 import { InventoryItem } from "./columns"
 import { db } from "@/lib/db"
 import { toast } from "sonner"
+import { historyService } from "@/lib/history-service"
 
 interface AddItemDialogProps {
   onAddItem: (item: InventoryItem) => void
@@ -26,18 +27,19 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
   const handleSubmit = async (values: AddItemFormValues) => {
     try {
       setLoading(true)
-      const id = await db.inventory.add({
+      const newItem: InventoryItem = {
         ...values,
-        sku: Number(values.sku),
         id: crypto.randomUUID(),
-      })
-      
-      const newItem = await db.inventory.get(id)
-      if (newItem) {
-        onAddItem(newItem)
-        toast.success("Item added successfully")
-        setOpen(false)
+        sku: values.sku,
+        quantity: Number(values.quantity),
+        price: Number(values.price)
       }
+      
+      await db.inventory.add(newItem)
+      onAddItem(newItem)
+      await historyService.trackChange(newItem.id, 'create', undefined, newItem)
+      toast.success("Item added successfully")
+      setOpen(false)
     } catch (error) {
       toast.error("Failed to add item")
       console.error(error)
