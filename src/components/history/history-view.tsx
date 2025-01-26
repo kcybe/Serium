@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { HistoryEntry, HistoryFilter } from '@/types/history'
 import { historyService } from '@/lib/history-service'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Calendar } from '@/components/ui/calendar'
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -17,6 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Input } from '@/components/ui/input'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,8 +27,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from '@/lib/utils'
-import { toast } from 'sonner'
-import { HistorySearchFilter } from './history-search-filter'
 
 const actionColors = {
   create: 'bg-green-500',
@@ -36,6 +37,7 @@ const actionColors = {
 export function HistoryView() {
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [filter, setFilter] = useState<HistoryFilter>({})
+  const [itemIdSearch, setItemIdSearch] = useState("")
   const [isRefreshing, setIsRefreshing] = useState(false)
 
   useEffect(() => {
@@ -48,18 +50,8 @@ export function HistoryView() {
   }
 
   const handleSearch = (value: string) => {
+    setItemIdSearch(value)
     setFilter({ ...filter, itemId: value || undefined })
-  }
-
-  const handleActionChange = (action: string) => {
-    setFilter({ 
-      ...filter, 
-      action: action === 'all' ? undefined : action as 'create' | 'update' | 'delete'
-    })
-  }
-
-  const handleClearFilters = () => {
-    setFilter({})
   }
 
   const handleExport = () => {
@@ -74,10 +66,6 @@ export function HistoryView() {
     setIsRefreshing(true)
     try {
       await loadHistory()
-      toast.success("History refreshed successfully")
-    } catch (error) {
-      console.error("Failed to refresh history:", error)
-      toast.error("Failed to refresh history")
     } finally {
       setIsRefreshing(false)
     }
@@ -122,12 +110,35 @@ export function HistoryView() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <HistorySearchFilter
-          onSearchChange={handleSearch}
-          onActionChange={handleActionChange}
-          selectedAction={filter.action || 'all'}
-          onClearFilters={handleClearFilters}
-        />
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <Input
+              placeholder="Search by Item ID"
+              value={itemIdSearch}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="max-w-[300px]"
+            />
+          </div>
+          <Select
+            value={filter.action || 'all'}
+            onValueChange={(value: string) => 
+              setFilter({ 
+                ...filter, 
+                action: value === 'all' ? undefined : value as 'create' | 'update' | 'delete'
+              })
+            }
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by action" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Actions</SelectItem>
+              <SelectItem value="create">Created</SelectItem>
+              <SelectItem value="update">Updated</SelectItem>
+              <SelectItem value="delete">Deleted</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
       <CardContent>
         <Table>

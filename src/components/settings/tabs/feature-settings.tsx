@@ -41,17 +41,27 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
     {
       id: "itemVerification",
       label: "Item Verification",
-      description: "Track when items were last verified in inventory (Refresh needed)",
+      description: "Track when items were last verified in inventory",
       icon: CheckCircle,
+      subFeatures: [
+        {
+          id: "scanToVerify",
+          label: "Scan to Verify",
+          description: "Enable barcode scanning for quick item verification"
+        }
+      ]
     },
   ]
 
-  const handleFeatureToggle = (featureId: string, checked: boolean) => {
+  const handleFeatureToggle = (featureId: string, checked: boolean, subFeatureId?: string) => {
     onSubmit({
       ...settings,
       features: {
         ...settings.features,
-        [featureId]: checked,
+        [featureId]: subFeatureId ? settings.features?.[featureId] : checked,
+        ...(subFeatureId && {
+          [subFeatureId]: checked
+        })
       },
     })
   }
@@ -67,28 +77,56 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
           {features.map((feature) => {
             const Icon = feature.icon
             return (
-              <div key={feature.id} className="flex items-start space-x-4 rounded-lg border p-4">
-                <Icon className="mt-1 h-5 w-5 text-muted-foreground" />
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label
-                      htmlFor={feature.id}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {feature.label}
-                    </label>
-                    <Checkbox
-                      id={feature.id}
-                      checked={settings.features?.[feature.id] || false}
-                      onCheckedChange={(checked) => 
-                        handleFeatureToggle(feature.id, checked as boolean)
-                      }
-                    />
+              <div key={feature.id} className="flex flex-col space-y-4 rounded-lg border p-4">
+                <div className="flex items-start space-x-4">
+                  <Icon className="mt-1 h-5 w-5 text-muted-foreground" />
+                  <div className="flex-1 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <label
+                        htmlFor={feature.id}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {feature.label}
+                      </label>
+                      <Checkbox
+                        id={feature.id}
+                        checked={settings.features?.[feature.id] || false}
+                        onCheckedChange={(checked) => 
+                          handleFeatureToggle(feature.id, checked as boolean)
+                        }
+                      />
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {feature.description}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
                 </div>
+                {feature.subFeatures && settings.features?.[feature.id] && (
+                  <div className="ml-9 space-y-3 border-l pl-4">
+                    {feature.subFeatures.map(subFeature => (
+                      <div key={subFeature.id} className="flex items-center justify-between">
+                        <div>
+                          <label
+                            htmlFor={subFeature.id}
+                            className="text-sm font-medium leading-none"
+                          >
+                            {subFeature.label}
+                          </label>
+                          <p className="text-sm text-muted-foreground">
+                            {subFeature.description}
+                          </p>
+                        </div>
+                        <Checkbox
+                          id={subFeature.id}
+                          checked={settings.features?.[subFeature.id] || false}
+                          onCheckedChange={(checked) => 
+                            handleFeatureToggle(feature.id, checked as boolean, subFeature.id)
+                          }
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )
           })}

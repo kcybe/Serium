@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { DataTable } from "@/components/inventory/data-table"
 import { type InventoryItem, getColumns } from "@/components/inventory/columns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -32,6 +32,7 @@ export default function InventoryPage() {
     const [settings, setSettings] = useState<SiteSettings>(defaultSettings)
     const [historyEnabled, setHistoryEnabled] = useState<boolean>(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
+    const isVerifying = useRef(false)
 
     const filteredData = useMemo(() => {
         let filtered = data
@@ -205,40 +206,50 @@ export default function InventoryPage() {
     setSelectedStatuses([])
   }
 
-  const handleVerify = async (id: string) => {
-    try {
-      const item = await db.inventory.get(id)
-      if (!item) {
-        throw new Error('Item not found')
-      }
+  const handleVerify = async (id: string, source: 'scan' | 'button' = 'button') => {
+    if (isVerifying.current) return;
+    isVerifying.current = true;
 
+    try {
+      const item = await db.inventory.get(id);
+      if (!item) {
+        throw new Error('Item not found');
+      }
+  
       const updatedItem = {
         ...item,
         lastVerified: new Date(),
         isVerified: true
-      }
-
-      await db.inventory.update(id, updatedItem)
-      await historyService.trackChange(id, 'update', item, updatedItem)
+      };
+  
+      await db.inventory.update(id, updatedItem);
+      await historyService.trackChange(id, 'update', item, updatedItem);
       
-      // Refresh the data in the table
       setData(prev => prev.map(i => {
         if (i.id === id) {
           return {
             ...i,
             lastVerified: new Date(),
             isVerified: true
-          }
+          };
         }
-        return i
-      }))
+        return i;
+      }));
       
-      toast.success("Item verified successfully")
+      if (source === 'scan') {
+        toast.success(`Verified item: ${item.name} (SKU: ${item.sku})`);
+      } else {
+        toast.success("Item verified successfully");
+      }
     } catch (error) {
-      console.error(error)
-      toast.error("Failed to verify item")
+      console.error(error);
+      toast.error("Failed to verify item");
+    } finally {
+      setTimeout(() => {
+        isVerifying.current = false;
+      }, 100);
     }
-  }
+  };
 
   return (
     <PageTransition>
@@ -284,6 +295,9 @@ export default function InventoryPage() {
                   onCategoriesChange={setSelectedCategories}
                   onStatusesChange={setSelectedStatuses}
                   onClearFilters={handleClearFilters}
+                  data={data}
+                  onVerify={handleVerify}
+                  settings={settings}
                 />
                 <DataTable 
                   columns={memoizedColumns}

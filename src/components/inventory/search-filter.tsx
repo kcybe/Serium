@@ -9,9 +9,12 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { FilterDropdown } from "./filter-dropdown"
 import { Button } from "../ui/button"
+import { toast } from "sonner"
+import { InventoryItem } from "@/types/inventory"
+import { SiteSettings } from "@/types/settings"
 
 type SearchParameter = "all" | "name" | "sku" | "location" | "description"
 
@@ -24,9 +27,12 @@ interface SearchFilterProps {
     onCategoriesChange: (categories: string[]) => void
     onStatusesChange: (statuses: string[]) => void
     onClearFilters: () => void  // Add this prop
-  }
+    data: InventoryItem[]
+    onVerify: (id: string, source?: 'scan' | 'button') => void
+    settings: SiteSettings  // Add this prop
+}
   
-  export function SearchFilter({ 
+export function SearchFilter({ 
     onSearchChange, 
     categories,
     statuses,
@@ -34,12 +40,19 @@ interface SearchFilterProps {
     selectedStatuses,
     onCategoriesChange,
     onStatusesChange,
-    onClearFilters
-  }: SearchFilterProps) {
+    onClearFilters,
+    data,
+    onVerify,
+    settings
+}: SearchFilterProps) {
   const [searchParam, setSearchParam] = useState<SearchParameter>("all")
   const [searchValue, setSearchValue] = useState<string>("")
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const [barcodeBuffer, setBarcodeBuffer] = useState<{ buffer: string; lastKeyTime: number }>({
+    buffer: '',
+    lastKeyTime: 0
+  })
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -97,6 +110,53 @@ interface SearchFilterProps {
     setSearchParam("all")
     onClearFilters()
   }
+
+  useEffect(() => {
+    if (!settings.features?.itemVerification || !settings.features?.scanToVerify) {
+      return;
+    }
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      const currentTime = new Date().getTime()
+      const bufferTimeout = 100
+
+      setBarcodeBuffer(prev => {
+        if (currentTime - prev.lastKeyTime > bufferTimeout) {
+          return {
+            buffer: e.key,
+            lastKeyTime: currentTime
+          }
+        }
+
+        if (e.key === 'Enter') {
+          const scannedSku = prev.buffer
+          const matchingItem = data.find(item => String(item.sku) === scannedSku)
+          if (matchingItem) {
+            onVerify(matchingItem.id, 'scan');
+          } else {
+            toast.error(`No item found with SKU: ${scannedSku}`);
+          }
+
+          return {
+            buffer: '',
+            lastKeyTime: currentTime
+          }
+        }
+
+        return {
+          buffer: prev.buffer + e.key,
+          lastKeyTime: currentTime
+        }
+      })
+    }
+
+    window.addEventListener('keypress', handleKeyPress)
+    return () => window.removeEventListener('keypress', handleKeyPress)
+  }, [data, onVerify, settings.features])
 
   return (
     <div className="flex flex-col gap-4">
