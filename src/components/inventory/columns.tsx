@@ -202,3 +202,46 @@ export const columns: ColumnDef<InventoryItem>[] = [
     }
   }
 ]
+
+export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
+  const baseColumns = columns.filter(col => col.id !== 'verification')
+  
+  if (settings.features?.itemVerification) {
+    return [...baseColumns, {
+      id: "verification",
+      header: "Last Verified",
+      cell: ({ row, table }) => {
+        const item = row.original
+        const lastVerified = item.lastVerified ? new Date(item.lastVerified) : null
+        
+        return (
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => (table.options.meta as TableMeta).onVerify(item.id)}
+              className="h-8 w-8 p-0"
+            >
+              {item.isVerified ? (
+                <CheckCircle className="h-4 w-4 text-green-500" />
+              ) : (
+                <XCircle className="h-4 w-4 text-red-500" />
+              )}
+            </Button>
+            <span className={cn(
+              "text-sm",
+              !lastVerified && "text-muted-foreground",
+              lastVerified && !item.isVerified && "text-red-500"
+            )}>
+              {lastVerified 
+                ? `${formatDistanceToNow(lastVerified)} ago`
+                : 'Never verified'}
+            </span>
+          </div>
+        )
+      }
+    }]
+  }
+  
+  return baseColumns
+}

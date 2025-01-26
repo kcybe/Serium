@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { DataTable } from "@/components/inventory/data-table"
-import { columns, type InventoryItem } from "@/components/inventory/columns"
+import { columns, type InventoryItem, getColumns } from "@/components/inventory/columns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AddItemDialog } from "@/components/inventory/add-item-dialog"
 import { Button } from "@/components/ui/button"
@@ -283,7 +283,7 @@ export default function InventoryPage() {
                   onClearFilters={handleClearFilters}
                 />
                 <DataTable 
-                  columns={columns} 
+                  columns={getColumns(settings)} 
                   data={filteredData}
                   onUpdate={(id, updatedItem) => handleUpdateItem(id, updatedItem)}
                   onDelete={handleDeleteItem}
