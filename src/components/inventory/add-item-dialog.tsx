@@ -38,7 +38,6 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
       await db.inventory.add(newItem)
       onAddItem(newItem)
       await historyService.trackChange(newItem.id, 'create', undefined, newItem)
-      toast.success("Item added successfully")
       setOpen(false)
     } catch (error) {
       toast.error("Failed to add item")

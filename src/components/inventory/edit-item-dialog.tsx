@@ -46,7 +46,6 @@ export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: Edit
       await db.inventory.update(item.id, processedValues)
       await historyService.trackChange(item.id, 'update', oldItem, processedValues)
       onItemUpdated(processedValues)
-      toast.success("Item updated successfully")
       onOpenChange(false)
     } catch (error) {
       toast.error("Failed to update item")

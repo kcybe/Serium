@@ -24,6 +24,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 export default function InventoryPage() {
     const [data, setData] = useState<InventoryItem[]>([])
     const [loading, setLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const [searchValue, setSearchValue] = useState("")
     const [searchParam, setSearchParam] = useState<"all" | "name" | "sku" | "location" | "description">("all")
@@ -66,22 +67,43 @@ export default function InventoryPage() {
     }, [data, searchValue, searchParam, selectedCategories, selectedStatuses])
   
     const loadItems = async () => {
-        setLoading(true)  // Add this line
+        if (isLoading) return
+
+        setIsLoading(true)
         try {
           const items = await db.inventory.toArray()
           setData(items)
-          toast.success("Data refreshed successfully")  // Add this line
+          if (items) {
+            toast.success("Data refreshed successfully", {
+              id: "refresh-data",
+            })
+          }
         } catch (error) {
           console.error("Failed to load items:", error)
-          toast.error("Failed to refresh data")  // Add this line
+          toast.error("Failed to refresh data", {
+            id: "refresh-data-error",
+          })
         } finally {
+          setIsLoading(false)
           setLoading(false)
         }
       }
   
     useEffect(() => {
-      loadItems()
-    }, [])
+      let mounted = true
+
+      const initializePage = async () => {
+        if (!mounted) return
+        await loadItems()
+        await loadSettings()
+      }
+
+      initializePage()
+
+      return () => {
+        mounted = false
+      }
+    }, []) // Only runs once on mount
 
     const loadSettings = async () => {
         const savedSettings = await db.settings.get('site-settings')  // Changed from 'site' to 'site-settings'
@@ -89,16 +111,6 @@ export default function InventoryPage() {
           setSettings(savedSettings)
         }
       }
-
-      useEffect(() => {
-        loadItems()
-        loadSettings()
-      }, [])
-      
-      // Add a new effect to watch settings changes
-      useEffect(() => {
-        loadSettings()
-      }, [settings])
 
     // Add this effect after your other effects
     useEffect(() => {
@@ -204,7 +216,7 @@ export default function InventoryPage() {
           <Card className="w-full max-w-7xl">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
               <CardTitle>
-                <InventoryHeader />
+                <InventoryHeader settings={settings} />
               </CardTitle>
               <div className="flex items-center gap-2">
                 <AddItemDialog onAddItem={handleAddItem} />

@@ -110,7 +110,6 @@ export const columns: ColumnDef<InventoryItem>[] = [
           }
           await db.inventory.delete(itemToDelete.id)
           ;(table.options.meta as TableMeta).deleteData(itemToDelete)
-          toast.success("Item deleted successfully")
           setDeleteOpen(false)
         } catch (error) {
           toast.error("Failed to delete item")
