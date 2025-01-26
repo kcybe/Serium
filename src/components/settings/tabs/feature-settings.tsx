@@ -41,7 +41,7 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
     {
       id: "itemVerification",
       label: "Item Verification",
-      description: "Track when items were last verified in inventory",
+      description: "Track when items were last verified in inventory (Refresh needed)",
       icon: CheckCircle,
     },
   ]

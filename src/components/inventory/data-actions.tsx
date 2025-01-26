@@ -7,20 +7,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Download, Upload, RotateCw } from "lucide-react"
+import { MoreHorizontal, Download, Upload, RotateCw, RefreshCw } from "lucide-react"
 import { useRef } from "react"
 import { toast } from "sonner"
 import { db } from "@/lib/db"
 import { exportToJson, importFromJson } from "@/lib/utils"
 import { InventoryItem } from "@/types/inventory"
+import { cn } from "@/lib/utils"
 
 interface DataActionsProps {
   data: InventoryItem[]
   onDataImported: (items: InventoryItem[]) => void
-  onRefresh: () => void
+  onRefresh: () => Promise<void>
+  isRefreshing: boolean
 }
 
-export function DataActions({ data, onDataImported, onRefresh }: DataActionsProps) {
+export function DataActions({ data, onDataImported, onRefresh, isRefreshing }: DataActionsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleExport = () => {
@@ -68,9 +70,14 @@ export function DataActions({ data, onDataImported, onRefresh }: DataActionsProp
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={onRefresh}>
-            <RotateCw className="mr-2 h-4 w-4" />
-            Refresh
+          <DropdownMenuItem onClick={onRefresh} disabled={isRefreshing}>
+            <RotateCw 
+              className={cn(
+                "h-4 w-4 mr-2",
+                isRefreshing && "animate-spin"
+              )} 
+            />
+            {isRefreshing ? "Refreshing..." : "Refresh"}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" />

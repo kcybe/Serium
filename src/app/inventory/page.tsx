@@ -31,6 +31,7 @@ export default function InventoryPage() {
     const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
     const [settings, setSettings] = useState<SiteSettings>(defaultSettings)
     const [historyEnabled, setHistoryEnabled] = useState<boolean>(true)
+    const [isRefreshing, setIsRefreshing] = useState(false)
 
     const filteredData = useMemo(() => {
         let filtered = data
@@ -67,12 +68,11 @@ export default function InventoryPage() {
     const memoizedColumns = useMemo(() => getColumns(settings), [settings])
   
     const loadItems = async () => {
-        if (isLoading) return
-
-        setIsLoading(true)
+        if (isRefreshing) return
+        setIsRefreshing(true)
+        
         try {
           const items = await db.inventory.toArray()
-          // Update verification status based on time threshold (e.g., 24 hours)
           const updatedItems = items.map(item => ({
             ...item,
             isVerified: item.lastVerified ? 
@@ -80,16 +80,12 @@ export default function InventoryPage() {
               : false
           }))
           setData(updatedItems)
-          toast.success("Data refreshed successfully", {
-            id: "refresh-data",
-          })
+          toast.success("Data refreshed successfully")
         } catch (error) {
           console.error("Failed to load items:", error)
-          toast.error("Failed to refresh data", {
-            id: "refresh-data-error",
-          })
+          toast.error("Failed to refresh data")
         } finally {
-          setIsLoading(false)
+          setIsRefreshing(false)
           setLoading(false)
         }
       }
@@ -261,9 +257,10 @@ export default function InventoryPage() {
               <div className="flex items-center gap-2">
                 <AddItemDialog onAddItem={handleAddItem} />
                 <DataActions 
-                  data={data} 
-                  onDataImported={(items) => setData(prev => [...prev, ...items])} 
-                  onRefresh={loadItems}
+                  data={data}
+                  onDataImported={(items) => setData(prev => [...prev, ...items])}
+                  onRefresh={loadItems} 
+                  isRefreshing={isRefreshing} 
                 />
               </div>
             </CardHeader>
