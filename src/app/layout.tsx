@@ -4,6 +4,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar"
 import { Toaster } from "sonner"
+import { Footer } from "@/components/footer"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -26,9 +27,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex min-h-screen flex-col">
-            <Navbar />
-            {children}
+          <div className="min-h-screen flex flex-col justify-between">
+            <div>
+              <Navbar />
+              {children}
+            </div>
+            <Footer />
           </div>
           <Toaster />
         </ThemeProvider>

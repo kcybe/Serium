@@ -1,5 +1,4 @@
 import { Hero } from "@/components/hero"
-import { Footer } from "@/components/footer"
 import { PageTransition } from '@/components/ui/page-transition'
 
 export default function Home() {
@@ -11,7 +10,6 @@ export default function Home() {
           {/* Add more sections here */}
         </div>
       </main>
-      <Footer />
     </PageTransition>
   )
 }
