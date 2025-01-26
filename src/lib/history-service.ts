@@ -81,10 +81,40 @@ export const historyService = {
       if (filter.action && filter.action !== 'all' as string) {
         collection = collection.filter(entry => entry.action === filter.action)
       }
-      if (filter.itemId) {
-        collection = collection.filter(entry => 
-          entry.itemId.toLowerCase().includes(filter.itemId!.toLowerCase())
-        )
+      if (filter.itemId && filter.searchParameter) {
+        const searchLower = filter.itemId.toLowerCase()
+        switch (filter.searchParameter) {
+          case "itemId":
+            collection = collection.filter(entry => 
+              entry.itemId.toLowerCase().includes(searchLower)
+            )
+            break
+          case "action":
+            collection = collection.filter(entry => 
+              entry.action.toLowerCase().includes(searchLower)
+            )
+            break
+          case "changes":
+            collection = collection.filter(entry => 
+              entry.changes.some(change => 
+                change.field.toLowerCase().includes(searchLower) ||
+                String(change.oldValue).toLowerCase().includes(searchLower) ||
+                String(change.newValue).toLowerCase().includes(searchLower)
+              )
+            )
+            break
+          case "all":
+            collection = collection.filter(entry => 
+              entry.itemId.toLowerCase().includes(searchLower) ||
+              entry.action.toLowerCase().includes(searchLower) ||
+              entry.changes.some(change => 
+                change.field.toLowerCase().includes(searchLower) ||
+                String(change.oldValue).toLowerCase().includes(searchLower) ||
+                String(change.newValue).toLowerCase().includes(searchLower)
+              )
+            )
+            break
+        }
       }
     }
 

@@ -16,4 +16,6 @@ export interface HistoryEntry {
     endDate?: Date
     action?: 'create' | 'update' | 'delete'
     itemId?: string
+    searchAll?: boolean
+    searchParameter?: "all" | "itemId" | "action" | "changes"
   }
