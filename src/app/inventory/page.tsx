@@ -68,8 +68,9 @@ export default function InventoryPage() {
     const memoizedColumns = useMemo(() => getColumns(settings), [settings])
   
     const loadItems = async () => {
-        if (isRefreshing) return
+        if (isRefreshing || isLoading) return
         setIsRefreshing(true)
+        setIsLoading(true)
         
         try {
           const items = await db.inventory.toArray()
@@ -80,12 +81,17 @@ export default function InventoryPage() {
               : false
           }))
           setData(updatedItems)
-          toast.success("Data refreshed successfully")
+          toast.success("Data refreshed successfully", {
+            id: "refresh-data"
+          })
         } catch (error) {
           console.error("Failed to load items:", error)
-          toast.error("Failed to refresh data")
+          toast.error("Failed to refresh data", {
+            id: "refresh-error"
+          })
         } finally {
           setIsRefreshing(false)
+          setIsLoading(false)
           setLoading(false)
         }
       }
