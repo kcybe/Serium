@@ -149,22 +149,26 @@ body {
 
 @keyframes matrix-rain {
   0% {
-    transform: translateY(-100%);
+    transform: translateX(-50%) translateY(-100%);
   }
   100% {
-    transform: translateY(100%);
+    transform: translateX(-50%) translateY(100%);
   }
 }
 
 .matrix-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   overflow: hidden;
   font-family: monospace;
   font-size: 1rem;
   line-height: 1;
   color: #0f0;
-  opacity: 0.2;
+  opacity: 0.35;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .matrix-bg::before,
@@ -172,19 +176,20 @@ body {
   content: "01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100 10010011 10101010 11001100 10101010 11110000 01001000 01100101 01101100 01101100 01101111";
   position: absolute;
   top: -50%;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
   width: 100%;
   height: 200%;
   white-space: pre-wrap;
   word-break: break-all;
   animation: matrix-rain 20s linear infinite;
-  transform: translateY(-50%);
+  text-align: center;
+  opacity: 0.35;
 }
 
 .matrix-bg::after {
   content: "セリウム インベントリ マネージャー 01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100 10010011 10101010 11001100";
   animation-duration: 17s;
   animation-delay: -2s;
-  left: -50%;
-  opacity: 0.5;
+  opacity: 0.35;
 }

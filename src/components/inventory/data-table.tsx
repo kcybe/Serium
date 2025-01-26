@@ -87,27 +87,27 @@ export function DataTable({
   })
 
   return (
-    <div>
+    <div className="space-y-4">
       <div className="flex items-center justify-between py-4">
-        <p className="text-sm font-medium">Total Products: {data.length}</p>
+        <p className="text-sm text-muted-foreground">
+          Total Products: {data.length}
+        </p>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border shadow-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
+              <TableRow key={headerGroup.id} className="bg-muted/50">
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="font-semibold">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -117,9 +117,10 @@ export function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-muted/50 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="py-3">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -132,7 +133,7 @@ export function DataTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-muted-foreground"
                 >
                   No results.
                 </TableCell>
@@ -143,12 +144,11 @@ export function DataTable({
       </div>
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Rows per page</p>
+          <p className="text-sm text-muted-foreground">Rows per page</p>
           <Select
             value={`${pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value))
-              setPageSize(Number(value))
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -164,46 +164,44 @@ export function DataTable({
           </Select>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+          <div className="flex w-[100px] items-center justify-center text-sm text-muted-foreground">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className="sr-only">Go to first page</span>
-            <ChevronsLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className="sr-only">Go to previous page</span>
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className="sr-only">Go to next page</span>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className="sr-only">Go to last page</span>
-            <ChevronsRight className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronsRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
