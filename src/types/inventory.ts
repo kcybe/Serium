@@ -8,6 +8,8 @@ export interface InventoryItem {
   status: string
   description: string
   location: string
+  lastVerified?: Date | null
+  isVerified?: boolean
 }
 
 export interface AddItemFormValues {

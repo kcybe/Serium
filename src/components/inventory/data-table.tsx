@@ -33,10 +33,13 @@ import {
 } from "lucide-react"
 import { useState } from "react"
 import { InventoryItem } from "./columns"
+import { SiteSettings } from "@/types/settings"
 
 export interface TableMeta {
-  updateData: (id: string, item: InventoryItem) => void
+  updateData: (id: string, updatedItem: InventoryItem) => void
   deleteData: (item: InventoryItem) => void
+  onVerify: (id: string) => void
+  settings: SiteSettings
 }
 
 interface DataTableProps<TData> {
@@ -44,13 +47,17 @@ interface DataTableProps<TData> {
   data: TData[]
   onUpdate: (id: string, item: TData) => void
   onDelete: (id: string) => void
+  handleVerify: (id: string) => void
+  settings: SiteSettings
 }
 
 export function DataTable({ 
   columns, 
   data,
   onUpdate,
-  onDelete 
+  onDelete,
+  handleVerify,
+  settings
 }: DataTableProps<InventoryItem>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pageSize, setPageSize] = useState(8)
@@ -82,7 +89,9 @@ export function DataTable({
     },
     meta: {
       updateData: (id: string, updatedItem: InventoryItem) => onUpdate(id, updatedItem),
-      deleteData: (item: InventoryItem) => onDelete(item.id)
+      deleteData: (item: InventoryItem) => onDelete(item.id),
+      onVerify: (id: string) => handleVerify(id),
+      settings: settings
     } as TableMeta,
   })
 

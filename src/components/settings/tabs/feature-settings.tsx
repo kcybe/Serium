@@ -5,7 +5,7 @@ import { SettingsSection } from "../settings-layout"
 import { SiteSettings } from "@/types/settings"
 import { Button } from "@/components/ui/button"
 import { DialogFooter } from "@/components/ui/dialog"
-import { Sparkles, Barcode, QrCode, History, Bell } from "lucide-react"
+import { Sparkles, Barcode, QrCode, History, Bell, CheckCircle } from "lucide-react"
 
 interface FeatureSettingsProps {
   settings: SiteSettings
@@ -37,6 +37,12 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
       label: "Notifications",
       description: "Get alerts for low stock and important updates",
       icon: Bell,
+    },
+    {
+      id: "itemVerification",
+      label: "Item Verification",
+      description: "Track when items were last verified in inventory",
+      icon: CheckCircle,
     },
   ]
 

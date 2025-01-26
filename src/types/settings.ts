@@ -14,6 +14,7 @@ export interface SiteSettings {
     qrCodeSupport?: boolean
     historyTracking?: boolean
     notifications?: boolean
+    itemVerification?: boolean
     [key: string]: boolean | undefined
   }
 }
@@ -34,6 +35,7 @@ export const defaultSettings: SiteSettings = {
     qrCodeSupport: false,
     historyTracking: false,
     notifications: false,
+    itemVerification: false,
   }
 }
 

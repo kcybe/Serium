@@ -72,12 +72,17 @@ export default function InventoryPage() {
         setIsLoading(true)
         try {
           const items = await db.inventory.toArray()
-          setData(items)
-          if (items) {
-            toast.success("Data refreshed successfully", {
-              id: "refresh-data",
-            })
-          }
+          // Update verification status based on time threshold (e.g., 24 hours)
+          const updatedItems = items.map(item => ({
+            ...item,
+            isVerified: item.lastVerified ? 
+              (new Date().getTime() - new Date(item.lastVerified).getTime()) < (24 * 60 * 60 * 1000)
+              : false
+          }))
+          setData(updatedItems)
+          toast.success("Data refreshed successfully", {
+            id: "refresh-data",
+          })
         } catch (error) {
           console.error("Failed to load items:", error)
           toast.error("Failed to refresh data", {
@@ -198,6 +203,41 @@ export default function InventoryPage() {
     setSelectedStatuses([])
   }
 
+  const handleVerify = async (id: string) => {
+    try {
+      const item = await db.inventory.get(id)
+      if (!item) {
+        throw new Error('Item not found')
+      }
+
+      const updatedItem = {
+        ...item,
+        lastVerified: new Date(),
+        isVerified: true
+      }
+
+      await db.inventory.update(id, updatedItem)
+      await historyService.trackChange(id, 'update', item, updatedItem)
+      
+      // Refresh the data in the table
+      setData(prev => prev.map(i => {
+        if (i.id === id) {
+          return {
+            ...i,
+            lastVerified: new Date(),
+            isVerified: true
+          }
+        }
+        return i
+      }))
+      
+      toast.success("Item verified successfully")
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to verify item")
+    }
+  }
+
   return (
     <PageTransition>
       <div className="flex flex-col gap-4 p-8 pt-8">
@@ -244,9 +284,11 @@ export default function InventoryPage() {
                 />
                 <DataTable 
                   columns={columns} 
-                  data={filteredData}  // Changed from data to filteredData
+                  data={filteredData}
                   onUpdate={(id, updatedItem) => handleUpdateItem(id, updatedItem)}
                   onDelete={handleDeleteItem}
+                  handleVerify={handleVerify}
+                  settings={settings}
                 />
               </div>
             </CardContent>

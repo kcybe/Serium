@@ -16,6 +16,10 @@ import { toast } from "sonner"
 import { db } from "@/lib/db"
 import { TableMeta } from "./data-table"
 import { ConfirmationDialog } from "../ui/confirmation-dialog"
+import { format, formatDistanceToNow } from "date-fns"
+import { CheckCircle, XCircle } from "lucide-react"
+import { SiteSettings } from "@/types/settings"
+import { cn } from "@/lib/utils"
 
 export interface InventoryItem {
   id: string
@@ -27,6 +31,8 @@ export interface InventoryItem {
   status: string
   description: string
   location: string
+  lastVerified?: Date | null
+  isVerified?: boolean
 }
 
 function SortableHeader({ column, title }: { column: any, title: string }) {
@@ -90,6 +96,45 @@ export const columns: ColumnDef<InventoryItem>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => <SortableHeader column={column} title="Status" />,
+  },
+  {
+    id: "verification",
+    header: "Last Verified",
+    cell: ({ row, table }) => {
+      const meta = table.options.meta as TableMeta
+      const settings = meta.settings as SiteSettings
+      
+      if (!settings.features?.itemVerification) return null
+      
+      const item = row.original
+      const lastVerified = item.lastVerified ? new Date(item.lastVerified) : null
+      
+      return (
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => meta.onVerify(item.id)}
+            className="h-8 w-8 p-0"
+          >
+            {item.isVerified ? (
+              <CheckCircle className="h-4 w-4 text-green-500" />
+            ) : (
+              <XCircle className="h-4 w-4 text-red-500" />
+            )}
+          </Button>
+          <span className={cn(
+            "text-sm",
+            !lastVerified && "text-muted-foreground",
+            lastVerified && !item.isVerified && "text-red-500"
+          )}>
+            {lastVerified 
+              ? `${formatDistanceToNow(lastVerified)} ago`
+              : 'Never verified'}
+          </span>
+        </div>
+      )
+    }
   },
   {
     id: "actions",

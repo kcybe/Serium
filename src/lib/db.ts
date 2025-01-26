@@ -10,8 +10,8 @@ class InventoryDB extends Dexie {
   
   constructor() {
     super('inventoryDB')
-    this.version(1).stores({
-      inventory: 'id, name, sku, description, quantity, price, category, location, status',
+    this.version(2).stores({
+      inventory: 'id, name, sku, description, quantity, price, category, location, status, lastVerified, isVerified',
       settings: 'id, companyName, currency, dateFormat, theme, categories, statuses, lowStockThreshold, defaultCategory, defaultLocation, defaultStatus',
       history: '++id, itemId, action, timestamp'
     })
