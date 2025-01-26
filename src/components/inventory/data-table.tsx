@@ -108,7 +108,7 @@ export function DataTable({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="bg-muted/50">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="font-semibold">
+                  <TableHead key={header.id} className="font-semibold text-center">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -129,7 +129,7 @@ export function DataTable({
                   className="hover:bg-muted/50 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-3">
+                    <TableCell key={cell.id} className="py-3 text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

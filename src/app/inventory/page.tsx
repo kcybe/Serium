@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { DataTable } from "@/components/inventory/data-table"
-import { columns, type InventoryItem, getColumns } from "@/components/inventory/columns"
+import { type InventoryItem, getColumns } from "@/components/inventory/columns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AddItemDialog } from "@/components/inventory/add-item-dialog"
 import { Button } from "@/components/ui/button"
@@ -25,10 +25,8 @@ export default function InventoryPage() {
     const [data, setData] = useState<InventoryItem[]>([])
     const [loading, setLoading] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
-
     const [searchValue, setSearchValue] = useState("")
     const [searchParam, setSearchParam] = useState<"all" | "name" | "sku" | "location" | "description">("all")
-
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
     const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
     const [settings, setSettings] = useState<SiteSettings>(defaultSettings)
@@ -65,6 +63,8 @@ export default function InventoryPage() {
 
         return filtered
     }, [data, searchValue, searchParam, selectedCategories, selectedStatuses])
+
+    const memoizedColumns = useMemo(() => getColumns(settings), [settings])
   
     const loadItems = async () => {
         if (isLoading) return
@@ -283,7 +283,7 @@ export default function InventoryPage() {
                   onClearFilters={handleClearFilters}
                 />
                 <DataTable 
-                  columns={getColumns(settings)} 
+                  columns={memoizedColumns}
                   data={filteredData}
                   onUpdate={(id, updatedItem) => handleUpdateItem(id, updatedItem)}
                   onDelete={handleDeleteItem}

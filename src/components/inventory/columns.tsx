@@ -1,6 +1,6 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, Column, Row, Table } from "@tanstack/react-table"
 import { MoreHorizontal, ArrowUpDown, ArrowDown, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -35,7 +35,7 @@ export interface InventoryItem {
   isVerified?: boolean
 }
 
-function SortableHeader({ column, title }: { column: any, title: string }) {
+function SortableHeader({ column, title }: { column: Column<InventoryItem>, title: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -64,81 +64,84 @@ function SortableHeader({ column, title }: { column: any, title: string }) {
   )
 }
 
-export const columns: ColumnDef<InventoryItem>[] = [
-  {
-    accessorKey: "name",
-    header: ({ column }) => <SortableHeader column={column} title="Name" />,
-  },
-  {
-    accessorKey: "sku",
-    header: ({ column }) => <SortableHeader column={column} title="SKU" />,
-  },
-  {
-    accessorKey: "description",
-    header: ({ column }) => <SortableHeader column={column} title="Description" />,
-  },
-  {
-    accessorKey: "quantity",
-    header: ({ column }) => <SortableHeader column={column} title="Quantity" />,
-  },
-  {
-    accessorKey: "price",
-    header: ({ column }) => <SortableHeader column={column} title="Price" />,
-  },
-  {
-    accessorKey: "category",
-    header: ({ column }) => <SortableHeader column={column} title="Category" />,
-  },
-  {
-    accessorKey: "location",
-    header: ({ column }) => <SortableHeader column={column} title="Location" />,
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => <SortableHeader column={column} title="Status" />,
-  },
-  {
-    id: "verification",
-    header: "Last Verified",
-    cell: ({ row, table }) => {
-      const meta = table.options.meta as TableMeta
-      const settings = meta.settings as SiteSettings
-      
-      if (!settings.features?.itemVerification) return null
-      
-      const item = row.original
-      const lastVerified = item.lastVerified ? new Date(item.lastVerified) : null
-      
-      return (
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => meta.onVerify(item.id)}
-            className="h-8 w-8 p-0"
-          >
-            {item.isVerified ? (
-              <CheckCircle className="h-4 w-4 text-green-500" />
-            ) : (
-              <XCircle className="h-4 w-4 text-red-500" />
-            )}
-          </Button>
-          <span className={cn(
-            "text-sm",
-            !lastVerified && "text-muted-foreground",
-            lastVerified && !item.isVerified && "text-red-500"
-          )}>
-            {lastVerified 
-              ? `${formatDistanceToNow(lastVerified)} ago`
-              : 'Never verified'}
-          </span>
-        </div>
-      )
+export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
+  const baseColumns = [
+    {
+      accessorKey: "name",
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Name" />,
+    },
+    {
+      accessorKey: "sku",
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="SKU" />,
+    },
+    {
+      accessorKey: "description",
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Description" />,
+    },
+    {
+      accessorKey: "quantity",
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Quantity" />,
+    },
+    {
+      accessorKey: "price",
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Price" />,
+    },
+    {
+      accessorKey: "category",
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Category" />,
+    },
+    {
+      accessorKey: "location",
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Location" />,
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Status" />,
     }
-  },
-  {
+  ]
+
+  const featureColumns = []
+  
+  if (settings.features?.itemVerification) {
+    featureColumns.push({
+      id: "verification",
+      header: "Last Verified",
+      cell: ({ row, table }: { row: Row<InventoryItem>, table: Table<InventoryItem> }) => {
+        const item = row.original
+        const lastVerified = item.lastVerified ? new Date(item.lastVerified) : null
+        
+        return (
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => (table.options.meta as TableMeta).onVerify(item.id)}
+              className="h-8 w-8 p-0"
+            >
+              {item.isVerified ? (
+                <CheckCircle className="h-4 w-4 text-green-500" />
+              ) : (
+                <XCircle className="h-4 w-4 text-red-500" />
+              )}
+            </Button>
+            <span className={cn(
+              "text-sm",
+              !lastVerified && "text-muted-foreground",
+              lastVerified && !item.isVerified && "text-red-500"
+            )}>
+              {lastVerified 
+                ? `${formatDistanceToNow(lastVerified)} ago`
+                : 'Never verified'}
+            </span>
+          </div>
+        )
+      }
+    })
+  }
+
+  const actionColumn = {
     id: "actions",
-    cell: ({ table, row }) => {
+    cell: ({ table, row }: { table: Table<InventoryItem>, row: Row<InventoryItem> }) => {
       const item = row.original
       const [editOpen, setEditOpen] = useState(false)
       const [deleteOpen, setDeleteOpen] = useState(false)
@@ -201,47 +204,10 @@ export const columns: ColumnDef<InventoryItem>[] = [
       )
     }
   }
-]
 
-export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
-  const baseColumns = columns.filter(col => col.id !== 'verification')
-  
-  if (settings.features?.itemVerification) {
-    return [...baseColumns, {
-      id: "verification",
-      header: "Last Verified",
-      cell: ({ row, table }) => {
-        const item = row.original
-        const lastVerified = item.lastVerified ? new Date(item.lastVerified) : null
-        
-        return (
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => (table.options.meta as TableMeta).onVerify(item.id)}
-              className="h-8 w-8 p-0"
-            >
-              {item.isVerified ? (
-                <CheckCircle className="h-4 w-4 text-green-500" />
-              ) : (
-                <XCircle className="h-4 w-4 text-red-500" />
-              )}
-            </Button>
-            <span className={cn(
-              "text-sm",
-              !lastVerified && "text-muted-foreground",
-              lastVerified && !item.isVerified && "text-red-500"
-            )}>
-              {lastVerified 
-                ? `${formatDistanceToNow(lastVerified)} ago`
-                : 'Never verified'}
-            </span>
-          </div>
-        )
-      }
-    }]
-  }
-  
-  return baseColumns
+  return [...baseColumns, ...(featureColumns.length > 0 ? [{
+    id: "separator",
+    header: () => <div className="w-px h-6 bg-border mx-2" />,
+    cell: () => <div className="w-px h-full bg-border mx-2" />,
+  }, ...featureColumns] : []), actionColumn]
 }
