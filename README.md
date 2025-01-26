@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 # Serium
-Serium is a modern inventory management app, built with Cursor AI and Next.js, offering local-first tracking, barcode scanning, and secure serial number management for teams.
+Serium is a modern inventory management app, built with Cursor AI and Next.js, offering local tracking, and secure serial number management for teams.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
