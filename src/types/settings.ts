@@ -15,7 +15,9 @@ export interface SiteSettings {
     historyTracking?: boolean
     notifications?: boolean
     itemVerification?: boolean
-    [key: string]: boolean | undefined
+    verificationTimeout?: number
+    verificationTimeoutUnit?: 'minutes' | 'hours' | 'days'
+    [key: string]: boolean | number | string | undefined
   }
 }
 
@@ -36,23 +38,25 @@ export const defaultSettings: SiteSettings = {
     historyTracking: false,
     notifications: false,
     itemVerification: false,
+    verificationTimeout: 7,
+    verificationTimeoutUnit: 'days'
   }
 }
 
-  export const currencyOptions = [
-    { label: 'USD ($)', value: 'USD' },
-    { label: 'EUR (€)', value: 'EUR' },
-    { label: 'GBP (£)', value: 'GBP' }
-  ]
-  
-  export const dateFormatOptions = [
-    { label: 'MM/DD/YYYY', value: 'MM/DD/YYYY' },
-    { label: 'DD/MM/YYYY', value: 'DD/MM/YYYY' },
-    { label: 'YYYY-MM-DD', value: 'YYYY-MM-DD' }
-  ]
-  
-  export const themeOptions = [
-    { label: 'Light', value: 'light' },
-    { label: 'Dark', value: 'dark' },
-    { label: 'System', value: 'system' }
-  ]
+export const currencyOptions = [
+  { label: 'USD ($)', value: 'USD' },
+  { label: 'EUR (€)', value: 'EUR' },
+  { label: 'GBP (£)', value: 'GBP' }
+]
+
+export const dateFormatOptions = [
+  { label: 'MM/DD/YYYY', value: 'MM/DD/YYYY' },
+  { label: 'DD/MM/YYYY', value: 'DD/MM/YYYY' },
+  { label: 'YYYY-MM-DD', value: 'YYYY-MM-DD' }
+]
+
+export const themeOptions = [
+  { label: 'Light', value: 'light' },
+  { label: 'Dark', value: 'dark' },
+  { label: 'System', value: 'system' }
+]

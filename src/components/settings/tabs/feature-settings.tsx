@@ -1,12 +1,15 @@
 "use client"
 
 import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 import { SettingsSection } from "../settings-layout"
 import { SiteSettings } from "@/types/settings"
 import { Button } from "@/components/ui/button"
 import { DialogFooter } from "@/components/ui/dialog"
-import { Sparkles, Barcode, QrCode, History, Bell, CheckCircle } from "lucide-react"
+import { Sparkles, Barcode, QrCode, History, Bell, CheckCircle, Clock } from "lucide-react"
 import { useState } from "react"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface FeatureSettingsProps {
   settings: SiteSettings
@@ -15,6 +18,12 @@ interface FeatureSettingsProps {
 
 export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
   const [localFeatures, setLocalFeatures] = useState(settings.features)
+  const [verificationTimeout, setVerificationTimeout] = useState(
+    settings.features.verificationTimeout || 7
+  )
+  const [verificationTimeoutUnit, setVerificationTimeoutUnit] = useState(
+    settings.features.verificationTimeoutUnit || 'days'
+  )
 
   const features = [
     {
@@ -51,25 +60,42 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
           id: "scanToVerify",
           label: "Scan to Verify",
           description: "Enable barcode scanning for quick item verification"
+        },
+        {
+          id: "verificationTimeout",
+          label: "Verification Timeout",
+          description: "Time before verification status turns red",
+          type: "number-with-unit"
         }
       ]
     },
   ]
 
-  const handleFeatureToggle = (featureId: string, checked: boolean, subFeatureId?: string) => {
+  const handleFeatureToggle = (featureId: string, checked: boolean | "indeterminate", subFeatureId?: string) => {
     setLocalFeatures(prev => ({
       ...prev,
-      [featureId]: subFeatureId ? prev?.[featureId] : checked,
+      [featureId]: subFeatureId ? prev?.[featureId] : (checked === true),
       ...(subFeatureId && {
-        [subFeatureId]: checked
+        [subFeatureId]: checked === true
       })
     }))
+  }
+
+  const handleTimeoutChange = (value: string) => {
+    const timeout = parseInt(value)
+    if (!isNaN(timeout) && timeout > 0) {
+      setVerificationTimeout(timeout)
+    }
   }
 
   const handleSubmit = () => {
     onSubmit({
       ...settings,
-      features: localFeatures
+      features: {
+        ...localFeatures,
+        verificationTimeout,
+        verificationTimeoutUnit
+      }
     })
   }
 
@@ -97,10 +123,8 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                       </label>
                       <Checkbox
                         id={feature.id}
-                        checked={localFeatures?.[feature.id] || false}
-                        onCheckedChange={(checked) => 
-                          handleFeatureToggle(feature.id, checked as boolean)
-                        }
+                        checked={!!localFeatures?.[feature.id]}
+                        onCheckedChange={(checked) => handleFeatureToggle(feature.id, checked)}
                       />
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -112,7 +136,7 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                   <div className="ml-9 space-y-3 border-l pl-4">
                     {feature.subFeatures.map(subFeature => (
                       <div key={subFeature.id} className="flex items-center justify-between">
-                        <div>
+                        <div className="flex-1">
                           <label
                             htmlFor={subFeature.id}
                             className="text-sm font-medium leading-none"
@@ -123,13 +147,39 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                             {subFeature.description}
                           </p>
                         </div>
-                        <Checkbox
-                          id={subFeature.id}
-                          checked={localFeatures?.[subFeature.id] || false}
-                          onCheckedChange={(checked) => 
-                            handleFeatureToggle(feature.id, checked as boolean, subFeature.id)
-                          }
-                        />
+                        {subFeature.type === "number-with-unit" ? (
+                          <div className="flex items-center space-x-2">
+                            <Input
+                              id={subFeature.id}
+                              type="number"
+                              min="1"
+                              value={verificationTimeout}
+                              onChange={(e) => handleTimeoutChange(e.target.value)}
+                              className="w-20"
+                            />
+                            <Select
+                              value={verificationTimeoutUnit}
+                              onValueChange={(value: "minutes" | "hours" | "days") => setVerificationTimeoutUnit(value)}
+                            >
+                              <SelectTrigger className="w-[110px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="minutes">Minutes</SelectItem>
+                                <SelectItem value="hours">Hours</SelectItem>
+                                <SelectItem value="days">Days</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        ) : (
+                          <Checkbox
+                            id={subFeature.id}
+                            checked={!!localFeatures?.[subFeature.id]}
+                            onCheckedChange={(checked) => 
+                              handleFeatureToggle(feature.id, checked, subFeature.id)
+                            }
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
