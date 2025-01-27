@@ -20,6 +20,16 @@ export interface SiteSettings {
     verificationTimeoutUnit?: 'minutes' | 'hours' | 'days'
     [key: string]: boolean | number | string | undefined
   }
+  visibleColumns: {
+    name: boolean
+    sku: boolean
+    description: boolean
+    quantity: boolean
+    price: boolean
+    category: boolean
+    location: boolean
+    status: boolean
+  }
 }
 
 export const defaultSettings: SiteSettings = {
@@ -41,6 +51,16 @@ export const defaultSettings: SiteSettings = {
     itemVerification: false,
     verificationTimeout: 7,
     verificationTimeoutUnit: 'days'
+  },
+  visibleColumns: {
+    name: true,
+    sku: true,
+    description: true,
+    quantity: true,
+    price: true,
+    category: true,
+    location: true,
+    status: true
   }
 }
 

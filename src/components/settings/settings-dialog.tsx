@@ -68,26 +68,20 @@ export function SettingsDialog() {
           <Settings2 className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0">
+        <DialogHeader className="p-6 pb-0">
           <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
-        <SettingsTabs 
-          settings={settings} 
-          onSubmit={handleSubmit} 
-          onSettingsImported={(newSettings) => {
-            setSettings(newSettings)
-            window.location.reload()
-          }}
-        >
-          <TabsContent value="table">
-            <TableSettings 
-              settings={settings} 
-              onSubmit={handleSubmit} 
-              onSettingsUpdated={loadSettings}
-            />
-          </TabsContent>
-        </SettingsTabs>
+        <div className="flex-1 overflow-y-auto px-6 pb-6">
+          <SettingsTabs
+            settings={settings}
+            onSubmit={handleSubmit}
+            onSettingsImported={(newSettings) => {
+              setSettings(newSettings)
+              window.location.reload()
+            }}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   )

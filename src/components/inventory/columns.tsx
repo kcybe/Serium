@@ -68,37 +68,55 @@ export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
   const baseColumns = [
     {
       accessorKey: "name",
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Name" />,
+      header: ({ column }: { column: Column<InventoryItem> }) => 
+        <SortableHeader column={column} title="Name" />,
     },
     {
       accessorKey: "sku",
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="SKU" />,
+      header: ({ column }: { column: Column<InventoryItem> }) => 
+        <SortableHeader column={column} title="SKU" />,
+      show: settings.visibleColumns?.sku
     },
     {
       accessorKey: "description",
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Description" />,
+      header: ({ column }: { column: Column<InventoryItem> }) => 
+        <SortableHeader column={column} title="Description" />,
+      show: settings.visibleColumns?.description
     },
     {
       accessorKey: "quantity",
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Quantity" />,
+      header: ({ column }: { column: Column<InventoryItem> }) => 
+        <SortableHeader column={column} title="Quantity" />,
+      show: settings.visibleColumns?.quantity
     },
     {
       accessorKey: "price",
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Price" />,
+      header: ({ column }: { column: Column<InventoryItem> }) => 
+        <SortableHeader column={column} title="Price" />,
+      show: settings.visibleColumns?.price
     },
     {
       accessorKey: "category",
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Category" />,
+      header: ({ column }: { column: Column<InventoryItem> }) => 
+        <SortableHeader column={column} title="Category" />,
+      show: settings.visibleColumns?.category
     },
     {
       accessorKey: "location",
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Location" />,
+      header: ({ column }: { column: Column<InventoryItem> }) => 
+        <SortableHeader column={column} title="Location" />,
+      show: settings.visibleColumns?.location
     },
     {
       accessorKey: "status",
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Status" />,
+      header: ({ column }: { column: Column<InventoryItem> }) => 
+        <SortableHeader column={column} title="Status" />,
+      show: settings.visibleColumns?.status
     }
-  ]
+  ].filter(column => {
+    if (column.accessorKey === 'name') return true;
+    return settings.visibleColumns?.[column.accessorKey as keyof typeof settings.visibleColumns] ?? true;
+  });
 
   const featureColumns = []
   
