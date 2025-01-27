@@ -6,6 +6,7 @@ import { SiteSettings } from "@/types/settings"
 import { Button } from "@/components/ui/button"
 import { DialogFooter } from "@/components/ui/dialog"
 import { Sparkles, Barcode, QrCode, History, Bell, CheckCircle } from "lucide-react"
+import { useState } from "react"
 
 interface FeatureSettingsProps {
   settings: SiteSettings
@@ -13,6 +14,8 @@ interface FeatureSettingsProps {
 }
 
 export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
+  const [localFeatures, setLocalFeatures] = useState(settings.features)
+
   const features = [
     {
       id: "barcodeScanning",
@@ -54,15 +57,19 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
   ]
 
   const handleFeatureToggle = (featureId: string, checked: boolean, subFeatureId?: string) => {
+    setLocalFeatures(prev => ({
+      ...prev,
+      [featureId]: subFeatureId ? prev?.[featureId] : checked,
+      ...(subFeatureId && {
+        [subFeatureId]: checked
+      })
+    }))
+  }
+
+  const handleSubmit = () => {
     onSubmit({
       ...settings,
-      features: {
-        ...settings.features,
-        [featureId]: subFeatureId ? settings.features?.[featureId] : checked,
-        ...(subFeatureId && {
-          [subFeatureId]: checked
-        })
-      },
+      features: localFeatures
     })
   }
 
@@ -90,7 +97,7 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                       </label>
                       <Checkbox
                         id={feature.id}
-                        checked={settings.features?.[feature.id] || false}
+                        checked={localFeatures?.[feature.id] || false}
                         onCheckedChange={(checked) => 
                           handleFeatureToggle(feature.id, checked as boolean)
                         }
@@ -101,7 +108,7 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                     </p>
                   </div>
                 </div>
-                {feature.subFeatures && settings.features?.[feature.id] && (
+                {feature.subFeatures && localFeatures?.[feature.id] && (
                   <div className="ml-9 space-y-3 border-l pl-4">
                     {feature.subFeatures.map(subFeature => (
                       <div key={subFeature.id} className="flex items-center justify-between">
@@ -118,7 +125,7 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                         </div>
                         <Checkbox
                           id={subFeature.id}
-                          checked={settings.features?.[subFeature.id] || false}
+                          checked={localFeatures?.[subFeature.id] || false}
                           onCheckedChange={(checked) => 
                             handleFeatureToggle(feature.id, checked as boolean, subFeature.id)
                           }
@@ -132,6 +139,9 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
           })}
         </div>
       </SettingsSection>
+      <DialogFooter>
+        <Button type="button" onClick={handleSubmit}>Save Changes</Button>
+      </DialogFooter>
     </form>
   )
 }
