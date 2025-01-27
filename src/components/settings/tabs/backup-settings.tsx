@@ -19,10 +19,14 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
 
   const handleExportAll = async () => {
     try {
-      const inventory = await db.inventory.toArray()
+      const [inventory, historyLogs] = await Promise.all([
+        db.inventory.toArray(),
+        db.history.toArray()
+      ])
       const backup = {
         settings,
-        inventory
+        inventory,
+        history: historyLogs
       }
       exportToJson(backup, `inventory-backup-${new Date().toISOString().split('T')[0]}.json`)
       toast.success("Backup exported successfully")
@@ -43,7 +47,10 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
       }
 
       // Clear existing data
-      await db.inventory.clear()
+      await Promise.all([
+        db.inventory.clear(),
+        db.history.clear()
+      ])
       
       // Import inventory items with new IDs
       const itemsWithNewIds = importedData.inventory.map((item: any) => ({
@@ -51,8 +58,11 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         id: crypto.randomUUID()
       }))
       
-      await db.inventory.bulkAdd(itemsWithNewIds)
-      await db.settings.put({ ...importedData.settings, id: 'site-settings' })
+      await Promise.all([
+        db.inventory.bulkAdd(itemsWithNewIds),
+        db.settings.put({ ...importedData.settings, id: 'site-settings' }),
+        importedData.history && db.history.bulkAdd(importedData.history)
+      ])
       
       onSettingsImported(importedData.settings)
       toast.success("Backup imported successfully")
