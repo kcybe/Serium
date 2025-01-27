@@ -74,17 +74,37 @@ export default function InventoryPage() {
         setIsLoading(true)
         
         try {
-          const items = await db.inventory.toArray()
+          // Load both items and settings in parallel
+          const [items, savedSettings] = await Promise.all([
+            db.inventory.toArray(),
+            db.settings.get('site-settings')
+          ])
+
           const updatedItems = items.map(item => ({
             ...item,
             isVerified: item.lastVerified ? 
               (new Date().getTime() - new Date(item.lastVerified).getTime()) < (24 * 60 * 60 * 1000)
               : false
           }))
+
+          // Check if there are actual changes in the data or settings
+          const hasDataChanges = JSON.stringify(updatedItems) !== JSON.stringify(data)
+          const hasSettingsChanges = JSON.stringify(savedSettings) !== JSON.stringify(settings)
+          
           setData(updatedItems)
-          toast.success("Data refreshed successfully", {
-            id: "refresh-data"
-          })
+          if (savedSettings) {
+            setSettings(savedSettings)
+          }
+          
+          if (hasDataChanges || hasSettingsChanges) {
+            toast.success("Data refreshed successfully", {
+              id: "refresh-data"
+            })
+          } else {
+            toast.info("No changes found", {
+              id: "refresh-data"
+            })
+          }
         } catch (error) {
           console.error("Failed to load items:", error)
           toast.error("Failed to refresh data", {
