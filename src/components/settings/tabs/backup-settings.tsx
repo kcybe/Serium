@@ -2,12 +2,13 @@
 
 import { Button } from "@/components/ui/button"
 import { SettingsSection } from "../settings-layout"
-import { Download, Upload, Save } from "lucide-react"
+import { Download, Upload, Save, RotateCcw } from "lucide-react"
 import { db } from "@/lib/db"
 import { exportToJson, importFromJson } from "@/lib/utils"
 import { toast } from "sonner"
-import { useRef } from "react"
-import { SiteSettings } from "@/types/settings"
+import { useRef, useState } from "react"
+import { SiteSettings, defaultSettings } from "@/types/settings"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface BackupSettingsProps {
   settings: SiteSettings
@@ -16,6 +17,7 @@ interface BackupSettingsProps {
 
 export function BackupSettings({ settings, onSettingsImported }: BackupSettingsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [showResetDialog, setShowResetDialog] = useState(false)
 
   const handleExportAll = async () => {
     try {
@@ -74,6 +76,22 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
     }
   }
 
+  const handleFactoryReset = async () => {
+    try {
+      await Promise.all([
+        db.inventory.clear(),
+        db.history.clear(),
+        db.settings.put({ ...defaultSettings, id: 'site-settings' })
+      ])
+      onSettingsImported(defaultSettings)
+      toast.success("Factory reset completed successfully")
+    } catch (error) {
+      toast.error("Failed to perform factory reset")
+      console.error(error)
+    }
+    setShowResetDialog(false)
+  }
+
   return (
     <div className="space-y-6">
       <SettingsSection
@@ -99,6 +117,30 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
           </Button>
         </div>
       </SettingsSection>
+
+      <SettingsSection
+        icon={RotateCcw}
+        title="Factory Reset"
+        description="Reset all settings and data to default state"
+      >
+        <Button 
+          variant="destructive" 
+          onClick={() => setShowResetDialog(true)}
+        >
+          <RotateCcw className="mr-2 h-4 w-4" />
+          Reset to Factory Defaults
+        </Button>
+      </SettingsSection>
+
+      <ConfirmationDialog
+        open={showResetDialog}
+        onOpenChange={setShowResetDialog}
+        onConfirm={handleFactoryReset}
+        title="Factory Reset"
+        description="This will permanently delete all your data and reset all settings to their default values. This action cannot be undone."
+        confirmLabel="Reset Everything"
+        cancelLabel="Cancel"
+      />
     </div>
   )
 }

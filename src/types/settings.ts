@@ -1,4 +1,5 @@
 export interface SiteSettings {
+  id?: string
   inventoryName: string
   theme: "light" | "dark" | "system"
   currency: string
