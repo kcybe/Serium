@@ -5,8 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar"
 import { Toaster } from "sonner"
 import { Footer } from "@/components/footer"
-
-const inter = Inter({ subsets: ["latin"] })
+import { pixelifySans, inter } from '@/lib/fonts'
 
 export const metadata: Metadata = {
   title: "Inventory Manager",
@@ -19,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${pixelifySans.variable}`} suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
