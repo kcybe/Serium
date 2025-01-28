@@ -10,7 +10,7 @@ import {
 import { MoreHorizontal, Download, Upload, RotateCw, RefreshCw } from "lucide-react"
 import { useRef } from "react"
 import { toast } from "sonner"
-import { db } from "@/lib/db"
+import { db } from "@/lib/services/db"
 import { exportToJson, importFromJson } from "@/lib/utils"
 import { InventoryItem } from "@/types/inventory"
 import { cn } from "@/lib/utils"

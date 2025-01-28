@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { HistoryEntry, HistoryFilter } from '@/types/history'
-import { historyService } from '@/lib/history-service'
+import { historyService } from '@/lib/services/history'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { format } from 'date-fns'

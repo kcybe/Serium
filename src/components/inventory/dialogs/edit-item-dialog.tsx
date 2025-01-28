@@ -8,13 +8,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { AddItemForm } from "./add-item-form"
-import { InventoryItem } from "./columns"
-import { db } from "@/lib/db"
+import { AddItemForm } from "../forms/add-item-form"
+import { InventoryItem } from "../table/columns"
+import { db } from "@/lib/services/db"
 import { toast } from "sonner"
-import { LoadingSpinner } from "../ui/loading-spinner"
-import { AddItemFormValues } from "./add-item-form"
-import { historyService } from "@/lib/history-service"
+import { LoadingSpinner } from "../../ui/loading-spinner"
+import { AddItemFormValues } from "../forms/add-item-form"
+import { historyService } from "@/lib/services/history"
 
 interface EditItemDialogProps {
   item: InventoryItem

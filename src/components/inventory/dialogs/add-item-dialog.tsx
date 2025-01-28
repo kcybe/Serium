@@ -10,11 +10,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
-import { AddItemForm, type AddItemFormValues } from "./add-item-form"
-import { InventoryItem } from "./columns"
-import { db } from "@/lib/db"
+import { AddItemForm, type AddItemFormValues } from "../forms/add-item-form"
+import { InventoryItem } from "../table/columns"
+import { db } from "@/lib/services/db"
 import { toast } from "sonner"
-import { historyService } from "@/lib/history-service"
+import { historyService } from "@/lib/services/history"
 
 interface AddItemDialogProps {
   onAddItem: (item: InventoryItem) => void

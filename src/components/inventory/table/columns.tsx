@@ -10,12 +10,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { EditItemDialog } from "./edit-item-dialog"
+import { EditItemDialog } from "../dialogs/edit-item-dialog"
 import { useState } from "react"
 import { toast } from "sonner"
-import { db } from "@/lib/db"
+import { db } from "@/lib/services/db"
 import { TableMeta } from "./data-table"
-import { ConfirmationDialog } from "../ui/confirmation-dialog"
+import { ConfirmationDialog } from "../../ui/confirmation-dialog"
 import { format, formatDistanceToNow } from "date-fns"
 import { CheckCircle, XCircle } from "lucide-react"
 import { SiteSettings } from "@/types/settings"

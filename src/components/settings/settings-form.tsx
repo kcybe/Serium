@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge"
 import { DialogFooter } from "@/components/ui/dialog"
 import { Building2, Palette, Tags, ListTodo, X } from "lucide-react"
 import { useState } from "react"
-import { db } from "@/lib/db"
+import { db } from "@/lib/services/db"
 import { SiteSettings } from "@/types/settings"
 import { SettingsSection } from "./settings-layout"
 

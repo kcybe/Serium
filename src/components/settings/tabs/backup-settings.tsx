@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { SettingsSection } from "../settings-layout"
 import { Download, Upload, Save, RotateCcw } from "lucide-react"
-import { db } from "@/lib/db"
+import { db } from "@/lib/services/db"
 import { exportToJson, importFromJson } from "@/lib/utils"
 import { toast } from "sonner"
 import { useRef, useState } from "react"

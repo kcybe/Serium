@@ -11,11 +11,11 @@ import { Button } from "@/components/ui/button"
 import { Settings2, Table2, Save } from "lucide-react"
 import { useState, useEffect } from "react"
 import { SiteSettings, defaultSettings } from "@/types/settings"
-import { db } from "@/lib/db"
+import { db } from "@/lib/services/db"
 import { toast } from "sonner"
 import { useTheme } from "next-themes"
-import { SettingsTabs } from "./settings-tabs"
-import { TableSettings } from "./tabs/table-settings"
+import { SettingsTabs } from "../settings-tabs"
+import { TableSettings } from "../tabs/table-settings"
 import { Tabs, TabsContent } from "@/components/ui/tabs"  // Updated import
 
 const tabs = [

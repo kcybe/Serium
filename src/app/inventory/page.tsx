@@ -1,21 +1,21 @@
 "use client"
 
 import { useState, useEffect, useMemo, useRef } from "react"
-import { DataTable } from "@/components/inventory/data-table"
-import { type InventoryItem, getColumns } from "@/components/inventory/columns"
+import { DataTable } from "@/components/inventory/table/data-table"
+import { type InventoryItem, getColumns } from "@/components/inventory/table/columns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { AddItemDialog } from "@/components/inventory/add-item-dialog"
+import { AddItemDialog } from "@/components/inventory/dialogs/add-item-dialog"
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
-import { db } from "@/lib/db"
+import { db } from "@/lib/services/db"
 import { Skeleton } from "@/components/ui/skeleton"
 import { exportToJson } from "@/lib/utils"
-import { DataActions } from "@/components/inventory/data-actions"
+import { DataActions } from "@/components/inventory/actions/data-actions"
 import { InventoryHeader } from "@/components/inventory/inventory-header"
 import { toast } from "sonner"
-import { SearchFilter } from "@/components/inventory/search-filter"
+import { SearchFilter } from "@/components/inventory/filters/search-filter"
 import { defaultSettings, SiteSettings } from "@/types/settings"
-import { historyService } from '@/lib/history-service'
+import { historyService } from '@/lib/services/history'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import { PageTransition } from '@/components/ui/page-transition'

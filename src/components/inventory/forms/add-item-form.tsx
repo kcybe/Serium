@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/form"
 import { useEffect, useState } from "react"
 import { defaultSettings, SiteSettings } from "@/types/settings"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { db } from "@/lib/db"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { db } from "@/lib/services/db"
 
 const formSchema = z.object({
   sku: z.string(),
