@@ -15,6 +15,7 @@ import { exportToJson } from "@/lib/services/utils/export-to-json"
 import { importFromJson } from "@/lib/services/utils/import-from-json"
 import { InventoryItem } from "@/types/inventory"
 import { cn } from "@/lib/services/utils/utils"
+import { defaultSettings } from "@/types/settings"
 
 interface DataActionsProps {
   data: InventoryItem[]
@@ -26,8 +27,24 @@ interface DataActionsProps {
 export function DataActions({ data, onDataImported, onRefresh, isRefreshing }: DataActionsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleExport = () => {
-    exportToJson(data, `inventory-${new Date().toISOString().split('T')[0]}.json`)
+  const handleExport = async () => {
+    try {
+      const [settings, history] = await Promise.all([
+        db.settings.get('site-settings'),
+        db.history.toArray()
+      ]);
+      
+      const backupData = {
+        settings: settings || defaultSettings,
+        inventory: data,
+        history
+      };
+
+      exportToJson(backupData, `inventory-${new Date().toISOString().split('T')[0]}.json`);
+    } catch (error) {
+      toast.error("Failed to export data");
+      console.error(error);
+    }
   }
 
   const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,10 +58,16 @@ export function DataActions({ data, onDataImported, onRefresh, isRefreshing }: D
       // Generate new IDs for imported items
       const itemsWithNewIds = importedData.map(item => ({
         ...item,
-        id: crypto.randomUUID()
+        id: crypto.randomUUID(),
+        lastVerified: null,  // Ensure required fields
+        isVerified: false
       }))
   
-      await db.inventory.bulkAdd(itemsWithNewIds)
+      // Add transaction for bulk operations
+      await db.transaction('rw', db.inventory, async () => {
+        await db.inventory.bulkAdd(itemsWithNewIds);
+      })
+  
       onDataImported(itemsWithNewIds)
       toast.success("Data imported successfully")
     } catch (error) {

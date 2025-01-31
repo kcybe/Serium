@@ -3,6 +3,7 @@ import { useState } from "react"
 import { InventoryItem } from "@/types/inventory"
 import { TableMeta } from "../data-table"
 import { SiteSettings } from "@/types/settings"
+import { db } from "@/lib/services/db"
 
 export function useInventoryTable(
   data: InventoryItem[],
@@ -41,9 +42,15 @@ export function useInventoryTable(
       }
     },
     meta: {
-      updateData: (id: string, updatedItem: InventoryItem) => onUpdate(id, updatedItem),
-      deleteData: (item: InventoryItem) => onDelete(item.id),
-      onVerify: (id: string) => handleVerify(id),
+      updateData: async (id: string, updatedItem: InventoryItem) => {
+        await db.inventory.update(id, updatedItem);
+        onUpdate(id, updatedItem);
+      },
+      deleteData: async (item: InventoryItem) => {
+        await db.inventory.delete(item.id);
+        onDelete(item.id);
+      },
+      onVerify: handleVerify,
       settings: settings
     } as TableMeta,
   })

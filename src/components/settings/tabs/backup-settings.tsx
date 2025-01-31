@@ -75,7 +75,7 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         })
       }
       
-      toast.success('Full backup restored. Please refresh the page to make changes!)')
+      toast.success('Full backup restored. Please refresh the page to make changes!')
     } catch (error) {
       toast.error('Invalid backup file')
     }
