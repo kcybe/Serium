@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/services/utils/utils"
 
 function Skeleton({
   className,

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/services/utils/utils"
 import { LucideIcon } from "lucide-react"
 
 interface SettingsSectionProps {

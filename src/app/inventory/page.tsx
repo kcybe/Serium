@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useMemo, useRef } from "react"
 import { DataTable } from "@/components/inventory/table/data-table"
-import { type InventoryItem, getColumns } from "@/components/inventory/table/columns"
+import { getColumns } from "@/components/inventory/helpers/get-columns"
+import { type InventoryItem } from "@/types/inventory"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AddItemDialog } from "@/components/inventory/dialogs/add-item-dialog"
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
 import { db } from "@/lib/services/db"
 import { Skeleton } from "@/components/ui/skeleton"
-import { exportToJson } from "@/lib/utils"
+import { exportToJson } from "@/lib/services/utils/export-to-json"
 import { DataActions } from "@/components/inventory/actions/data-actions"
 import { InventoryHeader } from "@/components/inventory/inventory-header"
 import { toast } from "sonner"
@@ -19,6 +20,7 @@ import { historyService } from '@/lib/services/history'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import { PageTransition } from '@/components/ui/page-transition'
+import { inventoryService } from "@/lib/services/inventory"
 
 
 export default function InventoryPage() {
@@ -231,35 +233,14 @@ export default function InventoryPage() {
     isVerifying.current = true;
 
     try {
-      const item = await db.inventory.get(id);
-      if (!item) {
-        throw new Error('Item not found');
-      }
-  
-      const updatedItem = {
-        ...item,
-        lastVerified: new Date(),
-        isVerified: true
-      };
-  
-      await db.inventory.update(id, updatedItem);
-      await historyService.trackChange(id, 'update', item, updatedItem);
+      const updatedItem = await inventoryService.verifyItem(id)
       
-      setData(prev => prev.map(i => {
-        if (i.id === id) {
-          return {
-            ...i,
-            lastVerified: new Date(),
-            isVerified: true
-          };
-        }
-        return i;
-      }));
+      setData(prev => prev.map(i => i.id === id ? updatedItem : i))
       
       if (source === 'scan') {
-        toast.success(`Verified item: ${item.name} (SKU: ${item.sku})`);
+        toast.success(`Verified item: ${updatedItem.name} (SKU: ${updatedItem.sku})`)
       } else {
-        toast.success("Item verified successfully");
+        toast.success("Item verified successfully")
       }
     } catch (error) {
       console.error(error);
@@ -322,7 +303,7 @@ export default function InventoryPage() {
                 <DataTable 
                   columns={memoizedColumns}
                   data={filteredData}
-                  onUpdate={(id, updatedItem) => handleUpdateItem(id, updatedItem)}
+                  onUpdate={handleUpdateItem}
                   onDelete={handleDeleteItem}
                   handleVerify={handleVerify}
                   settings={settings}

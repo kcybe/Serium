@@ -9,7 +9,7 @@ import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download, MoreHorizontal, RotateCw } from 'lucide-react'
-import { exportToJson } from '@/lib/utils'
+import { exportToJson } from "@/lib/services/utils/export-to-json"
 import {
   Table,
   TableBody,
@@ -25,7 +25,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/services/utils/utils'
 import { HistorySearchFilter } from '@/components/history/history-search-filter'
 
 const actionColors = {

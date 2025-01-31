@@ -32,8 +32,9 @@ import {
   ChevronsRight,
 } from "lucide-react"
 import { useState } from "react"
-import { InventoryItem } from "./columns"
+import { InventoryItem } from "@/types/inventory"
 import { SiteSettings } from "@/types/settings"
+import { useInventoryTable } from "./hooks/use-inventory-table"
 
 export interface TableMeta {
   updateData: (id: string, updatedItem: InventoryItem) => void
@@ -59,41 +60,7 @@ export function DataTable({
   handleVerify,
   settings
 }: DataTableProps<InventoryItem>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [pageSize, setPageSize] = useState(8)
-  const [pageIndex, setPageIndex] = useState(0)
-  const [rowSelection, setRowSelection] = useState({})
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onSortingChange: setSorting,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      rowSelection,
-      pagination: {
-        pageSize,
-        pageIndex,
-      },
-    },
-    onPaginationChange: (updater) => {
-      if (typeof updater === 'function') {
-        const newState = updater({ pageIndex, pageSize })
-        setPageIndex(newState.pageIndex)
-        setPageSize(newState.pageSize)
-      }
-    },
-    meta: {
-      updateData: (id: string, updatedItem: InventoryItem) => onUpdate(id, updatedItem),
-      deleteData: (item: InventoryItem) => onDelete(item.id),
-      onVerify: (id: string) => handleVerify(id),
-      settings: settings
-    } as TableMeta,
-  })
+  const table = useInventoryTable(data, columns, onUpdate, onDelete, handleVerify, settings)
 
   return (
     <div className="space-y-4">
@@ -155,13 +122,11 @@ export function DataTable({
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">Rows per page</p>
           <Select
-            value={`${pageSize}`}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value))
-            }}
+            value={`${table.getState().pagination.pageSize}`}
+            onValueChange={(value) => table.setPageSize(Number(value))}
           >
             <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={pageSize} />
+              <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
               {[8, 16, 32, 48, 64].map((size) => (
@@ -174,8 +139,7 @@ export function DataTable({
         </div>
         <div className="flex items-center space-x-2">
           <div className="flex w-[100px] items-center justify-center text-sm text-muted-foreground">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
+            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
           </div>
           <div className="flex items-center space-x-2">
             <Button
