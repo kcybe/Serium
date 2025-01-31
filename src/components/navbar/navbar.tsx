@@ -1,12 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "./ui/button"
-import { ModeToggle } from "./mode-toggle"
-import SettingsButton from "./settings/settings-button"
-import InventoryButton from "./inventory/inventory-button"
-import { AnimatedLogo } from "./ui/animated-logo"
-import { History } from 'lucide-react'
+import { Button } from "../ui/button"
+import { ModeToggle } from "../mode-toggle"
+import SettingsButton from "./components/settings-button"
+import InventoryButton from "./components/inventory-button"
+import { AnimatedLogo } from "../ui/animated-logo"
+import HistoryButton from "./components/history-button"
+import DashboardButton from "../dashboard/dashboard-button"
 
 export function Navbar() {
   return (
@@ -18,12 +19,8 @@ export function Navbar() {
           </Link>
           <div className="flex space-x-2">
             <InventoryButton />
-            <Button variant="outline">
-              <Link href="/history" className="flex items-center">
-                <History className="h-[1.2rem] w-[1.2rem]" />
-                <span className="ml-2">History</span>
-              </Link>
-            </Button>
+            <DashboardButton />
+            <HistoryButton />
             <SettingsButton />
           </div>
         </div>

@@ -7,7 +7,7 @@ export default function InventoryButton() {
   return (
     <Button variant="outline">
           <Link href='/inventory' className='flex items-center'>
-            <Table className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
+            <Table className="h-[1.2rem] w-[1.2rem]" />
             <span className="ml-2">Inventory</span>
           </Link>
     </Button>
