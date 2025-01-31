@@ -31,7 +31,10 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         inventory,
         history: historyLogs
       }
-      exportToJson(backup, `inventory-backup-${new Date().toISOString().split('T')[0]}.json`)
+      exportToJson(
+        { settings, inventory, history: historyLogs },
+        `inventory-backup-${new Date().toISOString().split('T')[0]}.json`
+      )
       toast.success("Backup exported successfully")
     } catch (error) {
       toast.error("Failed to export backup")
@@ -40,40 +43,41 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
   }
 
   const handleImportAll = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+    
     try {
-      const file = event.target.files?.[0]
-      if (!file) return
-
-      const importedData = await importFromJson(file)
-      if (!importedData?.settings || !importedData?.inventory) {
-        throw new Error('Invalid backup format')
-      }
-
-      // Clear existing data
+      const backup = await importFromJson(file)
+      
+      // Clear existing data first
       await Promise.all([
         db.inventory.clear(),
         db.history.clear()
       ])
+
+      // Import inventory
+      if (backup.inventory) {
+        await db.inventory.bulkAdd(backup.inventory)
+      }
+
+      // Import history
+      if (backup.history) {
+        await db.history.bulkAdd(backup.history)
+      }
+
+      // Update settings
+      if (backup.settings) {
+        await db.settings.update('site-settings', {
+          ...backup.settings,
+          customColumns: backup.settings.customColumns || [],
+          categories: backup.settings.categories || [],
+          statuses: backup.settings.statuses || []
+        })
+      }
       
-      // Import inventory items with new IDs
-      const itemsWithNewIds = importedData.inventory.map((item: any) => ({
-        ...item,
-        id: crypto.randomUUID()
-      }))
-      
-      await Promise.all([
-        db.inventory.bulkAdd(itemsWithNewIds),
-        db.settings.put({ ...importedData.settings, id: 'site-settings' }),
-        importedData.history && db.history.bulkAdd(importedData.history)
-      ])
-      
-      onSettingsImported(importedData.settings)
-      toast.success("Backup imported successfully")
+      toast.success('Full backup restored. Please refresh the page to make changes!)')
     } catch (error) {
-      toast.error("Failed to import backup")
-      console.error(error)
-    } finally {
-      if (fileInputRef.current) fileInputRef.current.value = ''
+      toast.error('Invalid backup file')
     }
   }
 

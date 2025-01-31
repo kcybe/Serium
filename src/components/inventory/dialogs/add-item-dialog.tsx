@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
 import { AddItemForm, type AddItemFormValues } from "../forms/add-item-form"
-import { InventoryItem } from "../table/columns"
+import { InventoryItem } from "@/types/inventory"
 import { db } from "@/lib/services/db"
 import { toast } from "sonner"
 import { historyService } from "@/lib/services/history"

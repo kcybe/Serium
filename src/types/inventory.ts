@@ -10,6 +10,7 @@ export interface InventoryItem {
   location: string
   lastVerified?: Date | null
   isVerified?: boolean
+  customFields?: Record<string, string | number | boolean>
 }
 
 export interface AddItemFormValues {

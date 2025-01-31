@@ -1,8 +1,18 @@
-export async function importFromJson(file: File): Promise<any> {
-    try {
-      const text = await file.text()
-      return JSON.parse(text)
-    } catch (error) {
-      throw new Error('Invalid JSON file')
-    }
+import { InventoryItem } from "@/types/inventory"
+import { SiteSettings } from "@/types/settings"
+import { HistoryEntry } from "@/types/history"
+
+export async function importFromJson(file: File): Promise<{
+  inventory: InventoryItem[]
+  settings?: SiteSettings
+  history?: HistoryEntry[]
+}> {
+  const text = await file.text()
+  const data = JSON.parse(text)
+  
+  return {
+    inventory: data.inventory || data,
+    settings: data.settings,
+    history: data.history || []
   }
+}

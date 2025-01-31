@@ -1,3 +1,9 @@
+export interface CustomColumn {
+  id: string
+  label: string
+  type: 'text' | 'number' | 'boolean'
+}
+
 export interface SiteSettings {
   id?: string
   inventoryName: string
@@ -10,6 +16,7 @@ export interface SiteSettings {
   defaultStatus: string
   categories: string[]
   statuses: string[]
+  customColumns: CustomColumn[]
   features: {
     barcodeScanning?: boolean
     qrCodeSupport?: boolean
@@ -43,6 +50,7 @@ export const defaultSettings: SiteSettings = {
   defaultStatus: "In Stock",
   categories: ["General", "Electronics", "Office Supplies"],
   statuses: ["In Stock", "Low Stock", "Out of Stock"],
+  customColumns: [],
   features: {
     barcodeScanning: false,
     qrCodeSupport: false,
@@ -81,3 +89,4 @@ export const themeOptions = [
   { label: 'Dark', value: 'dark' },
   { label: 'System', value: 'system' }
 ]
+

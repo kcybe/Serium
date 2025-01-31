@@ -1,13 +1,13 @@
 "use client"
 
-import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Tags, ListTodo, Settings2, ListFilter } from "lucide-react"
+import { Tags, ListTodo, Settings2, ListFilter, Save, Trash2 } from "lucide-react"
 import { SettingsSection } from "../settings-layout"
 import { useState } from "react"
-import { SiteSettings } from "@/types/settings"
+import { SiteSettings, CustomColumn } from "@/types/settings"
 import { X } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useForm } from "react-hook-form"
@@ -16,6 +16,7 @@ import * as z from "zod"
 import { DialogFooter } from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { v4 as uuidv4 } from 'uuid'
 
 const tableSettingsSchema = z.object({
   defaultCategory: z.string(),
@@ -32,7 +33,14 @@ const tableSettingsSchema = z.object({
     category: z.boolean(),
     location: z.boolean(),
     status: z.boolean()
-  })
+  }),
+  customColumns: z.array(
+    z.object({
+      id: z.string(),
+      label: z.string().min(1, "Label is required"),
+      type: z.enum(['text', 'number', 'boolean'])
+    })
+  )
 })
 
 type TableSettingsValues = z.infer<typeof tableSettingsSchema>
@@ -67,7 +75,8 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
         category: true,
         location: true,
         status: true
-      }
+      },
+      customColumns: settings.customColumns || []
     },
   })
 
@@ -102,6 +111,16 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
 
   const handleRemoveStatus = (statusToRemove: string) => {
     setLocalStatuses(prev => prev.filter(s => s !== statusToRemove))
+  }
+
+  // Handlers for custom columns
+  const handleAddCustomColumn = () => {
+    form.setValue('customColumns', [...form.getValues('customColumns'), { id: uuidv4(), label: '', type: 'text' }])
+  }
+
+  const handleRemoveCustomColumn = (index: number) => {
+    const currentCustomColumns = form.getValues('customColumns');
+    form.setValue('customColumns', currentCustomColumns.filter((_, i) => i !== index));
   }
 
   return (
@@ -272,6 +291,60 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
                 />
               </div>
             ))}
+          </div>
+        </SettingsSection>
+
+        <SettingsSection
+          icon={Tags}
+          title="Custom Columns"
+          description="Add custom columns to the inventory table"
+        >
+          <div className="flex flex-col gap-4">
+            {form.watch('customColumns').map((column, index) => (
+              <div key={column.id} className="flex items-center gap-4">
+                <FormField
+                  control={form.control}
+                  name={`customColumns.${index}.label`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Label</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Column Label" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`customColumns.${index}.type`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Type</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="text">Text</SelectItem>
+                          <SelectItem value="number">Number</SelectItem>
+                          <SelectItem value="boolean">Boolean</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button className="mt-8" type="button" variant="destructive" onClick={() => handleRemoveCustomColumn(index)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button type="button" onClick={handleAddCustomColumn}>
+              Add Custom Column
+            </Button>
           </div>
         </SettingsSection>
 

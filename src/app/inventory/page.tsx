@@ -89,14 +89,21 @@ export default function InventoryPage() {
               : false
           }))
 
+          // Merge settings with defaultSettings to ensure customColumns is defined
+          const mergedSettings: SiteSettings = savedSettings
+            ? {
+                ...defaultSettings,
+                ...savedSettings,
+                customColumns: savedSettings.customColumns || defaultSettings.customColumns
+              }
+            : defaultSettings
+
           // Check if there are actual changes in the data or settings
           const hasDataChanges = JSON.stringify(updatedItems) !== JSON.stringify(data)
-          const hasSettingsChanges = JSON.stringify(savedSettings) !== JSON.stringify(settings)
+          const hasSettingsChanges = JSON.stringify(mergedSettings) !== JSON.stringify(settings)
           
           setData(updatedItems)
-          if (savedSettings) {
-            setSettings(savedSettings)
-          }
+          setSettings(mergedSettings)
           
           if (hasDataChanges || hasSettingsChanges) {
             toast.success("Data refreshed successfully", {
@@ -136,9 +143,15 @@ export default function InventoryPage() {
     }, []) // Only runs once on mount
 
     const loadSettings = async () => {
-        const savedSettings = await db.settings.get('site-settings')  // Changed from 'site' to 'site-settings'
+        const savedSettings = await db.settings.get('site-settings')  // Ensure this key is correct
         if (savedSettings) {
-          setSettings(savedSettings)
+          setSettings({
+            ...defaultSettings,
+            ...savedSettings,
+            customColumns: savedSettings.customColumns || defaultSettings.customColumns
+          })
+        } else {
+          setSettings(defaultSettings)
         }
       }
 
@@ -162,8 +175,51 @@ export default function InventoryPage() {
     }
   }
 
-  const handleExport = () => {
-    exportToJson(data, `inventory-${new Date().toISOString().split('T')[0]}.json`)
+  const handleExport = async () => {
+    const [settings, historyLogs] = await Promise.all([
+      db.settings.get('site-settings'),
+      db.history.toArray()
+    ])
+    
+    exportToJson(
+      {
+        settings: settings || defaultSettings,
+        inventory: data,
+        history: historyLogs
+      },
+      `inventory-${new Date().toISOString().split('T')[0]}.json`
+    )
+  }
+
+  const handleImport = async (file: File) => {
+    const reader = new FileReader()
+    reader.onload = async (e) => {
+      try {
+        const backup = JSON.parse(e.target?.result as string)
+        
+        // Restore settings
+        if (backup.settings) {
+          await db.settings.update('site-settings', {
+            ...backup.settings,
+            customColumns: backup.settings.customColumns || [],
+            categories: backup.settings.categories || [],
+            statuses: backup.settings.statuses || []
+          })
+        }
+
+        // Restore inventory with custom fields
+        if (backup.inventory) {
+          await db.inventory.clear()
+          await db.inventory.bulkAdd(backup.inventory)
+        }
+
+        toast.success('Backup restored successfully')
+        loadItems()
+      } catch (error) {
+        toast.error('Invalid backup file')
+      }
+    }
+    reader.readAsText(file)
   }
 
   if (loading) {

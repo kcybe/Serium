@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { AddItemForm } from "../forms/add-item-form"
-import { InventoryItem } from "../table/columns"
+import { InventoryItem } from "@/types/inventory"
 import { db } from "@/lib/services/db"
 import { toast } from "sonner"
 import { LoadingSpinner } from "../../ui/loading-spinner"
