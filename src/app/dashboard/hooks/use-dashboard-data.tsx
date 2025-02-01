@@ -12,15 +12,28 @@ interface DashboardData {
     totalValue: number
     totalCategories: number
   }
-  categoryDistribution: Array<{ id: string; label: string; value: number }>
-  stockLevels: Array<{ name: string; quantity: number }>
+  categoryDistribution: Array<{ 
+    id: string
+    name: string 
+    value: number 
+  }>
+  stockLevels: Array<{ 
+    name: string 
+    quantity: number 
+  }>
+  locationDistribution: Array<{ 
+    id: string
+    name: string 
+    value: number 
+  }>
 }
 
 export function useInventoryData() {
   const [data, setData] = useState<DashboardData>({
     inventoryStats: { totalItems: 0, lowStockItems: 0, totalValue: 0, totalCategories: 0 },
     categoryDistribution: [],
-    stockLevels: []
+    stockLevels: [],
+    locationDistribution: []
   })
   const [settings, setSettings] = useState<SiteSettings>()
 
@@ -42,12 +55,14 @@ export function useInventoryData() {
     const categories = new Map<string, number>()
     let totalValue = 0
     let lowStockItems = 0
+    const locations = new Map<string, number>()
 
     inventory.forEach(item => {
       totalValue += item.price * item.quantity
       if(item.quantity < (settings?.lowStockThreshold || 10)) lowStockItems++
       
       categories.set(item.category, (categories.get(item.category) || 0) + 1)
+      locations.set(item.location, (locations.get(item.location) || 0) + 1)
     })
 
     setData({
@@ -60,19 +75,11 @@ export function useInventoryData() {
       categoryDistribution: Array.from(categories)
         .map(([id, value]) => ({
           id,
-          label: id,
+          name: id,
           value
         }))
         .sort((a, b) => b.value - a.value)
-        .slice(0, 8)
-        .concat([{
-          id: 'other',
-          label: 'Other',
-          value: Array.from(categories)
-            .slice(8)
-            .reduce((acc, [, value]) => acc + value, 0)
-        }])
-        .filter(item => item.value > 0),
+        .slice(0, 8),
       stockLevels: Array.from(
         inventory.reduce((acc, item) => {
           const status = item.status || 'Unknown';
@@ -83,7 +90,15 @@ export function useInventoryData() {
           name, 
           quantity: Math.round(quantity * 100) / 100 
         })
-      ).sort((a, b) => b.quantity - a.quantity)
+      ).sort((a, b) => b.quantity - a.quantity),
+      locationDistribution: Array.from(locations)
+        .map(([id, value]) => ({
+          id,
+          name: id,
+          value
+        }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 8)
     })
   }
 
