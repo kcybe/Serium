@@ -27,14 +27,27 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
   const handleSubmit = async (values: AddItemFormValues) => {
     try {
       setLoading(true)
-      const newItem: InventoryItem = {
-        ...values,
-        id: crypto.randomUUID(),
-        sku: values.sku,
-        quantity: Number(values.quantity),
-        price: Number(values.price)
+      let attempts = 0
+      let newItem: InventoryItem
+
+      do {
+        newItem = {
+          ...values,
+          id: crypto.randomUUID(),
+          sku: values.sku,
+          quantity: Number(values.quantity),
+          price: Number(values.price)
+        }
+        attempts++
+      } while (
+        attempts < 3 && 
+        await db.inventory.get(newItem.id).catch(() => null)
+      )
+
+      if (attempts >= 3) {
+        throw new Error('Failed to generate unique ID after 3 attempts')
       }
-      
+
       await db.inventory.add(newItem)
       onAddItem(newItem)
       await historyService.trackChange(newItem.id, 'create', undefined, newItem)

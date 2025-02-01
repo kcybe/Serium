@@ -166,7 +166,6 @@ export default function InventoryPage() {
 
   const handleAddItem = async (newItem: InventoryItem) => {
     try {
-      await db.inventory.add(newItem);
       await historyService.trackChange(newItem.id, 'create', undefined, newItem)
       setData(prev => [...prev, newItem])
       toast.success("Item added successfully")
