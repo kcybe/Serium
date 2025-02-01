@@ -54,7 +54,7 @@ export const defaultSettings: SiteSettings = {
   features: {
     barcodeScanning: false,
     qrCodeSupport: false,
-    historyTracking: false,
+    historyTracking: true,
     notifications: false,
     itemVerification: false,
     verificationTimeout: 7,
