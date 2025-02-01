@@ -1,27 +1,63 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart, PieChart, Pie, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from "recharts"
+import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from "recharts"
 import { useInventoryData } from "./hooks/use-dashboard-data"
 import { useTheme } from "next-themes"
 import { PageTransition } from '@/components/ui/page-transition'
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
+import { chartConfig } from "@/components/ui/chart-config"
 
 export default function DashboardPage() {
-  const { inventoryStats, categoryDistribution, stockLevels, locationDistribution } = useInventoryData()
+  const { inventoryStats, categoryDistribution, locationDistribution } = useInventoryData()
   const { theme } = useTheme()
 
-  const textColor = theme === 'dark' ? 'hsl(var(--primary-foreground))' : 'hsl(var(--primary))'
-
-  // Get Shadcn UI colors based on theme
-  const getChartColor = () => {
-    return theme === 'dark' ? 'var(--primary)' : 'var(--primary)' // Using primary color from globals.css
+  const getChartColors = (data: Array<{ id: string }>) => {
+    return data.map((_, index) => 
+      `hsl(var(--chart-${(index % 5) + 1}))`
+    )
   }
 
-  const axisStyle = {
-    tick: { fill: textColor },
-    axisLine: { stroke: 'hsl(var(--muted))' },
-    tickLine: { stroke: 'hsl(var(--muted))' }
-  }
+  const renderPieChart = (title: string, data: Array<{ id: string, value: number }>) => (
+    <Card className="h-[400px] flex flex-col">
+      <CardHeader>
+        <CardTitle className="text-lg">{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex-1">
+        <ChartContainer
+          config={chartConfig}
+          className="h-full w-full [&_.recharts-pie-label-text]:fill-foreground"
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Tooltip 
+                content={<ChartTooltip />}
+                cursor={{ fill: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }}
+              />
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="id"
+                cx="50%"
+                cy="50%"
+                innerRadius="35%"
+                outerRadius="65%"
+                paddingAngle={2}
+                label
+              >
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={getChartColors(data)[index]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  )
 
   return (
     <PageTransition>
@@ -68,155 +104,9 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <Card className="p-6 h-[400px] flex flex-col">
-                <h3 className="text-lg font-semibold mb-4">Stock Levels</h3>
-                <div className="flex-1">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={stockLevels}>
-                      <CartesianGrid 
-                        strokeDasharray="3 3" 
-                        className="stroke-muted"
-                      />
-                      <XAxis 
-                        dataKey="name" 
-                        className="text-xs"
-                        {...axisStyle}
-                      />
-                      <YAxis 
-                        className="text-xs"
-                        {...axisStyle}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: 'hsl(var(--background))',
-                          borderColor: 'hsl(var(--border))',
-                          borderRadius: 'var(--radius)',
-                          color: 'hsl(var(--foreground))'
-                        }}
-                        itemStyle={{ color: 'hsl(var(--foreground))' }}
-                      />
-                      <Bar 
-                        dataKey="quantity" 
-                        className="fill-primary"
-                        radius={[4, 4, 0, 0]}
-                      >
-                        {stockLevels.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={getChartColor()}
-                            fillOpacity={0.8}
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
-              
-              <Card className="p-6 h-[400px] flex flex-col">
-                <h3 className="text-lg font-semibold mb-4">Category Distribution</h3>
-                <div className="flex-1 relative">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={categoryDistribution}
-                        dataKey="value"
-                        nameKey="id"
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
-                        paddingAngle={2}
-                        className="stroke-background"
-                      >
-                        {categoryDistribution.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={`hsl(var(--primary) / ${0.3 + (index * 0.1)})`}
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: 'hsl(var(--background))',
-                          borderColor: 'hsl(var(--border))',
-                          borderRadius: 'var(--radius)',
-                          color: 'hsl(var(--foreground))'
-                        }}
-                        itemStyle={{ color: 'hsl(var(--foreground))' }}
-                      />
-                      <Legend 
-                        layout="horizontal"
-                        verticalAlign="bottom"
-                        align="center"
-                        wrapperStyle={{ 
-                          paddingTop: '1rem',
-                          color: 'hsl(var(--foreground))' 
-                        }}
-                        iconType="circle"
-                        formatter={(value) => (
-                          <span className="text-sm">
-                            {value}
-                          </span>
-                        )}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
-
-              <Card className="p-6 h-[400px] flex flex-col">
-                <h3 className="text-lg font-semibold mb-4">Location Distribution</h3>
-                <div className="flex-1 relative">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={locationDistribution}
-                        dataKey="value"
-                        nameKey="id"
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
-                        paddingAngle={2}
-                        className="stroke-background"
-                      >
-                        {locationDistribution.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={`hsl(var(--primary) / ${0.3 + (index * 0.1)})`}
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: 'hsl(var(--background))',
-                          borderColor: 'hsl(var(--border))',
-                          borderRadius: 'var(--radius)',
-                          color: 'hsl(var(--foreground))'
-                        }}
-                        itemStyle={{ color: 'hsl(var(--foreground))' }}
-                      />
-                      <Legend 
-                        layout="horizontal"
-                        verticalAlign="bottom"
-                        align="center"
-                        wrapperStyle={{ 
-                          paddingTop: '1rem',
-                          color: 'hsl(var(--foreground))' 
-                        }}
-                        iconType="circle"
-                        formatter={(value) => (
-                          <span className="text-sm">
-                            {value}
-                          </span>
-                        )}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {renderPieChart("Category Distribution", categoryDistribution)}
+              {renderPieChart("Location Distribution", locationDistribution)}
             </div>
           </div>
         </div>
