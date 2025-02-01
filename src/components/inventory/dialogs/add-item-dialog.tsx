@@ -55,6 +55,7 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
     } catch (error) {
       toast.error("Failed to add item")
       console.error(error)
+      setOpen(false)
     } finally {
       setLoading(false)
     }

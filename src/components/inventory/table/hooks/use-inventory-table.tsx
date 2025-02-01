@@ -43,11 +43,9 @@ export function useInventoryTable(
     },
     meta: {
       updateData: async (id: string, updatedItem: InventoryItem) => {
-        await db.inventory.update(id, updatedItem);
         onUpdate(id, updatedItem);
       },
       deleteData: async (item: InventoryItem) => {
-        await db.inventory.delete(item.id);
         onDelete(item.id);
       },
       onVerify: handleVerify,

@@ -270,11 +270,22 @@ export default function InventoryPage() {
   }
 
   const handleDeleteItem = async (id: string) => {
-    const oldItem = await db.inventory.get(id)
-    await db.inventory.delete(id)
-    await historyService.trackChange(id, 'delete', oldItem)
-    setData(prev => prev.filter(item => item.id !== id))
-    toast.success("Item deleted successfully")
+    try {
+      const oldItem = await db.inventory.get(id)
+      if (!oldItem) return
+      
+      // Single database operation
+      await db.inventory.delete(id)
+      
+      // Single state update
+      setData(prev => prev.filter(item => item.id !== id))
+      
+      await historyService.trackChange(id, 'delete', oldItem)
+      toast.success("Item deleted successfully")
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to delete item")
+    }
   }
 
   const handleClearFilters = () => {

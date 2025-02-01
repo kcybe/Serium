@@ -50,6 +50,7 @@ export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: Edit
     } catch (error) {
       toast.error("Failed to update item")
       console.error(error)
+      onOpenChange(false)
     } finally {
       setLoading(false)
     }

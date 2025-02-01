@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import { db } from "@/lib/services/db"
 import { EditItemDialog } from "../../dialogs/edit-item-dialog"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
+import { InventoryItem } from "@/types/inventory"
 
 interface ActionCellProps {
   row: any // Replace with actual Row type if possible
@@ -17,7 +18,7 @@ export default function ActionCell({ row, table }: ActionCellProps) {
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
 
-  const handleUpdate = (updatedItem: any) => { // Replace 'any' with InventoryItem if possible
+  const handleUpdate = (updatedItem: InventoryItem) => { // Replace 'any' with InventoryItem if possible
     table.options.meta.updateData(item.id, updatedItem)
   }
 
@@ -26,12 +27,12 @@ export default function ActionCell({ row, table }: ActionCellProps) {
       if (!item.id) {
         throw new Error('Item ID is missing')
       }
-      await db.inventory.delete(item.id)
-      table.options.meta.deleteData(item)
-      setDeleteOpen(false)
+      await table.options.meta.deleteData(item)
     } catch (error) {
       toast.error("Failed to delete item")
       console.error(error)
+    } finally {
+      setDeleteOpen(false)
     }
   }
 
