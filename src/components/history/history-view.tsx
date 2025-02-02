@@ -25,7 +25,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { cn } from '@/lib/services/utils/utils'
+import { cn } from '@/lib/utils'
 import { HistorySearchFilter } from '@/components/history/history-search-filter'
 
 const actionColors = {

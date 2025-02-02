@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { CheckCircle, XCircle } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
-import { cn } from "@/lib/services/utils/utils"
+import { cn } from "@/lib/utils"
 import { TableMeta } from "../data-table"
 
 interface VerificationCellProps {

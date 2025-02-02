@@ -14,7 +14,7 @@ import { db } from "@/lib/services/db"
 import { exportToJson } from "@/lib/services/utils/export-to-json"
 import { importFromJson } from "@/lib/services/utils/import-from-json"
 import { InventoryItem } from "@/types/inventory"
-import { cn } from "@/lib/services/utils/utils"
+import { cn } from "@/lib/utils"
 import { defaultSettings } from "@/types/settings"
 
 interface DataActionsProps {
