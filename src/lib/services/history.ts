@@ -69,33 +69,35 @@ export const historyService = {
     return { success: true }
   },
   async getHistory(filter?: HistoryFilter) {
-    let collection = db.history.orderBy('timestamp').reverse()
+    let query = db.history
+      .orderBy('timestamp')
+      .reverse();
 
     if (filter) {
       if (filter.startDate) {
-        collection = collection.filter(entry => entry.timestamp >= filter.startDate!)
+        query = query.filter(entry => entry.timestamp >= filter.startDate!)
       }
       if (filter.endDate) {
-        collection = collection.filter(entry => entry.timestamp <= filter.endDate!)
+        query = query.filter(entry => entry.timestamp <= filter.endDate!)
       }
       if (filter.action && filter.action !== 'all' as string) {
-        collection = collection.filter(entry => entry.action === filter.action)
+        query = query.filter(entry => entry.action === filter.action)
       }
       if (filter.itemId && filter.searchParameter) {
         const searchLower = filter.itemId.toLowerCase()
         switch (filter.searchParameter) {
           case "itemId":
-            collection = collection.filter(entry => 
+            query = query.filter(entry => 
               entry.itemId.toLowerCase().includes(searchLower)
             )
             break
           case "action":
-            collection = collection.filter(entry => 
+            query = query.filter(entry => 
               entry.action.toLowerCase().includes(searchLower)
             )
             break
           case "changes":
-            collection = collection.filter(entry => 
+            query = query.filter(entry => 
               entry.changes.some(change => 
                 change.field.toLowerCase().includes(searchLower) ||
                 String(change.oldValue).toLowerCase().includes(searchLower) ||
@@ -104,7 +106,7 @@ export const historyService = {
             )
             break
           case "all":
-            collection = collection.filter(entry => 
+            query = query.filter(entry => 
               entry.itemId.toLowerCase().includes(searchLower) ||
               entry.action.toLowerCase().includes(searchLower) ||
               entry.changes.some(change => 
@@ -118,7 +120,7 @@ export const historyService = {
       }
     }
 
-    return await collection.toArray()
+    return query.sortBy('timestamp');
   },
   getSettings: () => db.settings.get('site-settings'),
   getInventory: () => db.inventory.toArray(),
