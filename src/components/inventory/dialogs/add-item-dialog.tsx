@@ -24,6 +24,18 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const generateUUID = () => {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID()
+    }
+    // Fallback for environments without crypto support
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0
+      const v = c === 'x' ? r : (r & 0x3 | 0x8)
+      return v.toString(16)
+    })
+  }
+
   const handleSubmit = async (values: AddItemFormValues) => {
     try {
       setLoading(true)
@@ -33,7 +45,7 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
       do {
         newItem = {
           ...values,
-          id: crypto.randomUUID(),
+          id: generateUUID(),
           sku: values.sku,
           quantity: Number(values.quantity),
           price: Number(values.price)
