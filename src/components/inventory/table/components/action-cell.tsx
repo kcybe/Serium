@@ -17,6 +17,7 @@ export default function ActionCell({ row, table }: ActionCellProps) {
   const item = row.original
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   const handleUpdate = (updatedItem: InventoryItem) => { // Replace 'any' with InventoryItem if possible
     table.options.meta.updateData(item.id, updatedItem)
@@ -38,7 +39,7 @@ export default function ActionCell({ row, table }: ActionCellProps) {
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <MoreHorizontal className="h-4 w-4" />
@@ -49,28 +50,41 @@ export default function ActionCell({ row, table }: ActionCellProps) {
           <DropdownMenuItem onClick={() => navigator.clipboard.writeText(item.id)}>
             Copy ID
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setEditOpen(true)}>
+          <DropdownMenuItem onClick={() => {
+            setEditOpen(true)
+            setDropdownOpen(false)
+          }}>
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setDeleteOpen(true)} className="text-destructive">
+          <DropdownMenuItem 
+            onClick={() => {
+              setDeleteOpen(true)
+              setDropdownOpen(false)
+            }} 
+            className="text-destructive"
+          >
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <EditItemDialog
-        item={item}
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        onItemUpdated={handleUpdate}
-      />
-      <ConfirmationDialog
-        open={deleteOpen}
-        onOpenChange={setDeleteOpen}
-        onConfirm={handleDelete}
-        title="Delete Item"
-        description="Are you sure you want to delete this item? This action cannot be undone."
-        confirmLabel="Delete"
-      />
+      {editOpen && (
+        <EditItemDialog
+          item={item}
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          onItemUpdated={handleUpdate}
+        />
+      )}
+      {deleteOpen && (
+        <ConfirmationDialog
+          open={deleteOpen}
+          onOpenChange={setDeleteOpen}
+          onConfirm={handleDelete}
+          title="Delete Item"
+          description="Are you sure you want to delete this item? This action cannot be undone."
+          confirmLabel="Delete"
+        />
+      )}
     </>
   )
 }
