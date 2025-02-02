@@ -9,7 +9,6 @@ import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download, MoreHorizontal, RotateCw } from 'lucide-react'
-import { exportToJson } from "@/lib/services/utils/export-to-json"
 import {
   Table,
   TableBody,
@@ -27,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from '@/lib/utils'
 import { HistorySearchFilter } from '@/components/history/history-search-filter'
+import { defaultSettings } from '@/types/settings'
 
 const actionColors = {
   create: 'bg-green-500',
@@ -65,14 +65,7 @@ export function HistoryView() {
       searchParameter: parameter
     }))
     setPageIndex(0)
-  }
-
-  const handleExport = () => {
-    exportToJson(
-      history,
-      `inventory-history-${new Date().toISOString().split('T')[0]}.json`
-    )
-  }
+}
 
   const handleRefresh = async () => {
     if (isRefreshing) return
@@ -164,10 +157,6 @@ export function HistoryView() {
                   )} 
                 />
                 {isRefreshing ? "Refreshing..." : "Refresh"}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleExport}>
-                <Download className="mr-2 h-4 w-4" />
-                Export History
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

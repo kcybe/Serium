@@ -119,5 +119,7 @@ export const historyService = {
     }
 
     return await collection.toArray()
-  }
+  },
+  getSettings: () => db.settings.get('site-settings'),
+  getInventory: () => db.inventory.toArray(),
 }

@@ -88,7 +88,7 @@ export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
         featureColumns.push({
           id: "verification",
           header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Last Verified" />,
-          accessorFn: (row: InventoryItem) => row.lastVerified ? row.lastVerified.getTime() : 0,
+          accessorFn: (row: InventoryItem) => row.lastVerified instanceof Date ? row.lastVerified.getTime() : 0,
           cell: VerificationCell,
         });
       }
