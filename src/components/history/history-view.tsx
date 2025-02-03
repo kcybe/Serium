@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from '@/lib/utils'
 import { HistorySearchFilter } from '@/components/history/history-search-filter'
+import { toast } from 'sonner'
 
 const actionColors = {
   create: 'bg-green-500',
@@ -41,10 +42,11 @@ export function HistoryView() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [pageSize, setPageSize] = useState(8)
   const [pageIndex, setPageIndex] = useState(0)
+  const [reloadTrigger, setReloadTrigger] = useState(0)
 
   useEffect(() => {
     loadHistory()
-  }, [filter])
+  }, [filter, reloadTrigger])
 
   const loadHistory = async () => {
     const entries = await historyService.getHistory(filter)

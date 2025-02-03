@@ -13,6 +13,9 @@ export async function importFromJson(file: File): Promise<{
   return {
     inventory: data.inventory || data,
     settings: data.settings,
-    history: data.history || []
+    history: (data.history || []).map((entry: any) => ({
+      ...entry,
+      timestamp: new Date(entry.timestamp)
+    }))
   }
 }

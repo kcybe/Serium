@@ -120,7 +120,12 @@ export const historyService = {
       }
     }
 
-    return query.sortBy('timestamp');
+    return query.toArray().then(entries => 
+      entries.map(entry => ({
+        ...entry,
+        timestamp: new Date(entry.timestamp)
+      }))
+    );
   },
   getSettings: () => db.settings.get('site-settings'),
   getInventory: () => db.inventory.toArray(),
