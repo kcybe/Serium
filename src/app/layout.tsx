@@ -8,7 +8,7 @@ import { Footer } from "@/components/footer"
 import { pixelifySans, inter } from '@/lib/fonts'
 
 export const metadata: Metadata = {
-  title: "Inventory Manager",
+  title: "Serium",
   description: "Manage your inventory with ease",
 }
 

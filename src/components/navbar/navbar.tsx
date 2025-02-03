@@ -1,8 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "../ui/button"
-import { ModeToggle } from "../mode-toggle"
 import SettingsButton from "./components/settings-button"
 import InventoryButton from "./components/inventory-button"
 import { AnimatedLogo } from "../ui/animated-logo"

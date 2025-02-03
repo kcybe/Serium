@@ -6,7 +6,6 @@ import { GeneralSettings } from "./tabs/general-settings"
 import { TableSettings } from "./tabs/table-settings"
 import { SiteSettings } from "@/types/settings"
 import { BackupSettings } from "./tabs/backup-settings"
-import { Toggle } from "../ui/toggle"
 import { FeatureSettings } from "./tabs/feature-settings"
 
 interface SettingsTabsProps {

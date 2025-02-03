@@ -17,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Input } from '@/components/ui/input'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +25,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from '@/lib/utils'
 import { HistorySearchFilter } from '@/components/history/history-search-filter'
-import { defaultSettings } from '@/types/settings'
 
 const actionColors = {
   create: 'bg-green-500',

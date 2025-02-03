@@ -1,6 +1,6 @@
 import { Column } from "@tanstack/react-table";
 
-import { ColumnDef, Row, Table } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table"
 import { InventoryItem } from "@/types/inventory"
 import { SiteSettings, CustomColumn } from "@/types/settings"
 import { SortableHeader } from "@/components/inventory/table/sortable-header"

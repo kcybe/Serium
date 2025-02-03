@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Download, Upload, RotateCw, RefreshCw } from "lucide-react"
+import { MoreHorizontal, Download, Upload, RotateCw } from "lucide-react"
 import { useRef } from "react"
 import { toast } from "sonner"
 import { db } from "@/lib/services/db"

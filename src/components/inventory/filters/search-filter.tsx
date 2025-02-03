@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState } from "react"
 import { FilterDropdown } from "./filter-dropdown"
 import { Button } from "../../ui/button"
 import { toast } from "sonner"

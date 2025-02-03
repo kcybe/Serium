@@ -6,9 +6,8 @@ import { SettingsSection } from "../settings-layout"
 import { SiteSettings } from "@/types/settings"
 import { Button } from "@/components/ui/button"
 import { DialogFooter } from "@/components/ui/dialog"
-import { Sparkles, Barcode, QrCode, History, Bell, CheckCircle, Clock } from "lucide-react"
+import { Sparkles, History, Bell, CheckCircle } from "lucide-react"
 import { useState } from "react"
-import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface FeatureSettingsProps {
@@ -26,18 +25,6 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
   )
 
   const features = [
-    {
-      id: "barcodeScanning",
-      label: "Barcode Scanning",
-      description: "Enable barcode scanning for quick item lookup",
-      icon: Barcode,
-    },
-    {
-      id: "qrCodeSupport",
-      label: "QR Code Support",
-      description: "Generate and scan QR codes for inventory items",
-      icon: QrCode,
-    },
     {
       id: "historyTracking",
       label: "History Tracking",
