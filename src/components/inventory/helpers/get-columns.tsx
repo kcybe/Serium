@@ -6,54 +6,56 @@ import { SiteSettings, CustomColumn } from "@/types/settings"
 import { SortableHeader } from "@/components/inventory/table/sortable-header"
 import VerificationCell from "@/components/inventory/table/components/verification-cell"
 import ActionCell from "../table/components/action-cell";
+import { useTranslation } from "@/hooks/use-translation";
 
 export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
+  const { t } = useTranslation(settings)
     const baseColumns = [
       {
         accessorKey: "name",
         header: ({ column }: { column: Column<InventoryItem> }) => 
-          <SortableHeader column={column} title="Name" />,
+          <SortableHeader column={column} title={t('table.columns.name')} settings={settings} />,
       },
       {
         accessorKey: "sku",
         header: ({ column }: { column: Column<InventoryItem> }) => 
-          <SortableHeader column={column} title="SKU" />,
+          <SortableHeader column={column} title={t('table.columns.sku')} settings={settings} />,
         show: settings.visibleColumns?.sku
       },
       {
         accessorKey: "description",
         header: ({ column }: { column: Column<InventoryItem> }) => 
-          <SortableHeader column={column} title="Description" />,
+          <SortableHeader column={column} title={t('table.columns.description')} settings={settings} />,
         show: settings.visibleColumns?.description
       },
       {
         accessorKey: "quantity",
         header: ({ column }: { column: Column<InventoryItem> }) => 
-          <SortableHeader column={column} title="Quantity" />,
+          <SortableHeader column={column} title={t('table.columns.quantity')} settings={settings} />,
         show: settings.visibleColumns?.quantity
       },
       {
         accessorKey: "price",
         header: ({ column }: { column: Column<InventoryItem> }) => 
-          <SortableHeader column={column} title="Price" />,
+          <SortableHeader column={column} title={t('table.columns.price')} settings={settings} />,
         show: settings.visibleColumns?.price
       },
       {
         accessorKey: "category",
         header: ({ column }: { column: Column<InventoryItem> }) => 
-          <SortableHeader column={column} title="Category" />,
+          <SortableHeader column={column} title={t('table.columns.category')} settings={settings} />,
         show: settings.visibleColumns?.category
       },
       {
         accessorKey: "location",
         header: ({ column }: { column: Column<InventoryItem> }) => 
-          <SortableHeader column={column} title="Location" />,
+          <SortableHeader column={column} title={t('table.columns.location')} settings={settings} />,
         show: settings.visibleColumns?.location
       },
       {
         accessorKey: "status",
         header: ({ column }: { column: Column<InventoryItem> }) => 
-          <SortableHeader column={column} title="Status" />,
+          <SortableHeader column={column} title={t('table.columns.status')} settings={settings} />,
         show: settings.visibleColumns?.status
       }
     ].filter(column => {
@@ -65,7 +67,7 @@ export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
     const customColumns: ColumnDef<InventoryItem>[] = (settings.customColumns || []).map((col: CustomColumn) => ({
       accessorFn: (row: InventoryItem) => row.customFields?.[col.id] || '',
       id: col.id,
-      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title={col.label} />,
+      header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title={col.label} settings={settings} />,
       cell: ({ row }) => {
         const value = row.original.customFields?.[col.id]
         switch(col.type) {
@@ -87,7 +89,7 @@ export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
     if (settings.features?.itemVerification) {
         featureColumns.push({
           id: "verification",
-          header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title="Last Verified" />,
+          header: ({ column }: { column: Column<InventoryItem> }) => <SortableHeader column={column} title={t('table.columns.lastVerified')} settings={settings} />,
           accessorFn: (row: InventoryItem) => row.lastVerified instanceof Date ? row.lastVerified.getTime() : 0,
           cell: VerificationCell,
         });

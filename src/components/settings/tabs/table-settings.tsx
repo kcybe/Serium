@@ -17,6 +17,7 @@ import { DialogFooter } from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { v4 as uuidv4 } from 'uuid'
+import { useTranslation } from "@/hooks/use-translation"
 
 const tableSettingsSchema = z.object({
   defaultCategory: z.string(),
@@ -57,6 +58,7 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
   const [localCategories, setLocalCategories] = useState(settings.categories)
   const [localStatuses, setLocalStatuses] = useState(settings.statuses)
   const [localVisibleColumns, setLocalVisibleColumns] = useState(settings.visibleColumns)
+  const { t } = useTranslation(settings)
 
   const form = useForm<TableSettingsValues>({
     resolver: zodResolver(tableSettingsSchema),
@@ -128,8 +130,8 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <SettingsSection
           icon={Settings2}
-          title="Default Values"
-          description="Set default values for new items"
+          title={t('table.defaultValuesTitle')}
+          description={t('table.defaultValuesDescription')}
         >
           <div className="grid gap-4">
             <FormField
@@ -137,7 +139,7 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
               name="defaultCategory"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Default Category</FormLabel>
+                  <FormLabel>{t('table.defaultCategory')}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -161,7 +163,7 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
               name="defaultLocation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Default Location</FormLabel>
+                  <FormLabel>{t('table.defaultLocation')}</FormLabel>
                   <FormControl>
                     <Input 
                       {...field}
@@ -177,7 +179,7 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
               name="defaultStatus"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Default Status</FormLabel>
+                  <FormLabel>{t('table.defaultStatus')}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -200,12 +202,12 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
 
         <SettingsSection
           icon={Tags}
-          title="Categories"
-          description="Manage inventory categories"
+          title={t('table.categoriesTitle')}
+          description={t('table.categoriesDescription')}
         >
           <div className="flex gap-2">
             <Input
-              placeholder="Add new category"
+              placeholder={t('table.addCategoryPlaceholder')}
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
               className="flex-1"
@@ -216,7 +218,7 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
                 }
               }}
             />
-            <Button type="button" onClick={handleAddCategory}>Add</Button>
+            <Button type="button" onClick={handleAddCategory}>{t('buttons.add')}</Button>
           </div>
           <div className="flex flex-wrap gap-2 mt-2">
             {localCategories.map((category) => (
@@ -233,12 +235,12 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
 
         <SettingsSection
           icon={ListTodo}
-          title="Statuses"
-          description="Manage inventory status options"
+          title={t('table.statusesTitle')}
+          description={t('table.statusesDescription')}
         >
           <div className="flex gap-2">
             <Input
-              placeholder="Add new status"
+              placeholder={t('table.addStatusPlaceholder')}
               value={newStatus}
               onChange={(e) => setNewStatus(e.target.value)}
               className="flex-1"
@@ -249,7 +251,7 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
                 }
               }}
             />
-            <Button type="button" onClick={handleAddStatus}>Add</Button>
+            <Button type="button" onClick={handleAddStatus}>{t('buttons.add')}</Button>
           </div>
           <div className="flex flex-wrap gap-2 mt-2">
             {localStatuses.map((status) => (
@@ -266,14 +268,14 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
 
         <SettingsSection
           icon={ListFilter}
-          title="Visible Columns"
-          description="Choose which columns to display in the inventory table"
+          title={t('table.visibleColumnsTitle')}
+          description={t('table.visibleColumnsDescription')}
         >
           <div className="grid gap-4">
             {Object.entries(form.getValues().visibleColumns).map(([column, isVisible]) => (
               <div key={column} className="flex items-center justify-between">
                 <Label htmlFor={`column-${column}`} className="capitalize">
-                  {column}
+                  {t(`table.columns.${column}`)}
                 </Label>
                 <Switch
                   id={`column-${column}`}
@@ -296,8 +298,8 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
 
         <SettingsSection
           icon={Tags}
-          title="Custom Columns"
-          description="Add custom columns to the inventory table"
+          title={t('table.customColumnsTitle')}
+          description={t('table.customColumnsDescription')}
         >
           <div className="flex flex-col gap-4">
             {form.watch('customColumns').map((column, index) => (
@@ -328,9 +330,9 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="text">Text</SelectItem>
-                          <SelectItem value="number">Number</SelectItem>
-                          <SelectItem value="boolean">Boolean</SelectItem>
+                          <SelectItem value="text">{t('table.columnTypes.text')}</SelectItem>
+                          <SelectItem value="number">{t('table.columnTypes.number')}</SelectItem>
+                          <SelectItem value="boolean">{t('table.columnTypes.boolean')}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -343,13 +345,13 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
               </div>
             ))}
             <Button type="button" onClick={handleAddCustomColumn}>
-              Add Custom Column
+              {t('buttons.addCustomColumn')}
             </Button>
           </div>
         </SettingsSection>
 
         <DialogFooter>
-          <Button type="submit">Save Changes</Button>
+          <Button type="submit">{t('general.save')}</Button>
         </DialogFooter>
       </form>
     </Form>

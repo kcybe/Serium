@@ -17,6 +17,7 @@ export interface SiteSettings {
   categories: string[]
   statuses: string[]
   customColumns: CustomColumn[]
+  language: string
   features: {
     barcodeScanning?: boolean
     qrCodeSupport?: boolean
@@ -51,6 +52,7 @@ export const defaultSettings: SiteSettings = {
   categories: ["General", "Electronics", "Office Supplies"],
   statuses: ["In Stock", "Low Stock", "Out of Stock"],
   customColumns: [],
+  language: "en",
   features: {
     barcodeScanning: false,
     qrCodeSupport: false,

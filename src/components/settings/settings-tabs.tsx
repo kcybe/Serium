@@ -7,6 +7,7 @@ import { TableSettings } from "./tabs/table-settings"
 import { SiteSettings } from "@/types/settings"
 import { BackupSettings } from "./tabs/backup-settings"
 import { FeatureSettings } from "./tabs/feature-settings"
+import { useTranslation } from "@/hooks/use-translation"
 
 interface SettingsTabsProps {
   settings: SiteSettings
@@ -15,24 +16,26 @@ interface SettingsTabsProps {
 }
 
 export function SettingsTabs({ settings, onSubmit, onSettingsImported }: SettingsTabsProps) {
+  const { t } = useTranslation(settings)
+
   return (
     <Tabs defaultValue="general" className="w-full">
       <TabsList className="grid w-full grid-cols-4 mb-4">
         <TabsTrigger value="general" className="flex items-center gap-2">
           <Building2 className="h-4 w-4" />
-          General
+          {t('tabs.general')}
         </TabsTrigger>
         <TabsTrigger value="table" className="flex items-center gap-2">
           <Table2 className="h-4 w-4" />
-          Table
+          {t('tabs.table')}
         </TabsTrigger>
         <TabsTrigger value="features" className="flex items-center gap-2">
           <Settings2 className="h-4 w-4" />
-          Features
+          {t('tabs.features')}
         </TabsTrigger>
         <TabsTrigger value="backup" className="flex items-center gap-2">
           <Save className="h-4 w-4" />
-          Backup
+          {t('tabs.backup')}
         </TabsTrigger>
       </TabsList>
       <TabsContent value="general">

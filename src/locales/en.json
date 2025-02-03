@@ -1,0 +1,123 @@
+{
+  "general": {
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "inventoryName": "Inventory Name",
+    "searchPlaceholder": "Search items...",
+    "addItemButton": "Add Item",
+    "categoryLabel": "Category",
+    "statusLabel": "Status",
+    "locationLabel": "Location"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "currency": "Currency",
+    "dateFormat": "Date Format",
+    "themePlaceholder": "Select a theme"
+  },
+  "tabs": {
+    "general": "General",
+    "table": "Table",
+    "features": "Features",
+    "backup": "Backup"
+  },
+  "languages": {
+    "en": "English",
+    "he": "Hebrew"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "buttons": {
+    "inventory": "Inventory",
+    "save": "Save",
+    "cancel": "Cancel",
+    "export": "Export",
+    "import": "Import",
+    "add": "Add",
+    "resetEverything": "Reset Everything",
+    "addCustomColumn": "Add Custom Column"
+  },
+  "features": {
+    "featuresTitle": "Features",
+    "featuresDescription": "Enable or disable various features",
+    "historyTracking": "History Tracking",
+    "historyTrackingDescription": "Track changes and maintain audit logs",
+    "notifications": "Notifications",
+    "notificationsDescription": "Get alerts for low stock and important updates",
+    "itemVerification": "Item Verification",
+    "itemVerificationDescription": "Track when items were last verified in inventory",
+    "scanToVerify": "Scan to Verify",
+    "scanToVerifyDescription": "Enable barcode scanning for quick item verification",
+    "verificationTimeout": "Verification Timeout",
+    "verificationTimeoutDescription": "Time before verification status turns red"
+  },
+  "table": {
+    "defaultValuesTitle": "Default Values",
+    "defaultValuesDescription": "Set default values for new items",
+    "categoriesTitle": "Categories",
+    "categoriesDescription": "Manage inventory categories",
+    "statusesTitle": "Statuses",
+    "statusesDescription": "Manage inventory status options",
+    "visibleColumnsTitle": "Visible Columns",
+    "visibleColumnsDescription": "Choose which columns to display in the inventory table",
+    "customColumnsTitle": "Custom Columns",
+    "customColumnsDescription": "Add custom columns to the inventory table",
+    "defaultCategory": "Default Category",
+    "defaultLocation": "Default Location",
+    "defaultStatus": "Default Status",
+    "addCategoryPlaceholder": "Add new category",
+    "addStatusPlaceholder": "Add new status",
+    "columns": {
+      "name": "Name",
+      "sku": "SKU",
+      "description": "Description",
+      "quantity": "Quantity",
+      "price": "Price",
+      "category": "Category",
+      "location": "Location",
+      "status": "Status",
+      "lastVerified": "Last Verified"
+    },
+    "columnTypes": {
+      "text": "Text",
+      "number": "Number",
+      "boolean": "Boolean"
+    },
+    "emptyState": "No items found",
+    "loadingText": "Loading inventory...",
+    "filterByCategory": "Filter by category",
+    "filterByStatus": "Filter by status"
+  },
+  "units": {
+    "minutes": "Minutes",
+    "hours": "Hours",
+    "days": "Days"
+  },
+  "confirmation": {
+    "resetTitle": "Factory Reset",
+    "resetDescription": "This will permanently delete all your data and reset all settings to their default values. This action cannot be undone."
+  },
+  "backup": {
+    "backupRestoreTitle": "Backup & Restore",
+    "backupRestoreDescription": "Export or import all data including settings and inventory",
+    "factoryResetTitle": "Factory Reset",
+    "factoryResetDescription": "Reset all settings and data to default state"
+  },
+  "settingsSections": {
+    "inventoryTitle": "Inventory Settings",
+    "inventoryDescription": "Manage your inventory information",
+    "appearanceTitle": "Appearance",
+    "appearanceDescription": "Customize the look and feel",
+    "languageTitle": "Language",
+    "languageDescription": "Select the interface language"
+  },
+  "sort": {
+    "asc": "Ascending",
+    "desc": "Descending"
+  }
+}

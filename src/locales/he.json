@@ -1,0 +1,124 @@
+{
+  "general": {
+    "save": "שמור שינויים",
+    "cancel": "ביטול",
+    "loading": "טוען...",
+    "inventoryName": "שם המלאי",
+    "searchPlaceholder": "חיפוש פריטים...",
+    "addItemButton": "הוסף פריט",
+    "categoryLabel": "קטגוריה",
+    "statusLabel": "סטטוס",
+    "locationLabel": "מיקום"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "theme": "ערכת עיצוב",
+    "currency": "מטבע",
+    "dateFormat": "פורמט תאריך",
+    "themePlaceholder": "בחירת ערכת עיצוב"
+  },
+  "tabs": {
+    "general": "כללי",
+    "table": "טבלה",
+    "features": "תכונות",
+    "backup": "גיבוי"
+  },
+  "languages": {
+    "en": "אנגלית",
+    "he": "עברית"
+  },
+  "theme": {
+    "light": "בהיר",
+    "dark": "חשוך",
+    "system": "מערכת"
+  },
+  "buttons": {
+    "inventory": "מלאי",
+    "save": "שמור",
+    "cancel": "בטל",
+    "export": "ייצוא",
+    "import": "יבוא",
+    "add": "הוסף",
+    "resetEverything": "איפוס מלא",
+    "addCustomColumn": "הוסף עמודה מותאמת"
+  },
+  "features": {
+    "featuresTitle": "תכונות",
+    "featuresDescription": "הפעל או בטל אפשרויות מסוימות",
+    "historyTracking": "מעקב היסטוריה",
+    "historyTrackingDescription": "מעקב אחר שינויים ושמירת יומני ביקורת",
+    "notifications": "התראות",
+    "notificationsDescription": "קבלת התראות על מלאי נמוך ועדכונים חשובים",
+    "itemVerification": "אימות פריטים",
+    "itemVerificationDescription": "מעקב אחר מועד האימות האחרון של פריטים במלאי",
+    "scanToVerify": "סריקה לאימות",
+    "scanToVerifyDescription": "אפשר סריקת ברקוד לאימות מהיר של פריטים",
+    "verificationTimeout": "פסק זמן לאימות",
+    "verificationTimeoutDescription": "זמן עד שהסטטוס של האימות הופך לאדום"
+  },
+  "table": {
+    "defaultValuesTitle": "ערכי ברירת מחדל",
+    "defaultValuesDescription": "הגדר ערכי ברירת מחדל עבור פריטים חדשים",
+    "categoriesTitle": "קטגוריות",
+    "categoriesDescription": "ניהול קטגוריות מלאי",
+    "statusesTitle": "סטטוסים",
+    "statusesDescription": "ניהול אפשרויות סטטוס למלאי",
+    "visibleColumnsTitle": "עמודות גלויות",
+    "visibleColumnsDescription": "בחירת העמודות שיוצגו בטבלת המלאי",
+    "customColumnsTitle": "עמודות מותאמות",
+    "customColumnsDescription": "הוספת עמודות מותאמות לטבלת המלאי",
+    "defaultCategory": "קטגוריה ברירת מחדל",
+    "defaultLocation": "מיקום ברירת מחדל",
+    "defaultStatus": "סטטוס ברירת מחדל",
+    "addCategoryPlaceholder": "הוסף קטגוריה חדשה",
+    "addStatusPlaceholder": "הוסף סטטוס חדש",
+    "columns": {
+      "name": "שם",
+      "sku": "מק״ט",
+      "description": "תיאור",
+      "quantity": "כמות",
+      "price": "מחיר",
+      "category": "קטגוריה",
+      "location": "מיקום",
+      "status": "סטטוס",
+      "lastVerified": "אומת לאחרונה"
+    },
+    "columnTypes": {
+      "text": "טקסט",
+      "number": "מספר",
+      "boolean": "בוליאני"
+    },
+    "emptyState": "לא נמצאו פריטים",
+    "loadingText": "טוען מלאי...",
+    "filterByCategory": "סנן לפי קטגוריה",
+    "filterByStatus": "סנן לפי סטטוס"
+  },
+  "units": {
+    "minutes": "דקות",
+    "hours": "שעות",
+    "days": "ימים"
+  },
+  "confirmation": {
+    "resetTitle": "איפוס למצב היצרן",
+    "resetDescription": "פעולה זו תמחק לצמיתות את כל הנתונים ותאפס את כל ההגדרות לערכי ברירת המחדל. לא ניתן לבטל פעולה זו."
+  },
+  "backup": {
+    "backupRestoreTitle": "גיבוי ושחזור",
+    "backupRestoreDescription": "ייצוא או יבוא של כל הנתונים כולל הגדרות ומלאי",
+    "factoryResetTitle": "איפוס למצב היצרן",
+    "factoryResetDescription": "איפוס כל ההגדרות והנתונים למצב ברירת המחדל",
+    "factoryResetButton": "אפס לברירת מחדל" 
+  },
+  "settingsSections": {
+    "inventoryTitle": "הגדרות מלאי",
+    "inventoryDescription": "ניהול פרטי המלאי",
+    "appearanceTitle": "מראה חיצוני",
+    "appearanceDescription": "התאמת העיצוב והמראה",
+    "languageTitle": "שפה",
+    "languageDescription": "בחירת שפת הממשק"
+  },
+  "sort": {
+    "asc": "סדר עולה",
+    "desc": "סדר יורד"
+  }
+}

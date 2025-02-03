@@ -9,6 +9,7 @@ import { DialogFooter } from "@/components/ui/dialog"
 import { Sparkles, History, Bell, CheckCircle } from "lucide-react"
 import { useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTranslation } from "@/hooks/use-translation"
 
 interface FeatureSettingsProps {
   settings: SiteSettings
@@ -16,6 +17,7 @@ interface FeatureSettingsProps {
 }
 
 export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
+  const { t } = useTranslation(settings)
   const [localFeatures, setLocalFeatures] = useState(settings.features)
   const [verificationTimeout, setVerificationTimeout] = useState(
     settings.features.verificationTimeout || 7
@@ -90,8 +92,8 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
     <form className="space-y-6">
       <SettingsSection
         icon={Sparkles}
-        title="Features"
-        description="Enable or disable various features"
+        title={t(`features.featuresTitle`)}
+        description={t(`features.featuresDescription`)}
       >
         <div className="space-y-4">
           {features.map((feature) => {
@@ -106,7 +108,9 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                         htmlFor={feature.id}
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
-                        {feature.label}
+                        {t(feature.id === 'historyTracking' 
+                          ? 'features.historyTracking' 
+                          : `features.${feature.id}`)}
                       </label>
                       <Checkbox
                         id={feature.id}
@@ -115,7 +119,9 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                       />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {feature.description}
+                      {t(feature.id === 'historyTracking' 
+                        ? 'features.historyTrackingDescription' 
+                        : `features.${feature.id}Description`)}
                     </p>
                   </div>
                 </div>
@@ -128,10 +134,10 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                             htmlFor={subFeature.id}
                             className="text-sm font-medium leading-none"
                           >
-                            {subFeature.label}
+                            {t(`features.${subFeature.id}`)}
                           </label>
                           <p className="text-sm text-muted-foreground">
-                            {subFeature.description}
+                            {t(`features.${subFeature.id}Description`)}
                           </p>
                         </div>
                         {subFeature.type === "number-with-unit" ? (
@@ -152,9 +158,9 @@ export function FeatureSettings({ settings, onSubmit }: FeatureSettingsProps) {
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="minutes">Minutes</SelectItem>
-                                <SelectItem value="hours">Hours</SelectItem>
-                                <SelectItem value="days">Days</SelectItem>
+                                <SelectItem value="minutes">{t('units.minutes')}</SelectItem>
+                                <SelectItem value="hours">{t('units.hours')}</SelectItem>
+                                <SelectItem value="days">{t('units.days')}</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>

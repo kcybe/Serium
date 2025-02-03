@@ -45,6 +45,7 @@ export function SettingsDialog() {
       setTheme(values.theme)
       toast.success("Settings saved successfully")
       setOpen(false)
+      window.location.reload()
     } catch (error) {
       toast.error("Failed to save settings")
       console.error(error)

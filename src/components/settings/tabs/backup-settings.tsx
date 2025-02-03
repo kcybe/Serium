@@ -10,6 +10,7 @@ import { toast } from "sonner"
 import { useRef, useState } from "react"
 import { SiteSettings, defaultSettings } from "@/types/settings"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
+import { useTranslation } from "@/hooks/use-translation"
 
 interface BackupSettingsProps {
   settings: SiteSettings
@@ -17,6 +18,7 @@ interface BackupSettingsProps {
 }
 
 export function BackupSettings({ settings, onSettingsImported }: BackupSettingsProps) {
+  const { t } = useTranslation(settings)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [showResetDialog, setShowResetDialog] = useState(false)
 
@@ -101,8 +103,8 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
     <div className="space-y-6">
       <SettingsSection
         icon={Save}
-        title="Backup & Restore"
-        description="Export or import all data including settings and inventory"
+        title={t('backup.backupRestoreTitle')}
+        description={t('backup.backupRestoreDescription')}
       >
         <input
           type="file"
@@ -114,26 +116,26 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         <div className="flex gap-4">
           <Button onClick={handleExportAll}>
             <Download className="mr-2 h-4 w-4" />
-            Export All Data
+            {t('buttons.export')}
           </Button>
           <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
             <Upload className="mr-2 h-4 w-4" />
-            Import Backup
+            {t('buttons.import')}
           </Button>
         </div>
       </SettingsSection>
 
       <SettingsSection
         icon={RotateCcw}
-        title="Factory Reset"
-        description="Reset all settings and data to default state"
+        title={t('backup.factoryResetTitle')}
+        description={t('backup.factoryResetDescription')}
       >
         <Button 
           variant="destructive" 
           onClick={() => setShowResetDialog(true)}
         >
           <RotateCcw className="mr-2 h-4 w-4" />
-          Reset to Factory Defaults
+          {t('backup.factoryResetButton')}
         </Button>
       </SettingsSection>
 
@@ -141,8 +143,8 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         open={showResetDialog}
         onOpenChange={setShowResetDialog}
         onConfirm={handleFactoryReset}
-        title="Factory Reset"
-        description="This will permanently delete all your data and reset all settings to their default values. This action cannot be undone."
+        title={t('confirmation.resetTitle')}
+        description={t('confirmation.resetDescription')}
         confirmLabel="Reset Everything"
         cancelLabel="Cancel"
       />
