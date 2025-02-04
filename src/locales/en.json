@@ -154,5 +154,17 @@
     "searchPlaceholder": "Search history...",
     "searchBy": "Search by...",
     "filterByAction": "Filter by action"
+  },
+  "dashboard": {
+    "totalItems": "Total Items",
+    "lowStock": "Low Stock Items",
+    "totalValue": "Total Value",
+    "categories": "Categories",
+    "categoryDist": "Category Distribution",
+    "locationDist": "Location Distribution", 
+    "statusDist": "Status Distribution"
+  },
+  "common": {
+    "items": "items"
   }
 }

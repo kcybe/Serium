@@ -1,16 +1,20 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from "recharts"
+import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell, Legend } from "recharts"
 import { useInventoryData } from "./hooks/use-dashboard-data"
 import { useTheme } from "next-themes"
 import { PageTransition } from '@/components/ui/page-transition'
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
 import { chartConfig } from "@/components/ui/chart-config"
+import { useTranslation } from "@/hooks/use-translation"
+import { useSettings } from "@/hooks/use-settings"
 
 export default function DashboardPage() {
   const { inventoryStats, categoryDistribution, locationDistribution, statusDistribution } = useInventoryData()
   const { theme } = useTheme()
+  const settings = useSettings()
+  const { t } = useTranslation(settings)
 
   const getChartColors = (data: Array<{ id: string }>) => {
     return data.map((_, index) => 
@@ -52,6 +56,25 @@ export default function DashboardPage() {
                   />
                 ))}
               </Pie>
+              <Legend 
+                verticalAlign="bottom"
+                content={({ payload }) => (
+                  <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+                    {payload?.map((entry, index) => (
+                      <div key={`legend-${index}`} className="flex items-center gap-2 text-xs">
+                        <div 
+                          className="h-3 w-3 rounded-full" 
+                          style={{ backgroundColor: entry.color }}
+                        />
+                        <span>{(entry.payload as any)?.id}</span>
+                        <span className="text-muted-foreground">
+                          ({(entry.payload as any)?.value ?? 0} {t('common.items')})
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              />
             </PieChart>
           </ResponsiveContainer>
         </ChartContainer>
@@ -67,7 +90,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Total Items</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('dashboard.totalItems')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{inventoryStats.totalItems}</div>
@@ -75,7 +98,7 @@ export default function DashboardPage() {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Low Stock Items</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('dashboard.lowStock')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{inventoryStats.lowStockItems}</div>
@@ -83,7 +106,7 @@ export default function DashboardPage() {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Total Value</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('dashboard.totalValue')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
@@ -96,7 +119,7 @@ export default function DashboardPage() {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Categories</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('dashboard.categories')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{inventoryStats.totalCategories}</div>
@@ -105,9 +128,9 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {renderPieChart("Category Distribution", categoryDistribution)}
-              {renderPieChart("Location Distribution", locationDistribution)}
-              {renderPieChart("Status Distribution", statusDistribution)}
+              {renderPieChart(t('dashboard.categoryDist'), categoryDistribution)}
+              {renderPieChart(t('dashboard.locationDist'), locationDistribution)}
+              {renderPieChart(t('dashboard.statusDist'), statusDistribution)}
             </div>
           </div>
         </div>

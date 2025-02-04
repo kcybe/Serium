@@ -155,5 +155,17 @@
     "searchPlaceholder": "חיפוש בהיסטוריה...",
     "searchBy": "חפש לפי...",
     "filterByAction": "סנן לפי פעולה"
+  },
+  "dashboard": {
+    "totalItems": "פריטים בסך הכל",
+    "lowStock": "פריטים במלאי נמוך",
+    "totalValue": "ערך כולל",
+    "categories": "קטגוריות",
+    "categoryDist": "פילוח קטגוריות",
+    "locationDist": "פילוח מיקומים",
+    "statusDist": "פילוח סטטוסים"
+  },
+  "common": {
+    "items": "פריטים"
   }
 }
