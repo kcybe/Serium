@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "Manage your inventory with ease",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode

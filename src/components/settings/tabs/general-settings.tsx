@@ -113,7 +113,7 @@ export function GeneralSettings({ settings, onSubmit }: { settings: SiteSettings
             name="language"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('languages.en')}</FormLabel>
+                <FormLabel>{t('settingsSections.languageTitle')}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>

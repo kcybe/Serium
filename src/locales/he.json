@@ -4,7 +4,8 @@
     "cancel": "ביטול",
     "loading": "טוען...",
     "inventoryName": "שם המלאי",
-    "searchPlaceholder": "חיפוש פריטים...",
+    "searchPlaceholder": "חיפוש במלאי...",
+    "clearFiltersButton": "נקה פילטרים",
     "addItemButton": "הוסף פריט",
     "categoryLabel": "קטגוריה",
     "statusLabel": "סטטוס",
@@ -33,11 +34,13 @@
     "system": "מערכת"
   },
   "buttons": {
-    "inventory": "מלאי",
+    "inventory": "צפייה במלאי",
     "save": "שמור",
     "cancel": "בטל",
     "export": "ייצוא",
     "import": "יבוא",
+    "refresh": "רענן",
+    "refreshing": "...מרענן",
     "add": "הוסף",
     "resetEverything": "איפוס מלא",
     "addCustomColumn": "הוסף עמודה מותאמת"
@@ -91,7 +94,19 @@
     "emptyState": "לא נמצאו פריטים",
     "loadingText": "טוען מלאי...",
     "filterByCategory": "סנן לפי קטגוריה",
-    "filterByStatus": "סנן לפי סטטוס"
+    "filterByStatus": "סנן לפי סטטוס",
+    "totalProducts": "פריטים בסך הכל",
+    "selectedCount": "${selected} מתוך ${total} נבחרו",
+    "pagination": {
+    "pageOf": "עמוד ${current} מתוך ${total}"
+    },
+    "rowsPerPage": "שורות לעמוד",
+    "headers": {
+      "date": "תאריך",
+      "action": "פעולה",
+      "itemId": "מזהה פריט",
+      "changes": "שינויים"
+    }
   },
   "units": {
     "minutes": "דקות",
@@ -120,5 +135,25 @@
   "sort": {
     "asc": "סדר עולה",
     "desc": "סדר יורד"
+  },
+  "filters": {
+    "all": "כל הפרמטרים",
+    "name": "שם",
+    "sku": "מק״ט",
+    "location": "מיקום",
+    "description": "תיאור",
+    "allActions": "כל הפעולות"
+  },
+  "history": {
+    "actions": {
+      "create": "נוצר",
+      "update": "עודכן",
+      "delete": "נמחק"
+    },
+    "disabledTitle": "מעקב היסטוריה מושבת",
+    "disabledDescription": "הפעל בהגדרות כדי לעקוב אחר שינויים במלאי",
+    "searchPlaceholder": "חיפוש בהיסטוריה...",
+    "searchBy": "חפש לפי...",
+    "filterByAction": "סנן לפי פעולה"
   }
 }

@@ -16,7 +16,7 @@ interface SettingsTabsProps {
 }
 
 export function SettingsTabs({ settings, onSubmit, onSettingsImported }: SettingsTabsProps) {
-  const { t } = useTranslation(settings)
+  const { t } = useTranslation(settings || { language: 'en' } as SiteSettings)
 
   return (
     <Tabs defaultValue="general" className="w-full">

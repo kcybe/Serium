@@ -16,6 +16,8 @@ import { importFromJson } from "@/lib/services/utils/import-from-json"
 import { InventoryItem } from "@/types/inventory"
 import { cn } from "@/lib/utils"
 import { defaultSettings } from "@/types/settings"
+import { useTranslation } from "@/hooks/use-translation"
+import { useSettings } from "@/hooks/use-settings"
 
 interface DataActionsProps {
   data: InventoryItem[]
@@ -26,6 +28,8 @@ interface DataActionsProps {
 
 export function DataActions({ data, onDataImported, onRefresh, isRefreshing }: DataActionsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const settings = useSettings()
+  const { t } = useTranslation(settings)
 
   const handleExport = async () => {
     try {
@@ -101,15 +105,15 @@ export function DataActions({ data, onDataImported, onRefresh, isRefreshing }: D
                 isRefreshing && "animate-spin"
               )} 
             />
-            {isRefreshing ? "Refreshing..." : "Refresh"}
+            {isRefreshing ? t('buttons.refreshing') : t('buttons.refresh')}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" />
-            Export Data
+            {t('buttons.export')}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
             <Upload className="mr-2 h-4 w-4" />
-            Import Data
+            {t('buttons.import')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -35,6 +35,7 @@ import { useState } from "react"
 import { InventoryItem } from "@/types/inventory"
 import { SiteSettings } from "@/types/settings"
 import { useInventoryTable } from "./hooks/use-inventory-table"
+import { useTranslation } from "@/hooks/use-translation"
 
 export interface TableMeta {
   updateData: (id: string, updatedItem: InventoryItem) => void
@@ -61,13 +62,14 @@ export function DataTable({
   settings
 }: DataTableProps<InventoryItem>) {
   const table = useInventoryTable(data, columns, onUpdate, onDelete, handleVerify, settings)
+  const { t } = useTranslation(settings)
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between py-4">
-        <p className="text-sm text-muted-foreground">
-          Total Products: {data.length}
-        </p>
+        <div className="w-[150px] items-center justify-center text-sm text-muted-foreground">
+          {t('table.totalProducts')}: {data.length}
+        </div>
       </div>
       <div className="rounded-md border shadow-sm">
         <Table>
@@ -120,7 +122,7 @@ export function DataTable({
       </div>
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex items-center space-x-2">
-          <p className="text-sm text-muted-foreground">Rows per page</p>
+          <p className="text-sm text-muted-foreground">{t('table.rowsPerPage')}</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => table.setPageSize(Number(value))}
@@ -139,7 +141,10 @@ export function DataTable({
         </div>
         <div className="flex items-center space-x-2">
           <div className="flex w-[100px] items-center justify-center text-sm text-muted-foreground">
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+            {t('table.pagination.pageOf', {
+              current: String(table.getState().pagination.pageIndex + 1),
+              total: String(table.getPageCount())
+            })}
           </div>
           <div className="flex items-center space-x-2">
             <Button

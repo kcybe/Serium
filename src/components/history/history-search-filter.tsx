@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Button } from "../ui/button"
+import { useTranslation } from "@/hooks/use-translation"
+import { useSettings } from "@/hooks/use-settings"
 
 type SearchParameter = "all" | "itemId" | "action" | "changes"
 
@@ -31,6 +33,8 @@ export function HistorySearchFilter({
   const [searchValue, setSearchValue] = useState<string>("")
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const settings = useSettings()
+  const { t } = useTranslation(settings)
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -91,7 +95,7 @@ export function HistorySearchFilter({
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             ref={inputRef}
-            placeholder="Type / to search history..."
+            placeholder={t('history.searchPlaceholder')}
             className="pl-8 w-full"
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
@@ -99,13 +103,13 @@ export function HistorySearchFilter({
         </div>
         <Select value={searchParam} onValueChange={handleParameterChange}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Search by..." />
+            <SelectValue placeholder={t('history.searchBy')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Parameters</SelectItem>
-            <SelectItem value="itemId">Item ID</SelectItem>
-            <SelectItem value="action">Action</SelectItem>
-            <SelectItem value="changes">Changes</SelectItem>
+            <SelectItem value="all">{t('filters.all')}</SelectItem>
+            <SelectItem value="itemId">{t('table.headers.itemId')}</SelectItem>
+            <SelectItem value="action">{t('table.headers.action')}</SelectItem>
+            <SelectItem value="changes">{t('table.headers.changes')}</SelectItem>
           </SelectContent>
         </Select>
         <Select 
@@ -113,13 +117,13 @@ export function HistorySearchFilter({
           onValueChange={onActionChange}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by action" />
+            <SelectValue placeholder={t('history.filterByAction')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Actions</SelectItem>
-            <SelectItem value="create">Created</SelectItem>
-            <SelectItem value="update">Updated</SelectItem>
-            <SelectItem value="delete">Deleted</SelectItem>
+            <SelectItem value="all">{t('filters.allActions')}</SelectItem>
+            <SelectItem value="create">{t('history.actions.create')}</SelectItem>
+            <SelectItem value="update">{t('history.actions.update')}</SelectItem>
+            <SelectItem value="delete">{t('history.actions.delete')}</SelectItem>
           </SelectContent>
         </Select>
         <Button 
@@ -128,7 +132,7 @@ export function HistorySearchFilter({
           className="flex items-center gap-2"
           disabled={!searchValue && selectedAction === "all"}
         >
-          Clear Filters
+          {t('general.clearFiltersButton')}
         </Button>
       </div>
     </div>

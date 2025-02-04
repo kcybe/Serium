@@ -19,6 +19,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import { PageTransition } from '@/components/ui/page-transition'
 import { inventoryService } from "@/lib/services/inventory"
+import { useTranslation } from "@/hooks/use-translation"
 
 
 export default function InventoryPage() {
@@ -33,6 +34,7 @@ export default function InventoryPage() {
     const [historyEnabled, setHistoryEnabled] = useState<boolean>(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const isVerifying = useRef(false)
+    const { t } = useTranslation(settings)
 
     const filteredData = useMemo(() => {
         let filtered = data
@@ -324,9 +326,9 @@ export default function InventoryPage() {
           <div className="w-full max-w-7xl mx-auto">
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>History Tracking Disabled</AlertTitle>
+              <AlertTitle>{t('history.disabledTitle')}</AlertTitle>
               <AlertDescription>
-                History tracking is currently disabled. Enable it in settings to track inventory changes.
+                {t('history.disabledDescription')}
               </AlertDescription>
             </Alert>
           </div>

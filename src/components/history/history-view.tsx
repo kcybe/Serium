@@ -25,7 +25,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from '@/lib/utils'
 import { HistorySearchFilter } from '@/components/history/history-search-filter'
-import { toast } from 'sonner'
+import { useTranslation } from "@/hooks/use-translation"
+import { useSettings } from "@/hooks/use-settings"
 
 const actionColors = {
   create: 'bg-green-500',
@@ -43,6 +44,8 @@ export function HistoryView() {
   const [pageSize, setPageSize] = useState(8)
   const [pageIndex, setPageIndex] = useState(0)
   const [reloadTrigger, setReloadTrigger] = useState(0)
+  const settings = useSettings()
+  const { t } = useTranslation(settings)
 
   useEffect(() => {
     loadHistory()
@@ -156,7 +159,7 @@ export function HistoryView() {
                     isRefreshing && "animate-spin"
                   )} 
                 />
-                {isRefreshing ? "Refreshing..." : "Refresh"}
+                {isRefreshing ? t('buttons.refreshing') : t('buttons.refresh')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -183,10 +186,10 @@ export function HistoryView() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead>Item ID</TableHead>
-                <TableHead>Changes</TableHead>
+                <TableHead>{t('table.headers.date')}</TableHead>
+                <TableHead>{t('table.headers.action')}</TableHead>
+                <TableHead>{t('table.headers.itemId')}</TableHead>
+                <TableHead>{t('table.headers.changes')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -197,7 +200,7 @@ export function HistoryView() {
                   </TableCell>
                   <TableCell>
                     <Badge variant="secondary" className={actionColors[entry.action]}>
-                      {entry.action}
+                      {t(`history.actions.${entry.action}`)}
                     </Badge>
                   </TableCell>
                   <TableCell>{entry.itemId}</TableCell>
@@ -209,7 +212,7 @@ export function HistoryView() {
 
           <div className="flex items-center justify-between space-x-2 py-4">
             <div className="flex items-center space-x-2">
-              <p className="text-sm text-muted-foreground">Rows per page</p>
+              <p className="text-sm text-muted-foreground">{t('table.rowsPerPage')}</p>
               <Select
                 value={`${pageSize}`}
                 onValueChange={(value) => {
@@ -231,7 +234,10 @@ export function HistoryView() {
             </div>
             <div className="flex items-center space-x-2">
               <div className="flex w-[100px] items-center justify-center text-sm text-muted-foreground">
-                Page {pageIndex + 1} of {pageCount}
+                {t('table.pagination.pageOf', {
+                  current: String(pageIndex + 1),
+                  total: String(pageCount)
+                })}
               </div>
               <div className="flex items-center space-x-2">
                 <Button

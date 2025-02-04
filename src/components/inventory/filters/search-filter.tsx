@@ -15,6 +15,7 @@ import { Button } from "../../ui/button"
 import { toast } from "sonner"
 import { InventoryItem } from "@/types/inventory"
 import { SiteSettings } from "@/types/settings"
+import { useTranslation } from "@/hooks/use-translation"
 
 type SearchParameter = "all" | "name" | "sku" | "location" | "description"
 
@@ -45,6 +46,7 @@ export function SearchFilter({
     onVerify,
     settings
 }: SearchFilterProps) {
+  const { t } = useTranslation(settings || { language: 'en' } as SiteSettings)
   const [searchParam, setSearchParam] = useState<SearchParameter>("all")
   const [searchValue, setSearchValue] = useState<string>("")
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -165,7 +167,7 @@ export function SearchFilter({
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             ref={inputRef}
-            placeholder="Type / to search inventory..."
+            placeholder={t('general.searchPlaceholder')}
             className="pl-8"
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
@@ -176,11 +178,11 @@ export function SearchFilter({
             <SelectValue placeholder="Search by..." />
           </SelectTrigger>
           <SelectContent>
-              <SelectItem value="all">All Parameters</SelectItem>
-              <SelectItem value="name">Name</SelectItem>
-              <SelectItem value="sku">SKU</SelectItem>
-              <SelectItem value="location">Location</SelectItem>
-              <SelectItem value="description">Description</SelectItem>
+              <SelectItem value="all">{t('filters.all')}</SelectItem>
+              <SelectItem value="name">{t('filters.name')}</SelectItem>
+              <SelectItem value="sku">{t('filters.sku')}</SelectItem>
+              <SelectItem value="location">{t('filters.location')}</SelectItem>
+              <SelectItem value="description">{t('filters.description')}</SelectItem>
               </SelectContent>
         </Select>
         <Button 
@@ -189,18 +191,18 @@ export function SearchFilter({
           className="flex items-center gap-2"
           disabled={!searchValue && selectedCategories.length === 0 && selectedStatuses.length === 0}
         >
-          Clear Filters
+          {t('general.clearFiltersButton')}
         </Button>
       </div>
       <div className="flex gap-2">
         <FilterDropdown
-          title="Categories"
+          title={t('table.categoriesTitle')}
           options={categories}
           selectedOptions={selectedCategories}
           onSelectionChange={onCategoriesChange}
         />
         <FilterDropdown
-          title="Statuses"
+          title={t('table.statusesTitle')}
           options={statuses}
           selectedOptions={selectedStatuses}
           onSelectionChange={onStatusesChange}

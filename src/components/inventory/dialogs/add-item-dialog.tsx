@@ -15,6 +15,8 @@ import { InventoryItem } from "@/types/inventory"
 import { db } from "@/lib/services/db"
 import { toast } from "sonner"
 import { historyService } from "@/lib/services/history"
+import { useSettings } from "@/hooks/use-settings"
+import { useTranslation } from "@/hooks/use-translation"
 
 interface AddItemDialogProps {
   onAddItem: (item: InventoryItem) => void
@@ -23,6 +25,8 @@ interface AddItemDialogProps {
 export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const settings = useSettings()
+  const { t } = useTranslation(settings)
 
   const generateUUID = () => {
     if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -78,7 +82,7 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
-          Add Item
+          {t('general.addItemButton')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

@@ -4,7 +4,8 @@
     "cancel": "Cancel",
     "loading": "Loading...",
     "inventoryName": "Inventory Name",
-    "searchPlaceholder": "Search items...",
+    "searchPlaceholder": "Search inventory...",
+    "clearFiltersButton": "Clear Filters",
     "addItemButton": "Add Item",
     "categoryLabel": "Category",
     "statusLabel": "Status",
@@ -33,11 +34,13 @@
     "system": "System"
   },
   "buttons": {
-    "inventory": "Inventory",
+    "inventory": "View Inventory",
     "save": "Save",
     "cancel": "Cancel",
     "export": "Export",
     "import": "Import",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing...",
     "add": "Add",
     "resetEverything": "Reset Everything",
     "addCustomColumn": "Add Custom Column"
@@ -91,7 +94,19 @@
     "emptyState": "No items found",
     "loadingText": "Loading inventory...",
     "filterByCategory": "Filter by category",
-    "filterByStatus": "Filter by status"
+    "filterByStatus": "Filter by status",
+    "totalProducts": "Total products",
+    "selectedCount": "${selected} of ${total} selected",
+    "pagination": {
+    "pageOf": "Page ${current} of ${total}"
+    },
+    "rowsPerPage": "Rows per page",
+    "headers": {
+      "date": "Date",
+      "action": "Action",
+      "itemId": "Item ID",
+      "changes": "Changes"
+    }
   },
   "units": {
     "minutes": "Minutes",
@@ -119,5 +134,25 @@
   "sort": {
     "asc": "Ascending",
     "desc": "Descending"
+  },
+  "filters": {
+    "all": "All Parameters",
+    "name": "Name",
+    "sku": "SKU",
+    "location": "Location",
+    "description": "Description",
+    "allActions": "All Actions"
+  },
+  "history": {
+    "actions": {
+      "create": "Created",
+      "update": "Updated",
+      "delete": "Deleted"
+    },
+    "disabledTitle": "History Tracking Disabled",
+    "disabledDescription": "Enable in settings to track inventory changes",
+    "searchPlaceholder": "Search history...",
+    "searchBy": "Search by...",
+    "filterByAction": "Filter by action"
   }
 }
