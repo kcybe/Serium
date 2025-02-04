@@ -9,7 +9,7 @@ import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
 import { chartConfig } from "@/components/ui/chart-config"
 
 export default function DashboardPage() {
-  const { inventoryStats, categoryDistribution, locationDistribution } = useInventoryData()
+  const { inventoryStats, categoryDistribution, locationDistribution, statusDistribution } = useInventoryData()
   const { theme } = useTheme()
 
   const getChartColors = (data: Array<{ id: string }>) => {
@@ -104,9 +104,10 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {renderPieChart("Category Distribution", categoryDistribution)}
               {renderPieChart("Location Distribution", locationDistribution)}
+              {renderPieChart("Status Distribution", statusDistribution)}
             </div>
           </div>
         </div>

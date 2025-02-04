@@ -26,6 +26,11 @@ interface DashboardData {
     name: string 
     value: number 
   }>
+  statusDistribution: Array<{ 
+    id: string
+    name: string 
+    value: number 
+  }>
 }
 
 export function useInventoryData() {
@@ -33,7 +38,8 @@ export function useInventoryData() {
     inventoryStats: { totalItems: 0, lowStockItems: 0, totalValue: 0, totalCategories: 0 },
     categoryDistribution: [],
     stockLevels: [],
-    locationDistribution: []
+    locationDistribution: [],
+    statusDistribution: []
   })
   const [settings, setSettings] = useState<SiteSettings>()
 
@@ -56,6 +62,7 @@ export function useInventoryData() {
     let totalValue = 0
     let lowStockItems = 0
     const locations = new Map<string, number>()
+    const statuses = new Map<string, number>()
 
     inventory.forEach(item => {
       totalValue += item.price * item.quantity
@@ -63,6 +70,7 @@ export function useInventoryData() {
       
       categories.set(item.category, (categories.get(item.category) || 0) + 1)
       locations.set(item.location, (locations.get(item.location) || 0) + 1)
+      statuses.set(item.status, (statuses.get(item.status) || 0) + 1)
     })
 
     setData({
@@ -92,6 +100,14 @@ export function useInventoryData() {
         })
       ).sort((a, b) => b.quantity - a.quantity),
       locationDistribution: Array.from(locations)
+        .map(([id, value]) => ({
+          id,
+          name: id,
+          value
+        }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 8),
+      statusDistribution: Array.from(statuses)
         .map(([id, value]) => ({
           id,
           name: id,
