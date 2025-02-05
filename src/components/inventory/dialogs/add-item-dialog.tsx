@@ -68,8 +68,9 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
       onAddItem(newItem)
       await historyService.trackChange(newItem.id, 'create', undefined, newItem)
       setOpen(false)
-    } catch (error) {
-      toast.error("Failed to add item")
+    } catch (e) {
+      const error = e instanceof Error ? e : new Error('Unknown error')
+      toast.error(t('toast.itemAddError', { error: error.message }))
       console.error(error)
       setOpen(false)
     } finally {
@@ -87,7 +88,9 @@ export function AddItemDialog({ onAddItem }: AddItemDialogProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New Item</DialogTitle>
+          <DialogTitle>
+            {loading ? t('general.loading') : t('general.addItemTitle')}
+          </DialogTitle>
         </DialogHeader>
         <AddItemForm 
           onSubmit={handleSubmit}

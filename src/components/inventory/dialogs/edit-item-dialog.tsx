@@ -14,6 +14,8 @@ import { toast } from "sonner"
 import { LoadingSpinner } from "../../ui/loading-spinner"
 import { AddItemFormValues } from "../forms/add-item-form"
 import { historyService } from "@/lib/services/history"
+import { useSettings } from "@/hooks/use-settings"
+import { useTranslation } from "@/hooks/use-translation"
 
 interface EditItemDialogProps {
   item: InventoryItem
@@ -24,6 +26,8 @@ interface EditItemDialogProps {
 
 export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: EditItemDialogProps) {
   const [loading, setLoading] = useState(false)
+  const settings = useSettings()
+  const { t } = useTranslation(settings)
 
   const handleSubmit = async (values: AddItemFormValues) => {
     try {
@@ -46,9 +50,9 @@ export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: Edit
       await historyService.trackChange(item.id, 'update', oldItem, processedValues)
       onItemUpdated(processedValues)
       onOpenChange(false)
-    } catch (error) {
-      toast.error("Failed to update item")
-      console.error(error)
+    } catch (e) {
+      const error = e instanceof Error ? e : new Error('Unknown error')
+      toast.error(t('toast.itemUpdateError', { error: error.message }))
       onOpenChange(false)
     } finally {
       setLoading(false)
@@ -75,7 +79,7 @@ export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: Edit
           onCancel={() => onOpenChange(false)}
           loading={loading}
           defaultValues={{ ...item, sku: String(item.sku) }}
-          submitLabel={loading ? "Saving..." : "Save Changes"}
+          submitLabel={loading ? t('buttons.saving') : t('general.save')}
         />
       </DialogContent>
     </Dialog>

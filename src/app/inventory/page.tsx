@@ -21,7 +21,6 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { inventoryService } from "@/lib/services/inventory"
 import { useTranslation } from "@/hooks/use-translation"
 
-
 export default function InventoryPage() {
     const [data, setData] = useState<InventoryItem[]>([])
     const [loading, setLoading] = useState(true)
@@ -106,19 +105,13 @@ export default function InventoryPage() {
           setSettings(mergedSettings)
           
           if (hasDataChanges || hasSettingsChanges) {
-            toast.success("Data refreshed successfully", {
-              id: "refresh-data"
-            })
+            toast.success(t('toast.refreshSuccess'))
           } else {
-            toast.info("No changes found", {
-              id: "refresh-data"
-            })
+            toast.info(t('toast.noChanges'))
           }
-        } catch (error) {
-          console.error("Failed to load items:", error)
-          toast.error("Failed to refresh data", {
-            id: "refresh-error"
-          })
+        } catch (e) {
+          const error = e instanceof Error ? e : new Error('Unknown error')
+          toast.error(t('toast.refreshError', { error: error.message }))
         } finally {
           setIsRefreshing(false)
           setIsLoading(false)
@@ -168,10 +161,10 @@ export default function InventoryPage() {
     try {
       await historyService.trackChange(newItem.id, 'create', undefined, newItem)
       setData(prev => [...prev, newItem])
-      toast.success("Item added successfully")
+      toast.success(t('toast.itemAdded'))
     } catch (error) {
       console.error(error)
-      toast.error("Failed to add item")
+      toast.error(t('toast.itemAddError'))
     }
   }
 
@@ -213,10 +206,10 @@ export default function InventoryPage() {
           await db.inventory.bulkAdd(backup.inventory)
         }
 
-        toast.success('Backup restored successfully')
+        toast.success(t('toast.backupRestored'))
         loadItems()
       } catch (error) {
-        toast.error('Invalid backup file')
+        toast.error(t('toast.invalidBackup'))
       }
     }
     reader.readAsText(file)
@@ -262,10 +255,10 @@ export default function InventoryPage() {
       
       await db.inventory.update(id, processedItem)
       setData(prev => prev.map(item => item.id === id ? processedItem : item))
-      toast.success("Item updated successfully")
-    } catch (error) {
-      console.error(error)
-      toast.error("Failed to update item")
+      toast.success(t('toast.itemUpdated'))
+    } catch (e) {
+      const error = e instanceof Error ? e : new Error('Unknown error')
+      toast.error(t('toast.itemUpdateError', { error: error.message }))
     }
   }
 
@@ -281,10 +274,9 @@ export default function InventoryPage() {
       setData(prev => prev.filter(item => item.id !== id))
       
       await historyService.trackChange(id, 'delete', oldItem)
-      toast.success("Item deleted successfully")
+      toast.success(t('toast.itemDeleted'))
     } catch (error) {
-      console.error(error)
-      toast.error("Failed to delete item")
+      toast.error(t('toast.itemDeleteError', { error: error instanceof Error ? error.message : String(error) }))
     }
   }
 
@@ -305,13 +297,16 @@ export default function InventoryPage() {
       setData(prev => prev.map(i => i.id === id ? updatedItem : i))
       
       if (source === 'scan') {
-        toast.success(`Verified item: ${updatedItem.name} (SKU: ${updatedItem.sku})`)
+        toast.success(t('toast.scanVerifySuccess', {
+          itemName: updatedItem.name,
+          sku: String(updatedItem.sku)
+        }))
       } else {
-        toast.success("Item verified successfully")
+        toast.success(t('toast.verifySuccess'))
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to verify item");
+      toast.error(t('toast.verifyError'))
     } finally {
       setTimeout(() => {
         isVerifying.current = false;

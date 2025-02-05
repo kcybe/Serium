@@ -9,7 +9,34 @@
     "addItemButton": "הוסף פריט",
     "categoryLabel": "קטגוריה",
     "statusLabel": "סטטוס",
-    "locationLabel": "מיקום"
+    "locationLabel": "מיקום",
+    "form": {
+      "sku": "מק״ט",
+      "name": "שם",
+      "description": "תיאור",
+      "quantity": "כמות",
+      "price": "מחיר",
+      "category": "קטגוריה",
+      "location": "מיקום",
+      "status": "סטטוס",
+      "required": "שדה חובה",
+      "productInfo": "מידע על המוצר",
+      "productInfoDesc": "פרטים בסיסיים על הפריט",
+      "pricingStock": "מחיר ומלאי",
+      "pricingStockDesc": "פרטי מלאי ומחירים",
+      "classification": "סיווג",
+      "classificationDesc": "ארגון המלאי שלך",
+      "customFields": "שדות מותאמים",
+      "customFieldsDesc": "מידע נוסף על הפריט",
+      "namePlaceholder": "הזן שם פריט",
+      "skuPlaceholder": "הזן מק״ט",
+      "descPlaceholder": "הזן תיאור",
+      "qtyPlaceholder": "הזן כמות",
+      "pricePlaceholder": "הזן מחיר",
+      "locationPlaceholder": "הזן מיקום",
+      "enterField": "הזן {field}"
+    },
+    "addItemTitle": "הוסף פריט חדש"
   },
   "settings": {
     "title": "הגדרות",
@@ -167,5 +194,19 @@
   },
   "common": {
     "items": "פריטים"
+  },
+  "toast": {
+    "itemAdded": "הפריט נוסף בהצלחה",
+    "itemAddError": "הוספת הפריט נכשלה: ${error}",
+    "itemUpdated": "הפריט עודכן בהצלחה",
+    "itemUpdateError": "עדכון הפריט נכשל: ${error}",
+    "itemDeleted": "הפריט נמחק בהצלחה",
+    "itemDeleteError": "מחיקת הפריט נכשלה: ${error}",
+    "refreshError": "רענון הנתונים נכשל",
+    "verifySuccess": "הפריט אומת בהצלחה",
+    "verifyError": "אימות הפריט נכשל",
+    "scanVerifySuccess": "אומת הפריט: ${itemName} (מק״ט: ${sku})",
+    "refreshSuccess": "רענון הנתונים הצליח",
+    "noChanges": "לא נמצאו שינויים"
   }
 }

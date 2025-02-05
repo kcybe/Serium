@@ -9,7 +9,34 @@
     "addItemButton": "Add Item",
     "categoryLabel": "Category",
     "statusLabel": "Status",
-    "locationLabel": "Location"
+    "locationLabel": "Location",
+    "form": {
+      "sku": "SKU",
+      "name": "Name",
+      "description": "Description",
+      "quantity": "Quantity",
+      "price": "Price",
+      "category": "Category",
+      "location": "Location",
+      "status": "Status",
+      "required": "Required field",
+      "productInfo": "Product Information",
+      "productInfoDesc": "Basic details about the item",
+      "pricingStock": "Pricing & Stock",
+      "pricingStockDesc": "Inventory and pricing details",
+      "classification": "Classification",
+      "classificationDesc": "Organize your inventory",
+      "customFields": "Custom Fields",
+      "customFieldsDesc": "Additional item information",
+      "namePlaceholder": "Enter item name",
+      "skuPlaceholder": "Enter SKU",
+      "descPlaceholder": "Enter description",
+      "qtyPlaceholder": "Enter quantity",
+      "pricePlaceholder": "Enter price",
+      "locationPlaceholder": "Enter location",
+      "enterField": "Enter {field}"
+    },
+    "addItemTitle": "Add New Item"
   },
   "settings": {
     "title": "Settings",
@@ -36,6 +63,7 @@
   "buttons": {
     "inventory": "View Inventory",
     "save": "Save",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "export": "Export",
     "import": "Import",
@@ -166,5 +194,19 @@
   },
   "common": {
     "items": "items"
+  },
+  "toast": {
+    "itemAdded": "Item added successfully",
+    "itemAddError": "Failed to add item: ${error}",
+    "itemUpdated": "Item updated successfully", 
+    "itemUpdateError": "Failed to update item: ${error}",
+    "itemDeleted": "Item deleted successfully",
+    "itemDeleteError": "Failed to delete item: ${error}",
+    "refreshError": "Failed to refresh data: ${error}",
+    "verifySuccess": "Item verified successfully",
+    "verifyError": "Failed to verify item",
+    "scanVerifySuccess": "Verified item: ${itemName} (SKU: ${sku})",
+    "refreshSuccess": "Data refreshed successfully",
+    "noChanges": "No changes found"
   }
 }

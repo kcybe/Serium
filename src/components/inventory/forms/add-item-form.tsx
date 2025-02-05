@@ -20,6 +20,7 @@ import { db } from "@/lib/services/db"
 import { DialogFooter } from "@/components/ui/dialog"
 import { Box, DollarSign, Package, ScrollText } from "lucide-react"
 import { SettingsSection } from "@/components/settings/settings-layout"
+import { useTranslation } from "@/hooks/use-translation"
 
 const formSchema = z.object({
   sku: z.string(),
@@ -49,6 +50,7 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
     categories: [],
     statuses: []
   })
+  const { t } = useTranslation(settings)
   
   const form = useForm<AddItemFormValues>({
     resolver: zodResolver(formSchema),
@@ -103,8 +105,8 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
         <div className="mt-4 space-y-6 max-h-[70vh] overflow-y-auto px-1">
           <SettingsSection
             icon={Package}
-            title="Product Information"
-            description="Basic details about the item"
+            title={t('general.form.productInfo')}
+            description={t('general.form.productInfoDesc')}
           >
             <div className="space-y-4">
               <FormField
@@ -112,9 +114,9 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>{t('general.form.name')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter item name" {...field} />
+                      <Input placeholder={t('general.form.namePlaceholder')} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -125,9 +127,9 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
                 name="sku"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SKU</FormLabel>
+                    <FormLabel>{t('general.form.sku')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter SKU" {...field} />
+                      <Input placeholder={t('general.form.skuPlaceholder')} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -138,9 +140,9 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>{t('general.form.description')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter description" {...field} />
+                      <Input placeholder={t('general.form.descPlaceholder')} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -151,8 +153,8 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
 
           <SettingsSection
             icon={DollarSign}
-            title="Pricing & Stock"
-            description="Inventory and pricing details"
+            title={t('general.form.pricingStock')}
+            description={t('general.form.pricingStockDesc')}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
@@ -160,11 +162,11 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
                 name="quantity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Quantity</FormLabel>
+                    <FormLabel>{t('general.form.quantity')}</FormLabel>
                     <FormControl>
                       <Input 
                         type="number" 
-                        placeholder="Enter quantity" 
+                        placeholder={t('general.form.quantityPlaceholder')}
                         {...field}
                         value={field.value ?? 0}
                         onChange={e => field.onChange(Number(e.target.value))}
@@ -179,12 +181,12 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price</FormLabel>
+                    <FormLabel>{t('general.form.price')}</FormLabel>
                     <FormControl>
                       <Input 
                         type="number" 
                         step="0.01"
-                        placeholder="Enter price" 
+                        placeholder={t('general.form.pricePlaceholder')}
                         {...field}
                         value={field.value ?? 0}
                         onChange={e => field.onChange(Number(e.target.value))}
@@ -199,8 +201,8 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
 
           <SettingsSection
             icon={Box}
-            title="Classification"
-            description="Organize your inventory"
+            title={t('general.form.classification')}
+            description={t('general.form.classificationDesc')}
           >
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -209,11 +211,11 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel>{t('general.form.category')}</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select category" />
+                            <SelectValue placeholder={t('general.form.categoryPlaceholder')} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -233,9 +235,9 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
                   name="location"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Location</FormLabel>
+                      <FormLabel>{t('general.form.location')}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter location" {...field} />
+                        <Input placeholder={t('general.form.locationPlaceholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -247,11 +249,11 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel>{t('general.form.status')}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
+                          <SelectValue placeholder={t('general.form.statusPlaceholder')} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -272,8 +274,8 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
           {settings.customColumns.length > 0 && (
             <SettingsSection
               icon={ScrollText}
-              title="Custom Fields"
-              description="Additional item information"
+              title={t('general.form.customFields')}
+              description={t('general.form.customFieldsDesc')}
             >
               <div className="space-y-4">
                 {settings.customColumns.map((col: CustomColumn) => (
@@ -325,7 +327,7 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
 
         <DialogFooter className="mt-6">
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            {t('general.cancel')}
           </Button>
           <Button type="submit" disabled={loading}>
             {submitLabel}
