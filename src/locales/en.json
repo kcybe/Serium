@@ -4,7 +4,7 @@
     "cancel": "Cancel",
     "loading": "Loading...",
     "inventoryName": "Inventory Name",
-    "searchPlaceholder": "Search inventory...",
+    "searchPlaceholder": "Press '/' to jump to the search box",
     "clearFiltersButton": "Clear Filters",
     "addItemButton": "Add Item",
     "categoryLabel": "Category",
@@ -36,7 +36,8 @@
       "locationPlaceholder": "Enter location",
       "enterField": "Enter {field}"
     },
-    "addItemTitle": "Add New Item"
+    "addItemTitle": "Add New Item",
+    "loadingDescription": "Please wait while we fetch your data"
   },
   "settings": {
     "title": "Settings",
@@ -179,7 +180,7 @@
     },
     "disabledTitle": "History Tracking Disabled",
     "disabledDescription": "Enable in settings to track inventory changes",
-    "searchPlaceholder": "Search history...",
+    "searchPlaceholder": "Press '/' to jump to the search box",
     "searchBy": "Search by...",
     "filterByAction": "Filter by action"
   },

@@ -34,6 +34,7 @@ export default function InventoryPage() {
     const [isRefreshing, setIsRefreshing] = useState(false)
     const isVerifying = useRef(false)
     const { t } = useTranslation(settings)
+    const isLoadingRef = useRef(false)
 
     const filteredData = useMemo(() => {
         let filtered = data
@@ -70,7 +71,8 @@ export default function InventoryPage() {
     const memoizedColumns = useMemo(() => getColumns(settings), [settings])
   
     const loadItems = async () => {
-        if (isRefreshing || isLoading) return
+        if (isLoadingRef.current) return
+        isLoadingRef.current = true
         setIsRefreshing(true)
         setIsLoading(true)
         
@@ -113,6 +115,7 @@ export default function InventoryPage() {
           const error = e instanceof Error ? e : new Error('Unknown error')
           toast.error(t('toast.refreshError', { error: error.message }))
         } finally {
+          isLoadingRef.current = false
           setIsRefreshing(false)
           setIsLoading(false)
           setLoading(false)

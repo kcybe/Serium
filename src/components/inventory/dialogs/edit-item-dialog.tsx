@@ -67,7 +67,7 @@ export function EditItemDialog({ item, open, onOpenChange, onItemUpdated }: Edit
             {loading ? (
               <div className="flex items-center gap-2">
                 <LoadingSpinner className="h-4 w-4" />
-                Updating Item...
+                {t('general.loading')}
               </div>
             ) : (
               "Edit Item"

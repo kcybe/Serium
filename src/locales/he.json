@@ -4,7 +4,7 @@
     "cancel": "ביטול",
     "loading": "טוען...",
     "inventoryName": "שם המלאי",
-    "searchPlaceholder": "חיפוש במלאי...",
+    "searchPlaceholder": "לחץ '/' על מנת לקפוץ לתיבת החיפוש",
     "clearFiltersButton": "נקה פילטרים",
     "addItemButton": "הוסף פריט",
     "categoryLabel": "קטגוריה",
@@ -36,7 +36,8 @@
       "locationPlaceholder": "הזן מיקום",
       "enterField": "הזן {field}"
     },
-    "addItemTitle": "הוסף פריט חדש"
+    "addItemTitle": "הוסף פריט חדש",
+    "loadingDescription": "אנא המתן בזמן שאנחנו טוענים את הנתונים שלך"
   },
   "settings": {
     "title": "הגדרות",
@@ -179,7 +180,7 @@
     },
     "disabledTitle": "מעקב היסטוריה מושבת",
     "disabledDescription": "הפעל בהגדרות כדי לעקוב אחר שינויים במלאי",
-    "searchPlaceholder": "חיפוש בהיסטוריה...",
+    "searchPlaceholder": "לחץ '/' על מנת לקפוץ לתיבת החיפוש",
     "searchBy": "חפש לפי...",
     "filterByAction": "סנן לפי פעולה"
   },
