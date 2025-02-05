@@ -155,7 +155,8 @@
     "backupRestoreTitle": "Backup & Restore",
     "backupRestoreDescription": "Export or import all data including settings and inventory",
     "factoryResetTitle": "Factory Reset",
-    "factoryResetDescription": "Reset all settings and data to default state"
+    "factoryResetDescription": "Reset all settings and data to default state",
+    "factoryResetButton": "Reset to Factory Default" 
   },
   "settingsSections": {
     "inventoryTitle": "Inventory Settings",

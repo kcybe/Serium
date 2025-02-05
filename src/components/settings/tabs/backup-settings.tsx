@@ -84,6 +84,7 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
   }
 
   const handleFactoryReset = async () => {
+    if (!window.confirm(t('confirmation.hardReset'))) return
     try {
       await Promise.all([
         db.inventory.clear(),
@@ -145,8 +146,8 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         onConfirm={handleFactoryReset}
         title={t('confirmation.resetTitle')}
         description={t('confirmation.resetDescription')}
-        confirmLabel="Reset Everything"
-        cancelLabel="Cancel"
+        confirmLabel={t('buttons.resetEverything')}
+        cancelLabel={t('buttons.cancel')}
       />
     </div>
   )

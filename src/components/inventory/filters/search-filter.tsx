@@ -80,7 +80,8 @@ export function SearchFilter({
   }, [])
 
   const handleSearchChange = (value: string) => {
-    setSearchValue(value)
+    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s-]/g, '')
+    setSearchValue(sanitizedValue)
     
     // Clear any existing timeout
     if (typingTimeoutRef.current) {

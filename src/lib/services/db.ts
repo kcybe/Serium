@@ -22,6 +22,11 @@ export const db = new InventoryDB()
 
 // Delete existing database if needed
 export const resetDatabase = async () => {
-  await Dexie.delete('inventoryDB')
-  window.location.reload()
+  try {
+    await Dexie.delete('inventoryDB')
+    window.location.reload()
+  } catch (error) {
+    console.error('Database deletion failed:', error)
+    throw new Error('Failed to reset database')
+  }
 }
