@@ -37,7 +37,8 @@
       "enterField": "Enter {field}"
     },
     "addItemTitle": "Add New Item",
-    "loadingDescription": "Please wait while we fetch your data"
+    "loadingDescription": "Please wait while we fetch your data",
+    "actions": "Actions"
   },
   "settings": {
     "title": "Settings",
@@ -72,7 +73,9 @@
     "refreshing": "Refreshing...",
     "add": "Add",
     "resetEverything": "Reset Everything",
-    "addCustomColumn": "Add Custom Column"
+    "addCustomColumn": "Add Custom Column",
+    "generateBarcode": "Generate Barcode",
+    "delete": "Delete"
   },
   "features": {
     "featuresTitle": "Features",
@@ -144,7 +147,9 @@
   },
   "confirmation": {
     "resetTitle": "Factory Reset",
-    "resetDescription": "This will permanently delete all your data and reset all settings to their default values. This action cannot be undone."
+    "resetDescription": "This will permanently delete all your data and reset all settings to their default values. This action cannot be undone.",
+    "deleteItemTitle": "Delete Item",
+    "deleteItemDescription": "Are you sure you want to delete this item? This action cannot be undone."
   },
   "backup": {
     "backupRestoreTitle": "Backup & Restore",
@@ -208,6 +213,13 @@
     "verifyError": "Failed to verify item",
     "scanVerifySuccess": "Verified item: ${itemName} (SKU: ${sku})",
     "refreshSuccess": "Data refreshed successfully",
-    "noChanges": "No changes found"
+    "noChanges": "No changes found",
+    "noSkuForBarcode": "Item SKU is required for barcode generation"
+  },
+  "actions": {
+    "copyId": "Copy ID",
+    "generateBarcode": "Generate Barcode",
+    "edit": "Edit",
+    "delete": "Delete"
   }
 }

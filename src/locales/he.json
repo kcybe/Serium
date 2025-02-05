@@ -37,7 +37,8 @@
       "enterField": "הזן {field}"
     },
     "addItemTitle": "הוסף פריט חדש",
-    "loadingDescription": "אנא המתן בזמן שאנחנו טוענים את הנתונים שלך"
+    "loadingDescription": "אנא המתן בזמן שאנחנו טוענים את הנתונים שלך",
+    "actions": "פעולות"
   },
   "settings": {
     "title": "הגדרות",
@@ -71,7 +72,9 @@
     "refreshing": "...מרענן",
     "add": "הוסף",
     "resetEverything": "איפוס מלא",
-    "addCustomColumn": "הוסף עמודה מותאמת"
+    "addCustomColumn": "הוסף עמודה מותאמת",
+    "generateBarcode": "ייצוא ברקוד",
+    "delete": "מחק"
   },
   "features": {
     "featuresTitle": "תכונות",
@@ -143,7 +146,9 @@
   },
   "confirmation": {
     "resetTitle": "איפוס למצב היצרן",
-    "resetDescription": "פעולה זו תמחק לצמיתות את כל הנתונים ותאפס את כל ההגדרות לערכי ברירת המחדל. לא ניתן לבטל פעולה זו."
+    "resetDescription": "פעולה זו תמחק לצמיתות את כל הנתונים ותאפס את כל ההגדרות לערכי ברירת המחדל. לא ניתן לבטל פעולה זו.",
+    "deleteItemTitle": "מחיקת פריט",
+    "deleteItemDescription": "האם אתה בטוח שברצונך למחוק פריט זה? פעולה זו לא ניתנת לביטול."
   },
   "backup": {
     "backupRestoreTitle": "גיבוי ושחזור",
@@ -208,6 +213,13 @@
     "verifyError": "אימות הפריט נכשל",
     "scanVerifySuccess": "אומת הפריט: ${itemName} (מק״ט: ${sku})",
     "refreshSuccess": "רענון הנתונים הצליח",
-    "noChanges": "לא נמצאו שינויים"
+    "noChanges": "לא נמצאו שינויים",
+    "noSkuForBarcode": "נדרש מספר SKU ליצירת ברקוד"
+  },
+  "actions": {
+    "copyId": "העתק מזהה",
+    "generateBarcode": "צור ברקוד",
+    "edit": "ערוך",
+    "delete": "מחק"
   }
 }
