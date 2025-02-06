@@ -56,6 +56,75 @@ export function SearchFilter({
     lastKeyTime: 0
   })
 
+  // Refs to always have the latest data and verify callback.
+  const dataRef = useRef(data);
+  const onVerifyRef = useRef(onVerify);
+  useEffect(() => {
+    dataRef.current = data;
+    onVerifyRef.current = onVerify;
+  }, [data, onVerify]);
+
+  // Define a scanning state that controls the barcode scanning process.
+  // isScanning: indicates an active scan;
+  // buffer: accumulates scanned key characters.
+  const [scanningState, setScanningState] = useState<{ isScanning: boolean; buffer: string }>({
+    isScanning: false,
+    buffer: ""
+  });
+  // A ref to always have the latest scanning state (to avoid stale closures in the event listener).
+  const scanningStateRef = useRef(scanningState);
+  useEffect(() => {
+    scanningStateRef.current = scanningState;
+  }, [scanningState]);
+
+  // Use a ref for last key time for measuring pause between keys.
+  const lastKeyTimeRef = useRef<number>(Date.now());
+  const BUFFER_TIMEOUT = 100;
+
+  // Derive a stable flag for scan verification.
+  const isScanVerificationEnabled = !!(
+    settings.features?.itemVerification &&
+    settings.features?.scanToVerify
+  );
+
+  useEffect(() => {
+    if (!isScanVerificationEnabled) return;
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Ignore key presses if focused in an input/textarea.
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)
+        return;
+
+      const currentTime = Date.now();
+
+      // If too much time has elapsed or no scan in progress, start a new scanning session.
+      if (currentTime - lastKeyTimeRef.current > BUFFER_TIMEOUT || !scanningStateRef.current.isScanning) {
+        setScanningState({ isScanning: true, buffer: e.key });
+        scanningStateRef.current = { isScanning: true, buffer: e.key };
+      } else if (e.key === 'Enter' && scanningStateRef.current.isScanning) {
+        // Finish scanning and process the buffered scanning string.
+        const scannedSku = scanningStateRef.current.buffer;
+        setScanningState({ isScanning: false, buffer: "" });
+        scanningStateRef.current = { isScanning: false, buffer: "" };
+
+        const matchingItem = dataRef.current.find(item => String(item.sku) === scannedSku);
+        if (matchingItem) {
+          onVerifyRef.current(matchingItem.id, 'scan');
+        } else {
+          toast.error(`No item found with SKU: ${scannedSku}`);
+        }
+      } else {
+        // Otherwise, continue accumulating keys.
+        setScanningState(prev => ({ isScanning: true, buffer: prev.buffer + e.key }));
+        scanningStateRef.current.buffer += e.key;
+      }
+      lastKeyTimeRef.current = currentTime;
+    };
+
+    window.addEventListener('keypress', handleKeyPress);
+    return () => window.removeEventListener('keypress', handleKeyPress);
+  }, [isScanVerificationEnabled]);
+
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
@@ -113,53 +182,6 @@ export function SearchFilter({
     setSearchParam("all")
     onClearFilters()
   }
-
-  useEffect(() => {
-    if (!settings.features?.itemVerification || !settings.features?.scanToVerify) {
-      return;
-    }
-
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-        return;
-      }
-
-      const currentTime = new Date().getTime()
-      const bufferTimeout = 100
-
-      setBarcodeBuffer(prev => {
-        if (currentTime - prev.lastKeyTime > bufferTimeout) {
-          return {
-            buffer: e.key,
-            lastKeyTime: currentTime
-          }
-        }
-
-        if (e.key === 'Enter') {
-          const scannedSku = prev.buffer
-          const matchingItem = data.find(item => String(item.sku) === scannedSku)
-          if (matchingItem) {
-            onVerify(matchingItem.id, 'scan');
-          } else {
-            toast.error(`No item found with SKU: ${scannedSku}`);
-          }
-
-          return {
-            buffer: '',
-            lastKeyTime: currentTime
-          }
-        }
-
-        return {
-          buffer: prev.buffer + e.key,
-          lastKeyTime: currentTime
-        }
-      })
-    }
-
-    window.addEventListener('keypress', handleKeyPress)
-    return () => window.removeEventListener('keypress', handleKeyPress)
-  }, [data, onVerify, settings.features])
 
   return (
     <div className="flex flex-col gap-4">
