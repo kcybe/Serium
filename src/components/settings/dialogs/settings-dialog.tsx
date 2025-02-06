@@ -16,12 +16,6 @@ import { toast } from "sonner"
 import { useTheme } from "next-themes"
 import { SettingsTabs } from "../settings-tabs"
 
-const tabs = [
-  { value: "general", label: "General", icon: Settings2 },
-  { value: "table", label: "Table", icon: Table2 },
-  { value: "backup", label: "Backup", icon: Save }
-]
-
 export function SettingsDialog() {
   const [open, setOpen] = useState(false)
   const [settings, setSettings] = useState<SiteSettings>(defaultSettings)

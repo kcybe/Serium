@@ -3,7 +3,6 @@ import { useState } from "react"
 import { InventoryItem } from "@/types/inventory"
 import { TableMeta } from "../data-table"
 import { SiteSettings } from "@/types/settings"
-import { db } from "@/lib/services/db"
 
 export function useInventoryTable(
   data: InventoryItem[],

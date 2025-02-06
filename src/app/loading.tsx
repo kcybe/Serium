@@ -1,7 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { useTranslation } from "@/hooks/use-translation"
 import { useSettings } from "@/hooks/use-settings"
