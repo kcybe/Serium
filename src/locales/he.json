@@ -214,7 +214,13 @@
     "scanVerifySuccess": "אומת הפריט: ${itemName} (מק״ט: ${sku})",
     "refreshSuccess": "רענון הנתונים הצליח",
     "noChanges": "לא נמצאו שינויים",
-    "noSkuForBarcode": "נדרש מספר SKU ליצירת ברקוד"
+    "noSkuForBarcode": "נדרש מספר SKU ליצירת ברקוד",
+    "backupExportSuccess": "גיבוי יצא בהצלחה",
+    "backupExportError": "ייצוא הגיבוי נכשל",
+    "fullBackupRestored": "גיבוי מלא שוחזר. אנא רענן את הדף כדי לראות את השינויים!",
+    "invalidBackupFile": "קובץ גיבוי לא חוקי",
+    "factoryResetSuccess": "איפוס למצב היצרן הושלם בהצלחה",
+    "factoryResetError": "כישלון באיפוס למצב היצרן"
   },
   "actions": {
     "copyId": "העתק מזהה",

@@ -205,7 +205,7 @@
   "toast": {
     "itemAdded": "Item added successfully",
     "itemAddError": "Failed to add item: ${error}",
-    "itemUpdated": "Item updated successfully", 
+    "itemUpdated": "Item updated successfully",
     "itemUpdateError": "Failed to update item: ${error}",
     "itemDeleted": "Item deleted successfully",
     "itemDeleteError": "Failed to delete item: ${error}",
@@ -215,7 +215,13 @@
     "scanVerifySuccess": "Verified item: ${itemName} (SKU: ${sku})",
     "refreshSuccess": "Data refreshed successfully",
     "noChanges": "No changes found",
-    "noSkuForBarcode": "Item SKU is required for barcode generation"
+    "noSkuForBarcode": "Item SKU is required for barcode generation",
+    "backupExportSuccess": "Backup exported successfully",
+    "backupExportError": "Failed to export backup",
+    "fullBackupRestored": "Full backup restored. Please refresh the page to make changes!",
+    "invalidBackupFile": "Invalid backup file",
+    "factoryResetSuccess": "Factory reset completed successfully",
+    "factoryResetError": "Failed to perform factory reset"
   },
   "actions": {
     "copyId": "Copy ID",

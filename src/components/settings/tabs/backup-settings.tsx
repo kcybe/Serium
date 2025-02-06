@@ -37,9 +37,9 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         { settings, inventory, history: historyLogs },
         `inventory-backup-${new Date().toISOString().split('T')[0]}.json`
       )
-      toast.success("Backup exported successfully")
+      toast.success(t('toast.backupExportSuccess'))
     } catch (error) {
-      toast.error("Failed to export backup")
+      toast.error(t('toast.backupExportError'))
       console.error(error)
     }
   }
@@ -77,9 +77,9 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         })
       }
       
-      toast.success('Full backup restored. Please refresh the page to make changes!')
+      toast.success(t('toast.fullBackupRestored'))
     } catch (error) {
-      toast.error('Invalid backup file')
+      toast.error(t('toast.invalidBackupFile'))
     }
   }
 
@@ -91,9 +91,9 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         db.settings.put({ ...defaultSettings, id: 'site-settings' })
       ])
       onSettingsImported(defaultSettings)
-      toast.success("Factory reset completed successfully")
+      toast.success(t('toast.factoryResetSuccess'))
     } catch (error) {
-      toast.error("Failed to perform factory reset")
+      toast.error(t('toast.factoryResetError'))
       console.error(error)
     }
     setShowResetDialog(false)
