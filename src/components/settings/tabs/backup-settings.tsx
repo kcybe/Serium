@@ -84,7 +84,6 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
   }
 
   const handleFactoryReset = async () => {
-    if (!window.confirm(t('confirmation.hardReset'))) return
     try {
       await Promise.all([
         db.inventory.clear(),
@@ -114,13 +113,13 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
           className="hidden"
           onChange={handleImportAll}
         />
-        <div className="flex gap-4">
-          <Button onClick={handleExportAll}>
-            <Download className="mr-2 h-4 w-4" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Button type="button" className="w-full flex items-center justify-center gap-2" onClick={handleExportAll}>
+            <Download className="h-4 w-4" />
             {t('buttons.export')}
           </Button>
-          <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
-            <Upload className="mr-2 h-4 w-4" />
+          <Button variant={"outline"} type="button" className="w-full flex items-center justify-center gap-2" onClick={() => fileInputRef.current?.click()}>
+            <Upload className="h-4 w-4" />
             {t('buttons.import')}
           </Button>
         </div>
@@ -131,13 +130,12 @@ export function BackupSettings({ settings, onSettingsImported }: BackupSettingsP
         title={t('backup.factoryResetTitle')}
         description={t('backup.factoryResetDescription')}
       >
-        <Button 
-          variant="destructive" 
-          onClick={() => setShowResetDialog(true)}
-        >
-          <RotateCcw className="mr-2 h-4 w-4" />
-          {t('backup.factoryResetButton')}
-        </Button>
+        <div className="w-full">
+          <Button type="button" variant="destructive" className="w-full flex items-center justify-center gap-2" onClick={() => setShowResetDialog(true)}>
+            <RotateCcw className="h-4 w-4" />
+            {t('backup.factoryResetButton')}
+          </Button>
+        </div>
       </SettingsSection>
 
       <ConfirmationDialog
