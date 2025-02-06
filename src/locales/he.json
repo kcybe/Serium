@@ -65,6 +65,7 @@
   "buttons": {
     "inventory": "צפייה במלאי",
     "save": "שמור",
+    "saving": "שומר...",
     "cancel": "בטל",
     "export": "ייצוא",
     "import": "יבוא",
@@ -226,6 +227,7 @@
     "copyId": "העתק מזהה",
     "generateBarcode": "צור ברקוד",
     "edit": "ערוך",
-    "delete": "מחק"
+    "delete": "מחק",
+    "verify": "אשר"
   }
 }
