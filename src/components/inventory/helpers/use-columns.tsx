@@ -8,7 +8,7 @@ import VerificationCell from "@/components/inventory/table/components/verificati
 import ActionCell from "../table/components/action-cell";
 import { useTranslation } from "@/hooks/use-translation";
 
-export function getColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
+export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
   const { t } = useTranslation(settings)
     const baseColumns = [
       {

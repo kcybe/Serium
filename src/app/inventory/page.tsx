@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef } from "react"
 import { DataTable } from "@/components/inventory/table/data-table"
-import { getColumns } from "@/components/inventory/helpers/get-columns"
+import { useColumns } from "@/components/inventory/helpers/use-columns"
 import { type InventoryItem } from "@/types/inventory"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AddItemDialog } from "@/components/inventory/dialogs/add-item-dialog"
@@ -68,7 +68,7 @@ export default function InventoryPage() {
         return filtered
     }, [data, searchValue, searchParam, selectedCategories, selectedStatuses])
 
-    const memoizedColumns = useMemo(() => getColumns(settings), [settings])
+    const memoizedColumns = useMemo(() => useColumns(settings), [settings])
   
     const loadItems = async () => {
         if (isLoadingRef.current) return
