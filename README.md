@@ -1,81 +1,69 @@
-<<<<<<< HEAD
-# Serium
-Serium is a modern inventory management app, built with Cursor AI and Next.js, offering local tracking, and secure serial number management for teams.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1 align="center">
+  Serium
+</h1>
 
-## Getting Started
+<div align="center">
+  <img src="/public/imgs/screenshot-inventory.png" alt="Serium Inventory Management Interface" width="800">
+</div>
 
-First, run the development server:
+## Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Local-First Data Storage**:  
+  Inventory data is managed directly on your machine, ensuring enhanced privacy and rapid access without reliance on external services.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Integrated Barcode Scanning**:  
+  Quickly scan product barcodes to automatically update inventory records, streamlining the data entry process.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Customizable Inventory Views**:  
+  Tailor your inventory management experience by adjusting table layouts, custom columns, and filters to suit your workflow.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **History Tracking & Audit Logs**:  
+  Benefit from comprehensive change logs that track every modification, offering full audit trails to guarantee accountability.
 
-## Learn More
+- **Modern, Responsive UI**:  
+  Enjoy a sleek, intuitive interface built with Next.js, Shadcn UI, and Tailwind CSS, ensuring a smooth experience on any device.
 
-To learn more about Next.js, take a look at the following resources:
+## How To Use
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# Serium
-Serium is a modern inventory management app, built with Cursor AI and Next.js, offering local-first tracking, barcode scanning, and secure serial number management for teams.
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
+To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone this repository
+$ git clone https://github.com/amitmerchant1990/electron-markdownify
+
+# Go into the repository
+$ cd electron-markdownify
+
+# Install dependencies
+$ npm install
+
+# Run the app
+$ npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> **Note**
+> If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Emailware
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Serium is released as emailware. If you find this app useful, please drop an email to kcybe0x1@proton.me with your feedback!
 
-## Learn More
+## Credits
 
-To learn more about Next.js, take a look at the following resources:
+Serium is built using the following open source projects:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js](https://nextjs.org) – A React framework for production.
+- [React](https://reactjs.org) – A JavaScript library for building user interfaces.
+- [Tailwind CSS](https://tailwindcss.com) – A utility-first CSS framework.
+- [Shadcn UI](https://ui.shadcn.com) – Beautifully designed, accessible components.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+This project is licensed under the [MIT License](LICENSE).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
->>>>>>> fdddd85e18bfa69f48ea6a8543c40087d80f43a1
+<p align="center">
+  Serium © 2025 · <a href="https://github.com/kcybe/serium">GitHub</a>
+</p>
