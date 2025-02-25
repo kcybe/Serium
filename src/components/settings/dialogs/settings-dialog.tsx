@@ -8,18 +8,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Settings2, Table2, Save } from "lucide-react"
+import { Settings2 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { SiteSettings, defaultSettings } from "@/types/settings"
 import { db } from "@/lib/services/db"
 import { toast } from "sonner"
 import { useTheme } from "next-themes"
 import { SettingsTabs } from "../settings-tabs"
+import { useTranslation } from "@/hooks/use-translation"
 
 export function SettingsDialog() {
   const [open, setOpen] = useState(false)
   const [settings, setSettings] = useState<SiteSettings>(defaultSettings)
   const { setTheme } = useTheme()
+
+  const { t } = useTranslation(settings || { language: 'en' } as SiteSettings)
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -63,7 +66,7 @@ export function SettingsDialog() {
       </DialogTrigger>
       <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0">
         <DialogHeader className="p-6 pb-0">
-          <DialogTitle>Settings</DialogTitle>
+          <DialogTitle>{t('settings.title')}</DialogTitle>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto px-6 pb-6">
           <SettingsTabs

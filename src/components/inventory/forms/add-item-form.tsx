@@ -212,7 +212,7 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues}: AddIt
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t('general.form.category')}</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder={t('general.form.categoryPlaceholder')} />
@@ -250,7 +250,7 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues}: AddIt
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('general.form.status')}</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder={t('general.form.statusPlaceholder')} />
