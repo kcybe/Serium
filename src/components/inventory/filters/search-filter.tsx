@@ -149,8 +149,8 @@ export function SearchFilter({
   }, [])
 
   const handleSearchChange = (value: string) => {
-    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s-]/g, '')
-    setSearchValue(sanitizedValue)
+    // Remove the sanitization or use a more permissive one that allows Hebrew
+    setSearchValue(value)
     
     // Clear any existing timeout
     if (typingTimeoutRef.current) {

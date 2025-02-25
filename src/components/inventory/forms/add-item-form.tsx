@@ -44,7 +44,7 @@ interface AddItemFormProps {
   submitLabel?: string
 }
 
-export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submitLabel = "Add Item" }: AddItemFormProps) {
+export function AddItemForm({ onSubmit, onCancel, loading, defaultValues}: AddItemFormProps) {
   const [settings, setSettings] = useState<SiteSettings>({
     ...defaultSettings,
     categories: [],
@@ -330,7 +330,7 @@ export function AddItemForm({ onSubmit, onCancel, loading, defaultValues, submit
             {t('general.cancel')}
           </Button>
           <Button type="submit" disabled={loading}>
-            {submitLabel}
+            {t('general.addItemButton')}
           </Button>
         </DialogFooter>
       </form>
