@@ -303,7 +303,7 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
         >
           <div className="flex flex-col gap-4">
             {form.watch('customColumns').map((column, index) => (
-              <div key={column.id} className="flex items-center gap-4">
+              <div key={column.id} className="grid grid-cols-[1fr_1fr_auto] items-start gap-4">
                 <FormField
                   control={form.control}
                   name={`customColumns.${index}.label`}
@@ -339,7 +339,13 @@ export function TableSettings({ settings, onSubmit, onSettingsUpdated }: TableSe
                     </FormItem>
                   )}
                 />
-                <Button className="mt-8" type="button" variant="destructive" onClick={() => handleRemoveCustomColumn(index)}>
+                <Button 
+                  className="mt-8" 
+                  type="button" 
+                  variant="destructive" 
+                  size="icon"
+                  onClick={() => handleRemoveCustomColumn(index)}
+                >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
