@@ -34,7 +34,15 @@
       "qtyPlaceholder": "Enter quantity",
       "pricePlaceholder": "Enter price",
       "locationPlaceholder": "Enter location",
-      "enterField": "Enter {field}"
+      "enterField": "Enter value",
+      "nameTooShort": "Name must be at least 2 characters",
+      "quantityPositive": "Quantity must be positive",
+      "pricePositive": "Price must be positive",
+      "categoryTooShort": "Category must be at least 2 characters",
+      "statusTooShort": "Status must be at least 2 characters",
+      "fieldRequired": "This field is required",
+      "mustBeNumber": "Value must be a number",
+      "typePlaceholder": "Select field type"
     },
     "addItemTitle": "Add New Item",
     "loadingDescription": "Please wait while we fetch your data",
@@ -116,7 +124,8 @@
       "category": "Category",
       "location": "Location",
       "status": "Status",
-      "lastVerified": "Last Verified"
+      "lastVerified": "Last Verified",
+      "type": "Type"
     },
     "columnTypes": {
       "text": "Text",

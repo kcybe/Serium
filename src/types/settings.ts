@@ -2,6 +2,7 @@ export interface CustomColumn {
   id: string
   label: string
   type: 'text' | 'number' | 'boolean'
+  required: boolean
 }
 
 export interface SiteSettings {

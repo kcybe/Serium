@@ -34,7 +34,15 @@
       "qtyPlaceholder": "הזן כמות",
       "pricePlaceholder": "הזן מחיר",
       "locationPlaceholder": "הזן מיקום",
-      "enterField": "הזן {field}"
+      "enterField": "הזן ערך",
+      "nameTooShort": "שם חייב להכיל לפחות 2 תווים",
+      "quantityPositive": "כמות חייבת להיות חיובית",
+      "pricePositive": "מחיר חייב להיות חיובי",
+      "categoryTooShort": "קטגוריה חייבת להכיל לפחות 2 תווים",
+      "statusTooShort": "סטטוס חייב להכיל לפחות 2 תווים",
+      "fieldRequired": "שדה זה הוא חובה",
+      "mustBeNumber": "הערך חייב להיות מספר",
+      "typePlaceholder": "בחר סוג שדה"
     },
     "addItemTitle": "הוסף פריט חדש",
     "loadingDescription": "אנא המתן בזמן שאנחנו טוענים את הנתונים שלך",
@@ -116,7 +124,8 @@
       "category": "קטגוריה",
       "location": "מיקום",
       "status": "סטטוס",
-      "lastVerified": "אומת לאחרונה"
+      "lastVerified": "אומת לאחרונה",
+      "type": "סוג"
     },
     "columnTypes": {
       "text": "טקסט",
