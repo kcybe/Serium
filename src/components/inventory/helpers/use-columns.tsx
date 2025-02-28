@@ -1,4 +1,4 @@
-import { ColumnDef, Column } from "@tanstack/react-table";
+import { ColumnDef, Column, Row } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/inventory/table/components/sortable-header";
 import ActionCell from "@/components/inventory/table/components/action-cell";
 import VerificationCell from "@/components/inventory/table/components/verification-cell";
@@ -37,7 +37,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryItem> }) => {
         const name = row.getValue("name") as string;
         return <TruncatedCell content={name} valueType="text" />;
       },
@@ -55,7 +55,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryItem> }) => {
         const sku = row.getValue("sku") as string;
         return <TruncatedCell content={sku} maxChars={15} valueType="text" />;
       },
@@ -73,7 +73,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryItem> }) => {
         const description = row.getValue("description") as string;
         return (
           <TruncatedCell content={description} maxChars={25} valueType="text" />
@@ -93,7 +93,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryItem> }) => {
         const quantity = row.getValue("quantity") as number;
         return (
           <TruncatedCell
@@ -117,7 +117,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryItem> }) => {
         const price = row.getValue("price") as number;
         return (
           <TruncatedCell
@@ -141,7 +141,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryItem> }) => {
         const category = row.getValue("category") as string;
         return (
           <TruncatedCell content={category} maxChars={20} valueType="text" />
@@ -161,7 +161,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryItem> }) => {
         const location = row.getValue("location") as string;
         return (
           <TruncatedCell content={location} maxChars={20} valueType="text" />
@@ -181,7 +181,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryItem> }) => {
         const status = row.getValue("status") as string;
         return (
           <TruncatedCell content={status} maxChars={15} valueType="text" />
@@ -210,14 +210,14 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
     header: ({ column }: { column: Column<InventoryItem> }) => (
       <SortableHeader column={column} title={col.label} settings={settings} />
     ),
-    cell: ({ row }: { row: { original: InventoryItem } }) => {
+    cell: ({ row }: { row: Row<InventoryItem> }) => {
       const value = row.original.customFields?.[col.id];
 
       switch (col.type) {
         case "number":
           return (
             <TruncatedCell
-              content={value}
+              content={value as number}
               valueType="number"
               className="text-right"
             />
@@ -225,7 +225,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
         case "price":
           return (
             <TruncatedCell
-              content={value}
+              content={value as number}
               valueType="price"
               className="text-right"
             />
@@ -233,7 +233,7 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
         case "quantity":
           return (
             <TruncatedCell
-              content={value}
+              content={value as number}
               valueType="quantity"
               className="text-right"
             />
@@ -249,8 +249,16 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
             />
           );
         default:
+          // Convert value to string if it exists, or use empty string
+          const displayValue =
+            value !== undefined && value !== null ? String(value) : "";
+
           return (
-            <TruncatedCell content={value} maxChars={20} valueType="text" />
+            <TruncatedCell
+              content={displayValue}
+              maxChars={20}
+              valueType="text"
+            />
           );
       }
     },
