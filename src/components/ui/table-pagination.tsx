@@ -98,16 +98,16 @@ export function TablePagination({
           {showSelectedCount && selectedItems > 0 && (
             <span className="mr-1">
               {t("table.selectedCount", {
-                selected: selectedItems,
-                total: totalItems,
+                selected: selectedItems.toString(),
+                total: totalItems.toString(),
               })}
               {" · "}
             </span>
           )}
           {t("table.pageInfo", {
-            from,
-            to,
-            total: totalItems,
+            from: String(from),
+            to: String(to),
+            total: String(totalItems),
           })}
         </span>
       </div>
@@ -142,8 +142,8 @@ export function TablePagination({
             onKeyDown={handlePageKeyDown}
             className="h-6 w-10 text-center text-xs"
             aria-label={t("table.pagination.pageOf", {
-              current: pageNumber,
-              total: pageCount,
+              current: pageNumber.toString(),
+              total: pageCount.toString(),
             })}
           />
           <span className="text-xs text-muted-foreground">
