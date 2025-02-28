@@ -52,7 +52,7 @@ const tableSettingsSchema = z.object({
     z.object({
       id: z.string(),
       label: z.string().min(1, "Label is required"),
-      type: z.enum(["text", "number", "boolean"]),
+      type: z.enum(["text", "number", "boolean", "quantity", "price"]),
       required: z.boolean().default(false),
     })
   ),
