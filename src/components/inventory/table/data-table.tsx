@@ -1,14 +1,12 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  useReactTable,
   getPaginationRowModel,
-  SortingState,
   getSortedRowModel,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 import {
   Table,
   TableBody,
@@ -16,68 +14,81 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { 
-  ChevronLeft, 
+} from "@/components/ui/select";
+import {
+  ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-} from "lucide-react"
-import { useState } from "react"
-import { InventoryItem } from "@/types/inventory"
-import { SiteSettings } from "@/types/settings"
-import { useInventoryTable } from "./hooks/use-inventory-table"
-import { useTranslation } from "@/hooks/use-translation"
+} from "lucide-react";
+import { useState } from "react";
+import { InventoryItem } from "@/types/inventory";
+import { SiteSettings } from "@/types/settings";
+import { useInventoryTable } from "./hooks/use-inventory-table";
+import { useTranslation } from "@/hooks/use-translation";
 
 export interface TableMeta {
-  updateData: (id: string, updatedItem: InventoryItem) => void
-  deleteData: (item: InventoryItem) => void
-  onVerify: (id: string) => void
-  settings: SiteSettings
+  updateData: (id: string, updatedItem: InventoryItem) => void;
+  deleteData: (item: InventoryItem) => void;
+  onVerify: (id: string) => void;
+  settings: SiteSettings;
 }
 
 interface DataTableProps<TData> {
-  columns: ColumnDef<TData, any>[]
-  data: TData[]
-  onUpdate: (id: string, item: TData) => void
-  onDelete: (id: string) => void
-  handleVerify: (id: string) => void
-  settings: SiteSettings
+  columns: ColumnDef<TData, any>[];
+  data: TData[];
+  onUpdate: (id: string, item: TData) => void;
+  onDelete: (id: string) => void;
+  handleVerify: (id: string) => void;
+  settings: SiteSettings;
 }
 
-export function DataTable({ 
-  columns, 
+export function DataTable({
+  columns,
   data,
   onUpdate,
   onDelete,
   handleVerify,
-  settings
+  settings,
 }: DataTableProps<InventoryItem>) {
-  const table = useInventoryTable(data, columns, onUpdate, onDelete, handleVerify, settings)
-  const { t } = useTranslation(settings)
+  const table = useInventoryTable(
+    data,
+    columns,
+    onUpdate,
+    onDelete,
+    handleVerify,
+    settings
+  );
+  const { t } = useTranslation(settings);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between py-4">
         <div className="w-[150px] items-center justify-center text-sm text-muted-foreground">
-          {t('table.totalProducts')}: {data.length}
+          {t("table.totalProducts")}: {data.length}
         </div>
       </div>
-      <div className="rounded-md border shadow-sm">
-        <Table>
+
+      {/* Horizontal scrolling container */}
+      <div className="rounded-md border shadow-sm overflow-x-auto">
+        <Table className="min-w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="bg-muted/50">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="font-semibold text-center">
+                  <TableHead
+                    key={header.id}
+                    className="font-semibold text-center whitespace-nowrap"
+                    style={{ minWidth: getMinWidthForColumn(header.id) }}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -98,11 +109,17 @@ export function DataTable({
                   className="hover:bg-muted/50 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-3 text-center">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                    <TableCell
+                      key={cell.id}
+                      className="py-3 text-center"
+                      style={{ minWidth: getMinWidthForColumn(cell.column.id) }}
+                    >
+                      <div className="overflow-hidden text-ellipsis">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
                     </TableCell>
                   ))}
                 </TableRow>
@@ -113,16 +130,20 @@ export function DataTable({
                   colSpan={columns.length}
                   className="h-24 text-center text-muted-foreground"
                 >
-                  No results.
+                  {t("table.emptyState")}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination controls - fixed outside scrolling container */}
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex items-center space-x-2">
-          <p className="text-sm text-muted-foreground">{t('table.rowsPerPage')}</p>
+          <p className="text-sm text-muted-foreground">
+            {t("table.rowsPerPage")}
+          </p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => table.setPageSize(Number(value))}
@@ -141,9 +162,9 @@ export function DataTable({
         </div>
         <div className="flex items-center space-x-2">
           <div className="flex w-[100px] items-center justify-center text-sm text-muted-foreground">
-            {t('table.pagination.pageOf', {
+            {t("table.pagination.pageOf", {
               current: String(table.getState().pagination.pageIndex + 1),
-              total: String(table.getPageCount())
+              total: String(table.getPageCount()),
             })}
           </div>
           <div className="flex items-center space-x-2">
@@ -183,5 +204,40 @@ export function DataTable({
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+// Helper function to determine minimum width for columns
+function getMinWidthForColumn(columnId: string): string {
+  const columnWidths: Record<string, string> = {
+    name: "180px",
+    sku: "120px",
+    description: "200px",
+    quantity: "100px",
+    price: "120px",
+    category: "150px",
+    location: "150px",
+    status: "120px",
+    verification: "150px",
+    actions: "100px",
+  };
+
+  return columnWidths[columnId] || "120px";
+}
+
+// Column styling utility
+function getColumnStyles(columnId: string): React.CSSProperties {
+  const baseStyles: React.CSSProperties = {
+    minWidth: getMinWidthForColumn(columnId),
+  };
+
+  // Add special handling for the description column
+  if (columnId === "description") {
+    return {
+      ...baseStyles,
+      maxWidth: "100px",
+    };
+  }
+
+  return baseStyles;
 }
