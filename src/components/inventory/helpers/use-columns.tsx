@@ -26,6 +26,7 @@ const COLUMN_WIDTHS = {
 export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
   const { t } = useTranslation(settings);
 
+  // Base columns with consistent TruncatedCell implementation
   const baseColumns: ColumnDef<InventoryItem>[] = [
     {
       accessorKey: "name",
@@ -36,6 +37,11 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
+      cell: ({ row }) => {
+        const name = row.getValue("name") as string;
+        return <TruncatedCell content={name} valueType="text" />;
+      },
+      show: settings.visibleColumns?.name,
       meta: {
         width: COLUMN_WIDTHS.name,
       },
@@ -49,6 +55,10 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
+      cell: ({ row }) => {
+        const sku = row.getValue("sku") as string;
+        return <TruncatedCell content={sku} maxChars={15} valueType="text" />;
+      },
       show: settings.visibleColumns?.sku,
       meta: {
         width: COLUMN_WIDTHS.sku,
@@ -63,9 +73,11 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
-      cell: ({ row }: { row: { getValue: (key: string) => unknown } }) => {
+      cell: ({ row }) => {
         const description = row.getValue("description") as string;
-        return <TruncatedCell content={description} />;
+        return (
+          <TruncatedCell content={description} maxChars={25} valueType="text" />
+        );
       },
       show: settings.visibleColumns?.description,
       meta: {
@@ -81,6 +93,16 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
+      cell: ({ row }) => {
+        const quantity = row.getValue("quantity") as number;
+        return (
+          <TruncatedCell
+            content={quantity}
+            valueType="quantity"
+            className="text-right"
+          />
+        );
+      },
       show: settings.visibleColumns?.quantity,
       meta: {
         width: COLUMN_WIDTHS.quantity,
@@ -95,6 +117,16 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
+      cell: ({ row }) => {
+        const price = row.getValue("price") as number;
+        return (
+          <TruncatedCell
+            content={price}
+            valueType="price"
+            className="text-right"
+          />
+        );
+      },
       show: settings.visibleColumns?.price,
       meta: {
         width: COLUMN_WIDTHS.price,
@@ -109,6 +141,12 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
+      cell: ({ row }) => {
+        const category = row.getValue("category") as string;
+        return (
+          <TruncatedCell content={category} maxChars={20} valueType="text" />
+        );
+      },
       show: settings.visibleColumns?.category,
       meta: {
         width: COLUMN_WIDTHS.category,
@@ -123,6 +161,12 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
+      cell: ({ row }) => {
+        const location = row.getValue("location") as string;
+        return (
+          <TruncatedCell content={location} maxChars={20} valueType="text" />
+        );
+      },
       show: settings.visibleColumns?.location,
       meta: {
         width: COLUMN_WIDTHS.location,
@@ -137,6 +181,12 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
           settings={settings}
         />
       ),
+      cell: ({ row }) => {
+        const status = row.getValue("status") as string;
+        return (
+          <TruncatedCell content={status} maxChars={15} valueType="text" />
+        );
+      },
       show: settings.visibleColumns?.status,
       meta: {
         width: COLUMN_WIDTHS.status,
@@ -151,11 +201,11 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
     return settings.visibleColumns?.[key] ?? true;
   });
 
-  // Map custom columns with proper typing
+  // Map custom columns with proper typing and TruncatedCell implementation
   const customColumns: ColumnDef<InventoryItem>[] = (
     settings.customColumns ?? []
   ).map((col: CustomColumn) => ({
-    accessorFn: (row: InventoryItem) => row.customFields?.[col.id] ?? "",
+    accessorFn: (row) => row.customFields?.[col.id] ?? "",
     id: col.id,
     header: ({ column }: { column: Column<InventoryItem> }) => (
       <SortableHeader column={column} title={col.label} settings={settings} />
@@ -165,11 +215,43 @@ export function useColumns(settings: SiteSettings): ColumnDef<InventoryItem>[] {
 
       switch (col.type) {
         case "number":
-          return <span>{value}</span>;
+          return (
+            <TruncatedCell
+              content={value}
+              valueType="number"
+              className="text-right"
+            />
+          );
+        case "price":
+          return (
+            <TruncatedCell
+              content={value}
+              valueType="price"
+              className="text-right"
+            />
+          );
+        case "quantity":
+          return (
+            <TruncatedCell
+              content={value}
+              valueType="quantity"
+              className="text-right"
+            />
+          );
         case "boolean":
-          return <input type="checkbox" checked={Boolean(value)} disabled />;
+          // For boolean values, we'll use a checkbox (not a TruncatedCell)
+          return (
+            <input
+              type="checkbox"
+              checked={Boolean(value)}
+              disabled
+              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            />
+          );
         default:
-          return <span>{value}</span>;
+          return (
+            <TruncatedCell content={value} maxChars={20} valueType="text" />
+          );
       }
     },
     meta: {

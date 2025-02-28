@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-} from "@tanstack/react-table";
+import { ColumnDef, flexRender } from "@tanstack/react-table";
 import {
   Table,
   TableBody,
@@ -15,25 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react";
-import { useState } from "react";
 import { InventoryItem } from "@/types/inventory";
 import { SiteSettings } from "@/types/settings";
 import { useInventoryTable } from "./hooks/use-inventory-table";
 import { useTranslation } from "@/hooks/use-translation";
+import { TablePagination } from "@/components/ui/table-pagination";
 
 export interface TableMeta {
   updateData: (id: string, updatedItem: InventoryItem) => void;
@@ -68,140 +48,90 @@ export function DataTable({
     settings
   );
   const { t } = useTranslation(settings);
+  const { pageIndex, pageSize } = table.getState().pagination;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between py-4">
-        <div className="w-[150px] items-center justify-center text-sm text-muted-foreground">
-          {t("table.totalProducts")}: {data.length}
-        </div>
-      </div>
-
-      {/* Horizontal scrolling container */}
-      <div className="rounded-md border shadow-sm overflow-x-auto">
-        <Table className="min-w-full">
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="bg-muted/50">
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className="font-semibold text-center whitespace-nowrap"
-                    style={{ minWidth: getMinWidthForColumn(header.id) }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-muted/50 transition-colors"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className="py-3 text-center"
-                      style={{ minWidth: getMinWidthForColumn(cell.column.id) }}
+    <div className="space-y-2">
+      {/* Table container with defined height and overflow */}
+      <div className="rounded-md border overflow-hidden">
+        <div className="max-h-[600px] overflow-auto">
+          <Table className="w-full">
+            <TableHeader className="bg-muted/50 sticky top-0 z-10">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="hover:bg-transparent">
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      style={{
+                        width: getMinWidthForColumn(header.id),
+                        maxWidth: getMaxWidthForColumn(header.id),
+                      }}
+                      className="h-9 py-1 px-2"
                     >
-                      <div className="overflow-hidden text-ellipsis">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="h-9"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className="py-1 px-2"
+                        style={{
+                          maxWidth: getMaxWidthForColumn(cell.column.id),
+                        }}
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
                         )}
-                      </div>
-                    </TableCell>
-                  ))}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-16 text-center"
+                  >
+                    {t("table.noResults")}
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center text-muted-foreground"
-                >
-                  {t("table.emptyState")}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
-      {/* Pagination controls - fixed outside scrolling container */}
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="flex items-center space-x-2">
-          <p className="text-sm text-muted-foreground">
-            {t("table.rowsPerPage")}
-          </p>
-          <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => table.setPageSize(Number(value))}
-          >
-            <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {[8, 16, 32, 48, 64].map((size) => (
-                <SelectItem key={size} value={`${size}`}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="flex w-[100px] items-center justify-center text-sm text-muted-foreground">
-            {t("table.pagination.pageOf", {
-              current: String(table.getState().pagination.pageIndex + 1),
-              total: String(table.getPageCount()),
-            })}
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronsLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronsRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+      {/* Use our common pagination component */}
+      <div className="px-2 pt-2">
+        <TablePagination
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          pageCount={table.getPageCount()}
+          totalItems={table.getFilteredRowModel().rows.length}
+          selectedItems={table.getFilteredSelectedRowModel().rows.length}
+          onPageChange={(page) => table.setPageIndex(page)}
+          onPageSizeChange={(size) => table.setPageSize(size)}
+          settings={settings}
+          pageSizeOptions={[8, 15, 25, 50]}
+          showSelectedCount={true}
+        />
       </div>
     </div>
   );
@@ -210,34 +140,35 @@ export function DataTable({
 // Helper function to determine minimum width for columns
 function getMinWidthForColumn(columnId: string): string {
   const columnWidths: Record<string, string> = {
+    select: "30px",
+    status: "100px",
+    verify: "80px",
+    actions: "70px",
+    sku: "100px",
+    price: "90px",
+    quantity: "80px",
+    category: "130px",
     name: "180px",
-    sku: "120px",
-    description: "200px",
-    quantity: "100px",
-    price: "120px",
-    category: "150px",
-    location: "150px",
-    status: "120px",
-    verification: "150px",
-    actions: "100px",
+    description: "220px",
+    location: "130px",
+    separator: "30px",
   };
 
   return columnWidths[columnId] || "120px";
 }
 
-// Column styling utility
-function getColumnStyles(columnId: string): React.CSSProperties {
-  const baseStyles: React.CSSProperties = {
-    minWidth: getMinWidthForColumn(columnId),
+// Helper function to determine maximum width for columns
+function getMaxWidthForColumn(columnId: string): string {
+  const columnMaxWidths: Record<string, string> = {
+    select: "30px",
+    verify: "80px",
+    actions: "70px",
+    price: "90px",
+    quantity: "80px",
+    sku: "100px",
+    status: "100px",
+    separator: "30px",
   };
 
-  // Add special handling for the description column
-  if (columnId === "description") {
-    return {
-      ...baseStyles,
-      maxWidth: "100px",
-    };
-  }
-
-  return baseStyles;
+  return columnMaxWidths[columnId] || "auto";
 }

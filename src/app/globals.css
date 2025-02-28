@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -71,31 +80,6 @@ body {
     color: currentColor;
     text-shadow: none;
   }
-}
-
-.matrix-text {
-  position: relative;
-}
-
-.matrix-text::before,
-.matrix-text::after {
-  content: 'serium';
-  position: absolute;
-  left: 0;
-  width: 100%;
-  opacity: 0.8;
-}
-
-.matrix-text::before {
-  animation: glitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
-  color: rgba(99, 102, 241, 1)0f0;
-  z-index: -1;
-}
-
-.matrix-text::after {
-  animation: glitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
-  color: rgba(99, 102, 241, 1);
-  z-index: -2;
 }
 
 @layer base {

@@ -100,6 +100,7 @@
     "verificationTimeoutDescription": "Time before verification status turns red"
   },
   "table": {
+    "pageInfo": "${from}-${to} of ${total} items",
     "defaultValuesTitle": "Default Values",
     "defaultValuesDescription": "Set default values for new items",
     "categoriesTitle": "Categories",
@@ -139,7 +140,7 @@
     "totalProducts": "Total products",
     "selectedCount": "${selected} of ${total} selected",
     "pagination": {
-    "pageOf": "Page ${current} of ${total}"
+      "pageOf": "Page ${current} of ${total}"
     },
     "rowsPerPage": "Rows per page",
     "headers": {
@@ -147,7 +148,8 @@
       "action": "Action",
       "itemId": "Item ID",
       "changes": "Changes"
-    }
+    },
+    "noResults": "No results found"
   },
   "units": {
     "minutes": "Minutes",
@@ -165,7 +167,7 @@
     "backupRestoreDescription": "Export or import all data including settings and inventory",
     "factoryResetTitle": "Factory Reset",
     "factoryResetDescription": "Reset all settings and data to default state",
-    "factoryResetButton": "Reset to Factory Default" 
+    "factoryResetButton": "Reset to Factory Default"
   },
   "settingsSections": {
     "inventoryTitle": "Inventory Settings",
@@ -205,7 +207,7 @@
     "totalValue": "Total Value",
     "categories": "Categories",
     "categoryDist": "Category Distribution",
-    "locationDist": "Location Distribution", 
+    "locationDist": "Location Distribution",
     "statusDist": "Status Distribution"
   },
   "common": {
@@ -223,6 +225,8 @@
     "verifyError": "Failed to verify item",
     "scanVerifySuccess": "Verified item: ${itemName} (SKU: ${sku})",
     "refreshSuccess": "Data refreshed successfully",
+    "historyRefreshed": "History refreshed successfully",
+    "historyLoadError": "Failed to load history",
     "noChanges": "No changes found",
     "noSkuForBarcode": "Item SKU is required for barcode generation",
     "backupExportSuccess": "Backup exported successfully",

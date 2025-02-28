@@ -100,6 +100,7 @@
     "verificationTimeoutDescription": "זמן עד שהסטטוס של האימות הופך לאדום"
   },
   "table": {
+    "pageInfo": "${from}-${to} מתוך ${total} פריטים",
     "defaultValuesTitle": "ערכי ברירת מחדל",
     "defaultValuesDescription": "הגדר ערכי ברירת מחדל עבור פריטים חדשים",
     "categoriesTitle": "קטגוריות",
@@ -139,7 +140,7 @@
     "totalProducts": "פריטים בסך הכל",
     "selectedCount": "${selected} מתוך ${total} נבחרו",
     "pagination": {
-    "pageOf": "עמוד ${current} מתוך ${total}"
+      "pageOf": "עמוד ${current} מתוך ${total}"
     },
     "rowsPerPage": "שורות לעמוד",
     "headers": {
@@ -147,7 +148,8 @@
       "action": "פעולה",
       "itemId": "מזהה פריט",
       "changes": "שינויים"
-    }
+    },
+    "noResults": "לא נמצאו תוצאות"
   },
   "units": {
     "minutes": "דקות",
@@ -165,7 +167,7 @@
     "backupRestoreDescription": "ייצוא או יבוא של כל הנתונים כולל הגדרות ומלאי",
     "factoryResetTitle": "איפוס למצב היצרן",
     "factoryResetDescription": "איפוס כל ההגדרות והנתונים למצב ברירת המחדל",
-    "factoryResetButton": "אפס לברירת מחדל" 
+    "factoryResetButton": "אפס לברירת מחדל"
   },
   "settingsSections": {
     "inventoryTitle": "הגדרות מלאי",
@@ -223,6 +225,8 @@
     "verifyError": "אימות הפריט נכשל",
     "scanVerifySuccess": "אומת הפריט: ${itemName} (מק״ט: ${sku})",
     "refreshSuccess": "רענון הנתונים הצליח",
+    "historyRefreshed": "ההיסטוריה רועננה בהצלחה",
+    "historyLoadError": "טעינת ההיסטוריה נכשלה",
     "noChanges": "לא נמצאו שינויים",
     "noSkuForBarcode": "נדרש מספר SKU ליצירת ברקוד",
     "backupExportSuccess": "גיבוי יצא בהצלחה",
