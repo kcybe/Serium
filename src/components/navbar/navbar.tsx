@@ -1,31 +1,30 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import SettingsButton from "./components/settings-button"
-import InventoryButton from "./components/inventory-button"
-import { AnimatedLogo } from "../ui/animated-logo"
-import HistoryButton from "./components/history-button"
-import DashboardButton from "../dashboard/dashboard-button"
-import { useSettings } from "@/hooks/use-settings"
+import Link from "next/link";
+import { AnimatedLogo } from "../ui/animated-logo";
+import { NavItems } from "./components/nav-items";
+import { MobileNav } from "./components/mobile-nav";
 
 export function Navbar() {
-  const settings = useSettings()
-  
   return (
-    <div className="sticky top-4 z-50 flex justify-center">
-      <nav className="border rounded-lg bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full max-w-7xl mx-4 p-2">
-        <div className="container flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
+    <div className="sticky top-0 z-50 flex justify-center">
+      <nav className="border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full p-4">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex space-x-2">
             <AnimatedLogo />
           </Link>
-          <div className="flex space-x-2">
-            <InventoryButton settings={settings} />
-            <DashboardButton />
-            <HistoryButton />
-            <SettingsButton />
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-1">
+            <NavItems />
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden">
+            <MobileNav />
           </div>
         </div>
       </nav>
     </div>
-  )
+  );
 }
