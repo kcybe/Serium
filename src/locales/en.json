@@ -240,7 +240,10 @@
     "fullBackupRestored": "Full backup restored. Please refresh the page to make changes!",
     "invalidBackupFile": "Invalid backup file",
     "factoryResetSuccess": "Factory reset completed successfully",
-    "factoryResetError": "Failed to perform factory reset"
+    "factoryResetError": "Failed to perform factory reset",
+    "settingsSaved": "Settings saved successfully",
+    "settingsLoadError": "Failed to load settings",
+    "settingsSaveError": "Failed to save settings"
   },
   "actions": {
     "copyId": "Copy ID",
