@@ -1,14 +1,9 @@
 "use client";
 
-import { useSettings } from "@/hooks/use-settings";
-import InventoryButton from "./inventory-button";
-import DashboardButton from "../../dashboard/dashboard-button";
-import HistoryButton from "./history-button";
-import SettingsButton from "./settings-button";
 import { useEffect, useState } from "react";
+import { NavDropdown } from "./nav-dropdown";
 
 export function NavItems() {
-  const settings = useSettings();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -21,11 +16,8 @@ export function NavItems() {
   }
 
   return (
-    <>
-      <InventoryButton settings={settings} />
-      <DashboardButton />
-      <HistoryButton />
-      <SettingsButton />
-    </>
+    <div className="flex items-center">
+      <NavDropdown />
+    </div>
   );
 }

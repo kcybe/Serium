@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AnimatedLogo } from "../ui/animated-logo";
-import { ClientNavItems } from "./components/client-nav-items";
-import { ClientMobileNav } from "./components/client-mobile-nav";
+import { NavItems } from "./components/nav-items";
+import { MobileNav } from "./components/mobile-nav";
 
 export function Navbar() {
   return (
@@ -13,13 +13,13 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-1">
-            <ClientNavItems />
+          <div className="hidden md:flex">
+            <NavItems />
           </div>
 
           {/* Mobile Navigation */}
           <div className="md:hidden">
-            <ClientMobileNav />
+            <MobileNav />
           </div>
         </div>
       </nav>
