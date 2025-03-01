@@ -18,7 +18,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/hooks/use-translation";
-import { useLanguage } from "@/providers/language-provider";
+import { useSettings } from "@/hooks/use-settings";
 
 interface NavItem {
   labelKey: string;
@@ -49,6 +49,7 @@ const navItems: NavItem[] = [
   },
 ];
 
+// Home item defined separately since it's used as the default
 const homeItem: NavItem = {
   labelKey: "general.home",
   href: "/",
@@ -57,14 +58,16 @@ const homeItem: NavItem = {
 
 export function NavDropdown() {
   const pathname = usePathname();
-  const { language } = useLanguage();
-  const { t } = useTranslation();
+  const settings = useSettings();
+  const { t } = useTranslation(settings);
 
+  // Find current page from pathname
   const currentPage =
     navItems.find(
       (item) => pathname === item.href || pathname.startsWith(`${item.href}/`)
     ) || homeItem;
 
+  // Include the icon in the button if we have one
   const currentIcon = currentPage.icon;
 
   return (
