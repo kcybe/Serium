@@ -176,7 +176,7 @@ export function HistoryView() {
     <Card className="overflow-hidden">
       <CardHeader>
         <div className="flex items-center justify-between mb-4">
-          <CardTitle>History</CardTitle>
+          <CardTitle>{t("general.history")}</CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon">

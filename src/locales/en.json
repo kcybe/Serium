@@ -46,14 +46,20 @@
     },
     "addItemTitle": "Add New Item",
     "loadingDescription": "Please wait while we fetch your data",
-    "actions": "Actions"
+    "actions": "Actions",
+    "inventory": "Inventory",
+    "dashboard": "Dashboard",
+    "history": "History",
+    "settings": "Settings",
+    "home": "Home"
   },
   "settings": {
     "title": "Settings",
     "theme": "Theme",
     "currency": "Currency",
     "dateFormat": "Date Format",
-    "themePlaceholder": "Select a theme"
+    "themePlaceholder": "Select a theme",
+    "pageTitle": "Settings"
   },
   "tabs": {
     "general": "General",

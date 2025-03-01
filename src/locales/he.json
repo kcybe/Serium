@@ -46,14 +46,20 @@
     },
     "addItemTitle": "הוסף פריט חדש",
     "loadingDescription": "אנא המתן בזמן שאנחנו טוענים את הנתונים שלך",
-    "actions": "פעולות"
+    "actions": "פעולות",
+    "inventory": "מלאי",
+    "dashboard": "לוח מחוונים",
+    "history": "היסטוריה",
+    "settings": "הגדרות",
+    "home": "בית"
   },
   "settings": {
     "title": "הגדרות",
     "theme": "ערכת עיצוב",
     "currency": "מטבע",
     "dateFormat": "פורמט תאריך",
-    "themePlaceholder": "בחירת ערכת עיצוב"
+    "themePlaceholder": "בחירת ערכת עיצוב",
+    "pageTitle": "הגדרות"
   },
   "tabs": {
     "general": "כללי",

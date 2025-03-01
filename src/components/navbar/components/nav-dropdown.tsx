@@ -17,31 +17,33 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "@/hooks/use-translation";
+import { useSettings } from "@/hooks/use-settings";
 
 interface NavItem {
-  label: string;
+  labelKey: string;
   href: string;
   icon: React.ReactNode;
 }
 
 const navItems: NavItem[] = [
   {
-    label: "Inventory",
+    labelKey: "general.inventory",
     href: "/inventory",
     icon: <PackageSearch className="h-4 w-4 mr-2" />,
   },
   {
-    label: "Dashboard",
+    labelKey: "general.dashboard",
     href: "/dashboard",
     icon: <LayoutDashboard className="h-4 w-4 mr-2" />,
   },
   {
-    label: "History",
+    labelKey: "general.history",
     href: "/history",
     icon: <History className="h-4 w-4 mr-2" />,
   },
   {
-    label: "Settings",
+    labelKey: "general.settings",
     href: "/settings",
     icon: <Settings className="h-4 w-4 mr-2" />,
   },
@@ -49,13 +51,15 @@ const navItems: NavItem[] = [
 
 // Home item defined separately since it's used as the default
 const homeItem: NavItem = {
-  label: "Home",
+  labelKey: "general.home",
   href: "/",
   icon: <Home className="h-4 w-4 mr-2" />,
 };
 
 export function NavDropdown() {
   const pathname = usePathname();
+  const settings = useSettings();
+  const { t } = useTranslation(settings);
 
   // Find current page from pathname
   const currentPage =
@@ -72,7 +76,7 @@ export function NavDropdown() {
         <Button variant="outline" className="flex items-center gap-1">
           <span className="flex items-center">
             {currentIcon}
-            {currentPage.label}
+            {t(currentPage.labelKey)}
           </span>
           <ChevronDown className="h-4 w-4 ml-1" />
         </Button>
@@ -86,7 +90,7 @@ export function NavDropdown() {
             }`}
           >
             {homeItem.icon}
-            {homeItem.label}
+            {t(homeItem.labelKey)}
           </Link>
         </DropdownMenuItem>
 
@@ -99,7 +103,7 @@ export function NavDropdown() {
               }`}
             >
               {item.icon}
-              {item.label}
+              {t(item.labelKey)}
             </Link>
           </DropdownMenuItem>
         ))}
