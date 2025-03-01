@@ -1,9 +1,7 @@
-"use client";
-
 import Link from "next/link";
 import { AnimatedLogo } from "../ui/animated-logo";
-import { NavItems } from "./components/nav-items";
-import { MobileNav } from "./components/mobile-nav";
+import { ClientNavItems } from "./components/client-nav-items";
+import { ClientMobileNav } from "./components/client-mobile-nav";
 
 export function Navbar() {
   return (
@@ -16,12 +14,12 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-1">
-            <NavItems />
+            <ClientNavItems />
           </div>
 
           {/* Mobile Navigation */}
           <div className="md:hidden">
-            <MobileNav />
+            <ClientMobileNav />
           </div>
         </div>
       </nav>
