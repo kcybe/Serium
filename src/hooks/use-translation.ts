@@ -7,7 +7,7 @@ import { useMemo } from "react";
 
 interface TranslationResult {
   t: (key: string, params?: Record<string, string>) => string;
-  translations: Record<string, string>;
+  translations: Record<string, any>;
   currentLanguage: string;
 }
 
