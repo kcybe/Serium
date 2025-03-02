@@ -163,8 +163,6 @@ function getMaxWidthForColumn(columnId: string): string {
     select: "30px",
     verify: "80px",
     actions: "70px",
-    price: "90px",
-    quantity: "80px",
     sku: "100px",
     status: "100px",
     separator: "30px",

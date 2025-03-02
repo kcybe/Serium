@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-}
-
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -29,33 +20,6 @@ body {
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
-}
-
-@keyframes glitch {
-  0% {
-    clip-path: inset(50% 0 30% 0);
-    transform: translate(-5px, 5px);
-  }
-  20% {
-    clip-path: inset(15% 0 65% 0);
-    transform: translate(5px, -5px);
-  }
-  40% {
-    clip-path: inset(45% 0 40% 0);
-    transform: translate(-5px, 5px);
-  }
-  60% {
-    clip-path: inset(25% 0 60% 0);
-    transform: translate(5px, -5px);
-  }
-  80% {
-    clip-path: inset(55% 0 30% 0);
-    transform: translate(-5px, 5px);
-  }
-  100% {
-    clip-path: inset(50% 0 30% 0);
-    transform: translate(0);
-  }
 }
 
 @keyframes matrix-reveal {
@@ -141,20 +105,17 @@ body {
 
 @layer base {
   * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-
-
-@layer base {
-  * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number'] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield !important;
+    margin: 0;
   }
 }

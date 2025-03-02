@@ -5,7 +5,10 @@
 /**
  * Get column width from either column meta or default mapping
  */
-export function getColumnWidth(columnId: string, columnMeta?: { width?: string }): string {
+export function getColumnWidth(
+  columnId: string,
+  columnMeta?: { width?: string }
+): string {
   // First try to get width from column meta
   if (columnMeta?.width) {
     return columnMeta.width;
@@ -14,7 +17,7 @@ export function getColumnWidth(columnId: string, columnMeta?: { width?: string }
   // Fallback to default column widths
   const defaultColumnWidths: Record<string, string> = {
     name: "200px",
-    sku: "120px", 
+    sku: "120px",
     description: "300px",
     quantity: "100px",
     price: "120px",
@@ -40,5 +43,5 @@ export const tableStyles = {
   headerCell: "font-semibold text-center whitespace-nowrap p-2",
   row: "hover:bg-muted/50 transition-colors",
   cell: "py-3 text-center",
-  cellContent: "overflow-hidden text-ellipsis"
+  cellContent: "overflow-hidden text-ellipsis",
 };
