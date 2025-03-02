@@ -7,7 +7,7 @@ interface InventoryActionsProps {
   data: InventoryItem[];
   onAddItem: (newItem: InventoryItem) => Promise<void>;
   onDataImported: (items: InventoryItem[]) => void;
-  onRefresh: () => void;
+  onRefresh: () => Promise<void>;
   isRefreshing: boolean;
 }
 

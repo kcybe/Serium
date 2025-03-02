@@ -17,7 +17,7 @@ interface InventoryFiltersProps {
   onCategoriesChange: (categories: string[]) => void;
   onStatusesChange: (statuses: string[]) => void;
   onClearFilters: () => void;
-  onVerify: (id: string, source: "scan" | "button") => void;
+  onVerify: (id: string, source: "scan" | "button" | undefined) => void;
 }
 
 export function InventoryFilters({

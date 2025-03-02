@@ -1,5 +1,5 @@
 // src/app/inventory/components/inventory-table.tsx
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { DataTable } from "@/components/inventory/table/data-table";
 import { useColumns } from "@/components/inventory/helpers/use-columns";
 import { InventoryItem } from "@/types/inventory";
@@ -22,13 +22,18 @@ export function InventoryTable({
 }: InventoryTableProps) {
   const memoizedColumns = useMemo(() => useColumns(settings), [settings]);
 
+  const handleVerify = useCallback(
+    (id: string) => onVerify(id, "button"),
+    [onVerify]
+  );
+
   return (
     <DataTable
       columns={memoizedColumns}
       data={filteredData}
       onUpdate={onUpdate}
       onDelete={onDelete}
-      handleVerify={onVerify}
+      handleVerify={handleVerify}
       settings={settings}
     />
   );

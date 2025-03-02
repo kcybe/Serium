@@ -18,16 +18,16 @@ import { TablePagination } from "@/components/ui/table-pagination";
 export interface TableMeta {
   updateData: (id: string, updatedItem: InventoryItem) => void;
   deleteData: (item: InventoryItem) => void;
-  onVerify: (id: string) => void;
+  onVerify: (id: string, source: "scan" | "button") => void;
   settings: SiteSettings;
 }
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData, any>[];
   data: TData[];
-  onUpdate: (id: string, item: TData) => void;
-  onDelete: (id: string) => void;
-  handleVerify: (id: string) => void;
+  onUpdate: (id: string, item: TData) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+  handleVerify: (id: string) => Promise<void>;
   settings: SiteSettings;
 }
 
