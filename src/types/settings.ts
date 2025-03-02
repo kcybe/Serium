@@ -42,7 +42,7 @@ export interface SiteSettings {
 }
 
 export const defaultSettings: SiteSettings = {
-  inventoryName: "My Inventory",
+  inventoryName: "Serium Inventory",
   theme: "system",
   currency: "USD",
   dateFormat: "MM/DD/YYYY",
